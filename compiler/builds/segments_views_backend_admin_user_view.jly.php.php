@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/css/vendor.bundle.base.css'); ?>">
     <link rel="stylesheet" href="<?php echo url('assets/backend/css/vertical-layout-light/style.css'); ?>">
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/dataTables.net-bs4/dataTables.bootstrap4.css'); ?>">
+    
 
     
 
@@ -135,58 +136,94 @@
     <span><?php echo session()->flash('info'); ?></span>
   </div>
 <?php } ?>
-                    <div class="row">
-  <div class="col-md-12">
-    <div class="card card-inverse-light-with-black-text flatten-border">
-      <div class="card-header">
-        <div class="row">
-          <div class="col-md-2">
-            <h6>Users</h6>
-          </div>
-          <div class="col">
-           
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              
-              <th>Create At</th>
-              
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-            <?php if($totalUsers > 0) { ?>
-              <?php foreach($users as $user) { ?>
-              <tr>
-                <td><?php echo $user->full_name; ?></td>
-                <td><?php echo $user->email; ?></td>
+                    <div class="content-wrapper">
+    <div class="row">
+    <div class="col-12">
+        <div class="card">
+        <div class="card-body">
+            <div class="row">
+            <div class="col-lg-4">
+                <div class="border-bottom text-center pb-4">
+                
+                
+                <div class="mb-3">
+                    <h3><?php echo $user->getFullNameProperty(); ?></h3>
+                    <div class="d-flex align-items-center justify-content-center">
+                    </div>
+                </div>
+                
+                </div>
+                
+                <div class="py-4">
+                <p class="clearfix">
+                    <span class="float-left">
+                    Name
+                    </span>
+                    <span class="float-right text-muted">
+                    <?php echo $user->getFullNameProperty(); ?>
+                    </span>
+                </p>
                
-                <td><?php echo date('M d, Y H:i', strtotime($user->created_at)); ?></td>
-             
-                <td>
-                  <a href="<?php echo url('admin/users/view/'.$user->id); ?>" class="btn btn-sm btn-success">
-                    <span><i class="ti-eye"></i></span>
-                  </a>
-                </td>
-              </tr>
-              <?php } ?>
-            <?php } else { ?>
-            <tr>
-              <td colspan="4" class="text-center text-muted">No data found</td>
-            </tr>
-            <?php } ?>
-          </tbody>
-        </table>
-      </div>
+                <p class="clearfix">
+                    <span class="float-left">
+                    Email
+                    </span>
+                    <span class="float-right text-muted">
+                    <?php echo $user->email; ?>
+                    </span>
+                </p>
+
+                <p class="clearfix">
+                    <span class="float-left">
+                    City
+                    </span>
+                    <span class="float-right text-muted">
+                        <?php echo $user->city_id != '' ?  $user->getCity()->name : 'N/A'; ?>
+                    </span>
+                </p>
+
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+            <h3>Practice Area</h3>
+              <div class="card">
+              <div class="table-responsive">  
+                    <table id="user-listing" class="table dataTable no-footer">
+                    <thead>
+                        <th class="sorting_asc">#</th>
+                        <th>Name</th>
+                    </thead>
+                    <tbody>
+                        <?php if(!empty($user->practiceArea())) { ?>
+                        <?php foreach($user->practiceArea() as $key => $practice_area) { ?>
+                            <tr>
+                                <td><?php echo $key + 1; ?></td>
+                                <td>
+                                    <?php if(!empty($practice_area->other)) { ?>
+                                        <?php echo $practice_area->other; ?>
+                                    <?php } else { ?>
+                                        <?php echo $practice_area->getPracticeArea()->title;; ?>
+                                    <?php } ?>
+                                    
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        <?php } else { ?>
+                        <tr>
+                            <td colspan="2">No data availabe!</td>
+                        </tr>    
+                        <?php } ?>
+                    </tbody>
+                    </table>
+                </div>      
+              </div>
+            </div>
+            </div>
+        </div>
+        </div>
     </div>
-  </div>
+    </div>
 </div>
                 </div>
                 <footer class="footer">
@@ -213,7 +250,33 @@
     <script type="text/javascript">
         var APP_BASE_URL = '<?php echo url("/"); ?>';
     </script>
-    
+    <script>
+    $(function($) {
+      'use strict';
+      $(function() {
+        $('#user-listing').DataTable({
+          "aLengthMenu": [
+            [5, 10, 15, -1],
+            [5, 10, 15, "All"]
+          ],
+          "iDisplayLength": 10,
+          "language": {
+            search: ""
+          }
+        });
+        $('#user-listing').each(function() {
+          var datatable = $(this);
+          // SEARCH - Add the placeholder for Search and Turn this into in-line form control
+          var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
+          search_input.attr('placeholder', 'Search');
+          search_input.removeClass('form-control-sm');
+          // LENGTH - Inline-Form control
+          var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
+          length_sel.removeClass('form-control-sm');
+        });
+      });
+    });
+</script>
 </body>
 
 </html>

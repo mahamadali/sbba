@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title><?php echo setting('app.title', 'Quotations'); ?></title>
+    <title><?php echo setting('app.title'); ?></title>
     
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/feather/feather.css'); ?>">
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/ti-icons/css/themify-icons.css'); ?>">
@@ -135,59 +135,32 @@
     <span><?php echo session()->flash('info'); ?></span>
   </div>
 <?php } ?>
-                    <div class="row">
-  <div class="col-md-12">
-    <div class="card card-inverse-light-with-black-text flatten-border">
-      <div class="card-header">
+                    <div class="card card-inverse-light-with-black-text flatten-border">
+    <div class="card-header">
+      Edit Practice Area
+    </div>
+    <div class="card-body">
+      <form method="post" action="<?php echo route('admin.practice_area.update'); ?>">
+        <input type="hidden" name="id" value="<?php echo $practice_area->id; ?>" />
         <div class="row">
-          <div class="col-md-2">
-            <h6>Users</h6>
-          </div>
           <div class="col">
-           
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" class="form-control" name="title" value="<?php echo $practice_area->title; ?>" />
+            </div>
           </div>
         </div>
-      </div>
-      <div class="card-body">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              
-              <th>Create At</th>
-              
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-            <?php if($totalUsers > 0) { ?>
-              <?php foreach($users as $user) { ?>
-              <tr>
-                <td><?php echo $user->full_name; ?></td>
-                <td><?php echo $user->email; ?></td>
-               
-                <td><?php echo date('M d, Y H:i', strtotime($user->created_at)); ?></td>
-             
-                <td>
-                  <a href="<?php echo url('admin/users/view/'.$user->id); ?>" class="btn btn-sm btn-success">
-                    <span><i class="ti-eye"></i></span>
-                  </a>
-                </td>
-              </tr>
-              <?php } ?>
-            <?php } else { ?>
-            <tr>
-              <td colspan="4" class="text-center text-muted">No data found</td>
-            </tr>
-            <?php } ?>
-          </tbody>
-        </table>
-      </div>
+        
+        <div class="row mt-2">
+          <div class="col">
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary btn-lg">Save</button>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
-</div>
                 </div>
                 <footer class="footer">
   <div class="d-sm-flex justify-content-center justify-content-sm-between">

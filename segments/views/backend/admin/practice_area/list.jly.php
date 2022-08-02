@@ -1,6 +1,6 @@
 @extends('backend/app')
 
-@block("title") {{ setting('app.title', 'Quotations') }} @endblock
+@block("title") {{ setting('app.title') }} @endblock
 
 @block("styles")
 @endblock
@@ -13,11 +13,11 @@
       <div class="card-header">
         <div class="row">
           <div class="col-md-2">
-            <h6>Categories</h6>
+            <h6>Practice Area</h6>
           </div>
           <div class="col">
-            <a class="btn btn-md btn-primary float-right" href="{{ route('admin.category.create') }}">
-              Add Category
+            <a class="btn btn-md btn-primary float-right" href="{{ route('admin.practice_area.create') }}">
+              Add Practice Area
             </a>
           </div>
         </div>
@@ -27,21 +27,19 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Prefix</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            @if (count($categories) > 0):
-              @foreach ($categories as $category):
+            @if (count($practice_areas) > 0):
+              @foreach ($practice_areas as $practice_area):
               <tr>
-                <td>{{ $category->title }}</td>
-                <td>{{ $category->prefix }}</td>
+                <td>{{ $practice_area->title }}</td>
                 <td>
-                  <a href="{{ url('admin/category/edit/'.$category->id) }}" class="btn btn-sm btn-info">
+                  <a href="{{ url('admin/practice_area/edit/'.$practice_area->id) }}" class="btn btn-sm btn-info">
                     <span><i class="ti-pencil"></i></span>
                   </a>
-                  <form method="post" action="{{ url('admin/category/delete/'.$category->id) }}" class="d-inline-block">
+                  <form method="post" action="{{ url('admin/practice_area/delete/'.$practice_area->id) }}" class="d-inline-block">
                     <input type="hidden" name="_method" value="DELETE" />
                     <button type="submit" class="btn btn-sm btn-danger">
                       <span><i class="ti-trash"></i></span>
