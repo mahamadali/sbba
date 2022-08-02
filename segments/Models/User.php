@@ -25,14 +25,14 @@ class User extends Model
 
 	public function getFullNameProperty()
 	{
-		return $this->first_name . ' ' . $this->last_name;
+		return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
 	}
 
 	public function practiceArea(){
 		return $this->hasMany(UserPracticeAreas::class, 'user_id')->get();
 	}
 
-	public function getCity() {
+	public function city() {
 		return $this->parallelTo(City::class, 'city_id')->first();
 	}
 	

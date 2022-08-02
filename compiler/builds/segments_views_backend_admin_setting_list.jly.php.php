@@ -5,13 +5,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title><?php echo setting('app.title'); ?></title>
+    <title><?php echo setting('app.title', 'Quotations'); ?></title>
     
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/feather/feather.css'); ?>">
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/ti-icons/css/themify-icons.css'); ?>">
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/css/vendor.bundle.base.css'); ?>">
     <link rel="stylesheet" href="<?php echo url('assets/backend/css/vertical-layout-light/style.css'); ?>">
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/dataTables.net-bs4/dataTables.bootstrap4.css'); ?>">
+    
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap4.min.css">
     
 
     
@@ -69,7 +72,7 @@
       <li class="nav-item <?php echo (request()->matchesTo('/admin/users/*')) ? 'active' : ''; ?>">
         <a class="nav-link" href="<?php echo route('admin.users.list'); ?>">
           <i class="icon-head menu-icon"></i>
-          <span class="menu-title">Users</span>
+          <span class="menu-title">Members</span>
         </a>
       </li>
 
@@ -99,6 +102,13 @@
             <li class="nav-item"> <a class="nav-link" href="<?php echo route('admin.practice_area.list'); ?>"> Practice Area </a></li>
           </ul>
         </div>
+      </li>
+
+      <li class="nav-item <?php echo (request()->matchesTo('/admin/settings/*')) ? 'active' : ''; ?>">
+        <a class="nav-link" href="<?php echo route('admin.settings.list'); ?>">
+          <i class="ti-settings menu-icon"></i>
+          <span class="menu-title">Settings</span>
+        </a>
       </li>
 
     <?php } ?> 
@@ -136,32 +146,43 @@
     <span><?php echo session()->flash('info'); ?></span>
   </div>
 <?php } ?>
-                    <div class="card card-inverse-light-with-black-text flatten-border">
-    <div class="card-header">
-      Edit City
-    </div>
-    <div class="card-body">
-      <form method="post" action="<?php echo route('admin.cities.update'); ?>">
-        <input type="hidden" name="id" value="<?php echo $city->id; ?>" />
+                    <div class="row">
+  <div class="col-md-12">
+    <div class="card card-inverse-light-with-black-text flatten-border">
+      <div class="card-header">
         <div class="row">
-          <div class="col">
-            <div class="form-group">
-              <label>Name</label>
-              <input type="text" class="form-control" name="name" value="<?php echo $city->name; ?>" />
-            </div>
+          <div class="col-md-2">
+            <h6>Settings</h6>
           </div>
         </div>
-        
-        <div class="row mt-2">
-          <div class="col">
-            <div class="form-group">
-              <button type="submit" class="btn btn-primary btn-lg">Save</button>
+      </div>
+      <div class="card-body">
+      <form method="post" action="<?php echo route('admin.settings.update'); ?>">
+        <?php foreach($settings as $setting) { ?>
+          
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <?php echo $setting->key; ?>
+              <input type="hidden" class="form-control" name="setting_ids[]" value="<?php echo $setting->id; ?>" >
+              <input type="hidden" class="form-control" name="setting_keys[]" value="<?php echo $setting->key; ?>" >
+            </div>
+
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="setting_values[]" value="<?php echo $setting->value; ?>" >
             </div>
           </div>
+          
+        <?php } ?> 
+        <div class="row">
+          <div class="col-md-4">
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
         </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
+</div>
                 </div>
                 <footer class="footer">
   <div class="d-sm-flex justify-content-center justify-content-sm-between">
@@ -180,6 +201,14 @@
     <script src="<?php echo url('assets/backend/js/tabs.js'); ?>"></script>
     <script src="<?php echo url('assets/backend/vendors/datatables.net/jquery.dataTables.js'); ?>"></script>
     <script src="<?php echo url('assets/backend/vendors/datatables.net-bs4/dataTables.bootstrap4.js'); ?>"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.bootstrap4.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
 
     
     
@@ -191,6 +220,7 @@
 </body>
 
 </html>
+
 
 
 

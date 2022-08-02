@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="<?php echo url('assets/backend/css/vertical-layout-light/style.css'); ?>">
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/dataTables.net-bs4/dataTables.bootstrap4.css'); ?>">
     
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap4.min.css">
+    
 
     
 
@@ -69,7 +72,7 @@
       <li class="nav-item <?php echo (request()->matchesTo('/admin/users/*')) ? 'active' : ''; ?>">
         <a class="nav-link" href="<?php echo route('admin.users.list'); ?>">
           <i class="icon-head menu-icon"></i>
-          <span class="menu-title">Users</span>
+          <span class="menu-title">Members</span>
         </a>
       </li>
 
@@ -99,6 +102,13 @@
             <li class="nav-item"> <a class="nav-link" href="<?php echo route('admin.practice_area.list'); ?>"> Practice Area </a></li>
           </ul>
         </div>
+      </li>
+
+      <li class="nav-item <?php echo (request()->matchesTo('/admin/settings/*')) ? 'active' : ''; ?>">
+        <a class="nav-link" href="<?php echo route('admin.settings.list'); ?>">
+          <i class="ti-settings menu-icon"></i>
+          <span class="menu-title">Settings</span>
+        </a>
       </li>
 
     <?php } ?> 
@@ -157,6 +167,23 @@
           </div>
         </div>
       </div>
+
+      <div class="col-md-3 mb-4 stretch-card transparent">
+        <div class="card card-dark-blue">
+          <div class="card-body">
+            <p class="mb-4">Total Cities</p>
+            <p class="fs-30 mb-2"><?php echo $total_cities; ?></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-4 stretch-card transparent">
+        <div class="card card-light-blue">
+          <div class="card-body">
+            <p class="mb-4">Total Practice Area</p>
+            <p class="fs-30 mb-2"><?php echo $total_practice_area; ?></p>
+          </div>
+        </div>
+      </div>
       
     </div>
   </div>
@@ -179,6 +206,14 @@
     <script src="<?php echo url('assets/backend/js/tabs.js'); ?>"></script>
     <script src="<?php echo url('assets/backend/vendors/datatables.net/jquery.dataTables.js'); ?>"></script>
     <script src="<?php echo url('assets/backend/vendors/datatables.net-bs4/dataTables.bootstrap4.js'); ?>"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.bootstrap4.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
 
     
     

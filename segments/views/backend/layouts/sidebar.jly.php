@@ -11,7 +11,7 @@
       <li class="nav-item {{ (request()->matchesTo('/admin/users/*')) ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.users.list') }}">
           <i class="icon-head menu-icon"></i>
-          <span class="menu-title">Users</span>
+          <span class="menu-title">Members</span>
         </a>
       </li>
 
@@ -41,6 +41,13 @@
             <li class="nav-item"> <a class="nav-link" href="{{ route('admin.practice_area.list') }}"> Practice Area </a></li>
           </ul>
         </div>
+      </li>
+
+      <li class="nav-item {{ (request()->matchesTo('/admin/settings/*')) ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.settings.list') }}">
+          <i class="ti-settings menu-icon"></i>
+          <span class="menu-title">Settings</span>
+        </a>
       </li>
 
     @endif 

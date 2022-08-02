@@ -12,7 +12,7 @@ class UserController
 	{
 		$users = User::whereHas('role', function($query) {
 			return $query->where('name', 'user');
-		})->get();
+		})->with('city')->get();
 		
 		$totalUsers = count($users);
 		
@@ -30,6 +30,8 @@ class UserController
 			'user' => $user
 		]);
 	}
+
+	
 	
 
 }
