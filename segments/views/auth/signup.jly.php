@@ -52,6 +52,16 @@
                   <label for="email">Email</label>
                   <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
                 </div>
+
+                <div class="form-group  mt-4">
+                  <label for="email">City</label>
+                  <select class="city-options city_name form-control" name="city_id" id="city_name" required>
+                  <option value="">Select</option>
+                  @foreach($cities as $city):
+                  <option value="{{ $city->id }}">{{ $city->name }}</option>
+                  @endforeach
+            </select>
+                </div>
                 <div class="form-group  mt-4">
                   <label for="law_firm">Law Firm</label>
                   <input type="text" class="form-control" id="law_firm" name="law_firm" placeholder="Law Firm" required>
@@ -183,8 +193,11 @@
    submitHandler: function(form) {
        // form.submit();
        city_id = getCookie('city_id');
-       $(form).append("<input type='hidden' name='city_id' value='"+
-                         city_id+"' />");
+       // $(form).append("<input type='hidden' name='city_id' value='"+
+       //                   city_id+"' />");
+
+       $(form).find('button[type="submit"]').html('<i class="fa fa-spinner fa-spin"></i>');
+       $(form).find('button[type="submit"]').prop('disabled', true);
 
        $.ajax({
       url : '{{route("auth.register")}}',
@@ -192,6 +205,10 @@
       data : $(form).serializeArray(),
       dataType: 'json',
       success: function(response) {
+
+        $(form).find('button[type="submit"]').html('Sign Up');
+        $(form).find('button[type="submit"]').prop('disabled', false);
+
         $('#messages').html('');
         if(response.status == 304) {
             response.errors.forEach(error => {
@@ -202,11 +219,12 @@
         if(response.status == 200) {
             $('#messages').append('<p align="center" style="color:green;">'+response.message+'</p>');
             form.reset();
-            document.cookie = "city_id=; path=/; domain=example.com; max-age=0";
+            document.cookie = 'city_id=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
       },
       error: function() {
-        
+        $(form).find('button[type="submit"]').html('Sign Up');
+        $(form).find('button[type="submit"]').prop('disabled', false);
       }
     });
        
@@ -232,6 +250,7 @@
     // Return null if not found
     return null;
 }
+  $('.city_name').val(getCookie('city_id'));
  </script>
 </body>
 </html>

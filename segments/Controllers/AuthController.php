@@ -5,11 +5,13 @@ namespace Controllers;
 use Bones\Alert;
 use Bones\Request;
 use Bones\Session;
+use Mail\WelcomeEmail;
 use Jolly\Engine;
 use Models\Role;
 use Models\User;
 use Models\PracticeArea;
 use Models\UserPracticeArea;
+use Models\City;
 
 class AuthController
 {
@@ -66,8 +68,10 @@ class AuthController
 	public function signup()
 	{
 		$practice_areas = PracticeArea::get();
+		$cities = City::get();
 		return render('auth/signup', [
-			'practice_areas' => $practice_areas
+			'practice_areas' => $practice_areas,
+			 'cities' => $cities
 		]);
 	}
 
@@ -103,6 +107,8 @@ class AuthController
 			$user_practice_area->other = $request->other_practice_area[$key];
 			$user_practice_area->save();
 		}
+
+		Alert::as(new WelcomeEmail(User::where('id', $user->id)->with('getCity')->first()))->notify();
 
 		return response()->json([
 				'status' => 200,

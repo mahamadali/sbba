@@ -2,7 +2,7 @@
 
 namespace Mail;
 
-use Contributors\Mailer;
+use Contributors\Mail\Mailer;
 
 class WelcomeEmail extends Mailer
 {
@@ -16,8 +16,7 @@ class WelcomeEmail extends Mailer
     public function prepare()
     {
         return $this->html(content('mails/welcome', ['user' => $this->user]))
-                    ->subject('Welcome to ' . setting('app.title', 'Jolly Framework!'))
-                    ->attachment('hello121');
+                   ->to($this->user->email)->subject('New Member Registration');
     }
 
 }

@@ -3,7 +3,7 @@
 namespace Bones;
 
 use Bones\Skeletons\Supporters\AutoMethodMap;
-use Contributors\Mailer;
+use Contributors\Mail\Mailer;
 use JollyException\AlertException;
 
 class Alert extends AutoMethodMap

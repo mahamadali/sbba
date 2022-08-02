@@ -61,8 +61,8 @@
     </div>
     <div data-v-76520ee6="" class="section2__inner-txt-bottom">
         <h3 class="choose-city-label">  
-            <select class="city-options city_name" name="city_name" id="city_name">
-                <option value="" required>Select</option>
+            <select class="city-options city_name" name="city_name" id="city_name" required>
+                <option value="" >Select</option>
                 <?php foreach($cities as $city) { ?>
                 <option value="<?php echo $city->id; ?>"><?php echo $city->name; ?></option>
                 <?php } ?>
