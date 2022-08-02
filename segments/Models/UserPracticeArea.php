@@ -5,10 +5,10 @@ namespace Models;
 use Models\Base\Model;
 use Models\Traits\TrashMask;
 
-class PracticeArea extends Model
+class UserPracticeArea extends Model
 {
 	use TrashMask;
 	
-	protected $table = 'practice_areas';
+	protected $table = 'user_practice_areas';
 
 }

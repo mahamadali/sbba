@@ -62,39 +62,40 @@
               <!-- <div class="row add_new mt-4">
                 <label for="law_firm">Primary Practice Area(s)</label>
                 <div class="form-group col-11">
-                  <input id="practice_areas" name="practice_areas[]" placeholder="Practice Area" class="form-control" type="text" required>
+                  <input name="practice_areas[]" placeholder="Practice Area" class="form-control" type="text" required>
                 </div>
                 <div class="form-group col-1 mt-2" style="font-size:20px">
                  <a href="javascript:void(0)" class="practice_area_add"><i class="fa fa-plus-circle" aria-hidden="true"></i></a>
                </div>
              </div> -->
+
+              
+
              <div class="row add_new mt-4">
                 <label for="law_firm">Primary Practice Area(s)</label>
-                <div class="form-group col-12">
-                  <select class="form-control" name="practice_areas" id="practice_areas" required>
-                    <option value="Banking & Finance">Banking & Finance</option>
-                    <option value="Commercial Bankruptcy">Commercial Bankruptcy</option>
-                    <option value="Consumer Bankruptcy">Consumer Bankruptcy</option>
-                    <option value="Commercial Litigation">Commercial Litigation</option>
-                    <option value="Corporate Law">Corporate Law</option>
-                    <option value="Intellectual Property">Intellectual Property</option>
-                    <option value="Labor & Employment">Labor & Employment</option>
-                    <option value="Mergers & Acquisitions">Mergers & Acquisitions</option>
-                    <option value="Personal Injury">Personal Injury</option>
-                    <option value="Real Estate">Real Estate</option>
-                    <option value="Real Estate Litigation">Real Estate Litigation</option>
-                    <option value="Tax">Tax</option>
-                    <option value="Other">Other</option>
+                <div class="form-group col-11">
+                  <select class="form-control practice_areas" name="practice_areas[]" required>
+                    <option value="">Select</option>
+                    <?php foreach($practice_areas as $area) { ?>
+                    <option value="<?php echo $area->id; ?>"><?php echo $area->title; ?></option>
+                    <?php } ?>
+                    <option value="other">Other</option>
                   </select>
                 </div>
+                
+                 <div class="form-group col-1 mt-2" style="font-size:20px">
+                  <a href="javascript:void(0)" class="practice_area_add"><i class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                  </div>
+
+                  <div class="row mt-2 other_practice_area_section" style="display:none">
+                    
+                    <div class="form-group col-12">
+                      <input name="other_practice_area[]" placeholder="Enter Practice Area" class="form-control" type="text" required>
+                    </div>
+                 </div>
              </div>
 
-              <div class="row add_new mt-4">
-                <label for="law_firm">Other Primary Practice Area</label>
-                <div class="form-group col-12">
-                  <input id="other_practice_area" name="other_practice_area" placeholder="Other Primary Practice Area" class="form-control" type="text" required>
-                </div>
-             </div>
+             <div id="messages"></div>
 
 
              <div class="text-center mt-4">
@@ -122,19 +123,42 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script type="text/javascript">
 
-  $(document).on('click', '.practice_area_add', function(){
+
+  /* $(document).on('click', '.practice_area_add', function(){
     $(this).closest("div.add_new").after('<div class="row add_new mt-1"><div class="form-group col-11"><input id="practice_area" name="practice_area[]" placeholder="Practice Area" class="form-control practice_area" type="text" required></div><div class="form-group col-1 mt-2" style="font-size:20px"><a href="#" class="practice_area_remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></div></div>');
     var i = $(".row.add_new .practice_area").length;
     $(".row.add_new:last input[name='practice_area["+i+"]']").rules("add", {
       required: true
     });
+  });*/
+  
+  $(document).on('click', '.practice_area_add', function(){
+    $("div.add_new:last").after('<div class="row add_new mt-1"><div class="form-group col-11"><select class="form-control practice_areas" name="practice_areas[]" required><option value="">Select</option><?php foreach($practice_areas as $area) { ?><option value="<?php echo $area->id; ?>"><?php echo $area->title; ?></option><?php } ?><option value="other">Other</option></select></div><div class="form-group col-1 mt-2" style="font-size:20px"><a href="#" class="practice_area_remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></div><div class="row mt-2 other_practice_area_section" style="display:none"><div class="form-group col-12"><input name="other_practice_area[]" placeholder="Enter Practice Area" class="form-control" type="text" required></div></div></div>');
+    var i = $(".row.add_new .practice_area").length;
+    $(".row.add_new:last input[name='practice_area["+i+"]']").rules("add", {
+      required: true
+    });
+    $(".row.add_new:last input[name='other_practice_area["+i+"]']").rules("add", {
+      required: true
+    });
   });
-
-
 
   $(document).on('click', '.practice_area_remove', function(){
    $(this).parent().parent().remove();
  });
+
+ 
+ $(document).on('change', '.practice_areas', function(){
+    var val = this.value;
+    if(val == 'other')
+    {
+      $(this).parent().parent().find('.other_practice_area_section').css('display','block');
+    } else {
+      $(this).parent().parent().find('.other_practice_area_section').css('display','none');
+    }
+});
+
+
 
   $("form[name='register']").validate({
    rules: {
@@ -159,10 +183,56 @@
    },
    submitHandler: function(form) {
        // form.submit();
-       alert('Your data has been submitted successfully!');
-       form.reset();
+       city_id = getCookie('city_id');
+       $(form).append("<input type='hidden' name='city_id' value='"+
+                         city_id+"' />");
+
+       $.ajax({
+      url : '<?php echo route("auth.register"); ?>',
+      type : 'POST',
+      data : $(form).serializeArray(),
+      dataType: 'json',
+      success: function(response) {
+        $('#messages').html('');
+        if(response.status == 304) {
+            response.errors.forEach(error => {
+                $('#messages').append('<p align="center" style="color:red;">'+error+'</p>');
+            });
+        }
+
+        if(response.status == 200) {
+            $('#messages').append('<p align="center" style="color:green;">'+response.message+'</p>');
+            form.reset();
+            document.cookie = "city_id=; path=/; domain=example.com; max-age=0";
+        }
+      },
+      error: function() {
+        
+      }
+    });
+       
      }
    });
+
+  function getCookie(name) {
+    // Split cookie string and get all individual name=value pairs in an array
+    var cookieArr = document.cookie.split(";");
+    
+    // Loop through the array elements
+    for(var i = 0; i < cookieArr.length; i++) {
+        var cookiePair = cookieArr[i].split("=");
+        
+        /* Removing whitespace at the beginning of the cookie name
+        and compare it with the given string */
+        if(name == cookiePair[0].trim()) {
+            // Decode the cookie value and return
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    
+    // Return null if not found
+    return null;
+}
  </script>
 </body>
 </html>

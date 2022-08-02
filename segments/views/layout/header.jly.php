@@ -11,7 +11,7 @@
                      </span>
                      <div data-v-4031e0bf="">
                         <!-- <button data-v-4031e0bf="" class="ui-btn">Sign Up</button> -->
-                        <a href="{{ route('sign-up')}}" data-v-4031e0bf="" class="ui-btn home-signup">Sign Up</a>
+                        <a href="{{ route('auth.sign-up')}}" data-v-4031e0bf="" class="ui-btn home-signup">Sign Up</a>
                         <button data-v-4031e0bf="" class="ui-btn ui-btn__outline">Login</button>
                      </div>
                   </div>

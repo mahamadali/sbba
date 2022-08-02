@@ -11,6 +11,7 @@ class WelcomeController
         return render('welcome', [
             'cities' => $cities
         ]);
+     
     }
 
 

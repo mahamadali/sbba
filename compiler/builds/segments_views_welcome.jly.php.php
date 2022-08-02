@@ -19,7 +19,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 
-        <link rel="stylesheet" href="<?php echo url('assets/css/welcome.css'); ?>" />
+        <!-- <link rel="stylesheet" href="<?php echo url('assets/css/welcome.css'); ?>" /> -->
     </head>
     <body>
         <noscript><strong>We're sorry but Bizfluence doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript>
@@ -35,7 +35,7 @@
                      </span>
                      <div data-v-4031e0bf="">
                         <!-- <button data-v-4031e0bf="" class="ui-btn">Sign Up</button> -->
-                        <a href="<?php echo route('sign-up'); ?>" data-v-4031e0bf="" class="ui-btn home-signup">Sign Up</a>
+                        <a href="<?php echo route('auth.sign-up'); ?>" data-v-4031e0bf="" class="ui-btn home-signup">Sign Up</a>
                         <button data-v-4031e0bf="" class="ui-btn ui-btn__outline">Login</button>
                      </div>
                   </div>
@@ -61,7 +61,7 @@
     </div>
     <div data-v-76520ee6="" class="section2__inner-txt-bottom">
         <h3 class="choose-city-label">  
-            <select class="city-options" name="city_name" id="city_name">
+            <select class="city-options city_name" name="city_name" id="city_name">
                 <option value="" required>Select</option>
                 <?php foreach($cities as $city) { ?>
                 <option value="<?php echo $city->id; ?>"><?php echo $city->name; ?></option>
@@ -95,7 +95,7 @@
     </div>
     <div data-v-6c47e4b3="" class="section4__inner-txt">
         <h2 data-v-6c47e4b3="">Sign-up today — we’ll get you out of the office (or off the laptop) and have a beverage in your hand in no time. Let's have fun! And make getting referrals easier for all of us.</h2>
-        <a href="<?php echo route('sign-up'); ?>" class="ui-btn home-signup-footer">Sign Up</a>
+        <a href="<?php echo route('auth.sign-up'); ?>" class="ui-btn home-signup-footer">Sign Up</a>
     </div>
 </div>
 </section>
@@ -203,7 +203,25 @@
             </div>
          </div>
       </div>
-        <script src="<?php echo url('assets/js/app.js'); ?>" type="text/javascript"></script>
+        <script type="text/javascript">
+    $(document).on('change', '.city_name', function(){        
+    var city_id = this.value;
+     setCookie('city_id',city_id,1);
+});
+    function setCookie(name, value, daysToLive) {
+    // Encode value in order to escape semicolons, commas, and whitespace
+    var cookie = name + "=" + encodeURIComponent(value);
+    
+    if(typeof daysToLive === "number") {
+        /* Sets the max-age attribute so that the cookie expires
+        after the specified number of days */
+        cookie += "; max-age=" + (daysToLive*24*60*60);
+        
+        document.cookie = cookie;
+    }
+}
+</script>
+<!-- <script src="<?php echo url('assets/js/app.js'); ?>" type="text/javascript"></script> -->
     </body>
 </html>
 
