@@ -21,11 +21,11 @@
      <div data-v-76520ee6="" class="section2__inner-img"><img data-v-76520ee6="" src="{{url('assets/frontend/img/cities1.png')}}"></div>
      <div data-v-76520ee6="" class="section2__inner-txt">
         <h1 data-v-76520ee6="">Where Are We?</h1>
-        <h2 data-v-76520ee6="">We’ve started in Six cities. Choose a city and sign up. We’ll alert you when we have networking events near you!</h2>
+        <h2 data-v-76520ee6="">We’ve started in {{ strtolower(convert_number(count($cities))) }}  cities. Choose a city and sign up. We’ll alert you when we have networking events near you!</h2>
     </div>
     <div data-v-76520ee6="" class="section2__inner-txt-bottom">
         <h3 class="choose-city-label">  
-            <select class="city-options">
+            <select class="city-options" name="city_name" id="city_name">
                 <option value="" required>Select</option>
                 @foreach($cities as $city):
                 <option value="{{ $city->id }}">{{ $city->name }}</option>
