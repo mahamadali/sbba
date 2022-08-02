@@ -86,20 +86,6 @@
         </div>
       </li>
 
-      <li class="nav-item <?php echo (request()->matchesTO('/admin/practice_area/*')) ? 'active' : ''; ?>">
-        <a class="nav-link" data-toggle="collapse" href="#practice_area" aria-expanded="false" aria-controls="practice_area">
-          <i class="ti-list menu-icon"></i>
-          <span class="menu-title">Practice Area</span>
-          <i class="menu-arrow"></i>
-        </a>
-        <div class="collapse <?php echo (request()->matchesTO('/admin/practice_area/*')) ? 'show' : ''; ?>" id="practice_area">
-          <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="<?php echo route('admin.practice_area.create'); ?>"> Add </a></li>
-            <li class="nav-item"> <a class="nav-link" href="<?php echo route('admin.practice_area.list'); ?>"> Practice Area </a></li>
-          </ul>
-        </div>
-      </li>
-
     <?php } ?> 
 
     <li class="nav-item">
@@ -141,10 +127,12 @@
       <div class="card-header">
         <div class="row">
           <div class="col-md-2">
-            <h6>Users</h6>
+            <h6>Cities</h6>
           </div>
           <div class="col">
-           
+            <a class="btn btn-md btn-primary float-right" href="<?php echo route('admin.cities.create'); ?>">
+              Add City
+            </a>
           </div>
         </div>
       </div>
@@ -153,34 +141,31 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Email</th>
-              
-              <th>Create At</th>
-              
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            
-            <?php if($totalUsers > 0) { ?>
-              <?php foreach($users as $user) { ?>
+            <?php if(count($cities) > 0) { ?>
+              <?php foreach($cities as $city) { ?>
               <tr>
-                <td><?php echo $user->full_name; ?></td>
-                <td><?php echo $user->email; ?></td>
-               
-                <td><?php echo date('M d, Y H:i', strtotime($user->created_at)); ?></td>
-             
+                <td><?php echo $city->name; ?></td>
                 <td>
-                  <a href="<?php echo url('admin/users/view/'.$user->id); ?>" class="btn btn-sm btn-success">
-                    <span><i class="ti-eye"></i></span>
+                  <a href="<?php echo url('admin/cities/edit/'.$city->id); ?>" class="btn btn-sm btn-info">
+                    <span><i class="ti-pencil"></i></span>
                   </a>
+                  <form method="post" action="<?php echo url('admin/cities/delete/'.$city->id); ?>" class="d-inline-block">
+                    <input type="hidden" name="_method" value="DELETE" />
+                    <button type="submit" class="btn btn-sm btn-danger">
+                      <span><i class="ti-trash"></i></span>
+                      </a>
+                  </form>
                 </td>
               </tr>
               <?php } ?>
             <?php } else { ?>
-            <tr>
-              <td colspan="4" class="text-center text-muted">No data found</td>
-            </tr>
+              <tr>
+                <td colspan="3" class="text-center text-muted">No data found</td>
+              </tr>
             <?php } ?>
           </tbody>
         </table>

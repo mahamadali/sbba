@@ -97,3 +97,26 @@ if (! function_exists('convert_number')) {
         return $result;
     }
 }
+
+if (! function_exists('old')) {
+    function old($element)
+    {
+        if (!empty(session()->has('old'))) {
+            $formData = session()->get('old');
+            $old = (!empty($formData) && !empty($formData[$element])) ? $formData[$element] : null;
+            $formData[$element] = null;
+            session()->set('old', $formData);
+            return $old;
+        }
+
+        return '';
+        
+    }
+}
+
+if (! function_exists('clearOld')) {
+    function clearOld()
+    {
+        session()->remove('old');
+    }
+}

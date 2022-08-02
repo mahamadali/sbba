@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ url('assets/backend/vendors/css/vendor.bundle.base.css') }}">
     <link rel="stylesheet" href="{{ url('assets/backend/css/vertical-layout-light/style.css') }}">
     <link rel="stylesheet" href="{{ url('assets/backend/vendors/dataTables.net-bs4/dataTables.bootstrap4.css') }}">
+    
 
     
 

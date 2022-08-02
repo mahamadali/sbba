@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title><?php echo setting('app.title', 'Quotations'); ?></title>
+    <title><?php echo setting('app.title'); ?></title>
     
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/feather/feather.css'); ?>">
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/ti-icons/css/themify-icons.css'); ?>">
@@ -141,10 +141,12 @@
       <div class="card-header">
         <div class="row">
           <div class="col-md-2">
-            <h6>Users</h6>
+            <h6>Practice Area</h6>
           </div>
           <div class="col">
-           
+            <a class="btn btn-md btn-primary float-right" href="<?php echo route('admin.practice_area.create'); ?>">
+              Add Practice Area
+            </a>
           </div>
         </div>
       </div>
@@ -153,34 +155,31 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Email</th>
-              
-              <th>Create At</th>
-              
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            
-            <?php if($totalUsers > 0) { ?>
-              <?php foreach($users as $user) { ?>
+            <?php if(count($practice_areas) > 0) { ?>
+              <?php foreach($practice_areas as $practice_area) { ?>
               <tr>
-                <td><?php echo $user->full_name; ?></td>
-                <td><?php echo $user->email; ?></td>
-               
-                <td><?php echo date('M d, Y H:i', strtotime($user->created_at)); ?></td>
-             
+                <td><?php echo $practice_area->title; ?></td>
                 <td>
-                  <a href="<?php echo url('admin/users/view/'.$user->id); ?>" class="btn btn-sm btn-success">
-                    <span><i class="ti-eye"></i></span>
+                  <a href="<?php echo url('admin/practice_area/edit/'.$practice_area->id); ?>" class="btn btn-sm btn-info">
+                    <span><i class="ti-pencil"></i></span>
                   </a>
+                  <form method="post" action="<?php echo url('admin/practice_area/delete/'.$practice_area->id); ?>" class="d-inline-block">
+                    <input type="hidden" name="_method" value="DELETE" />
+                    <button type="submit" class="btn btn-sm btn-danger">
+                      <span><i class="ti-trash"></i></span>
+                      </a>
+                  </form>
                 </td>
               </tr>
               <?php } ?>
             <?php } else { ?>
-            <tr>
-              <td colspan="4" class="text-center text-muted">No data found</td>
-            </tr>
+              <tr>
+                <td colspan="3" class="text-center text-muted">No data found</td>
+              </tr>
             <?php } ?>
           </tbody>
         </table>

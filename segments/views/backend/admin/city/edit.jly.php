@@ -1,6 +1,6 @@
 @extends('backend/app')
 
-@block("title") {{ setting('app.title', 'Quotations') }} @endblock
+@block("title") {{ setting('app.title') }} @endblock
 
 @block("styles")
 @endblock
@@ -9,26 +9,20 @@
 
   <div class="card card-inverse-light-with-black-text flatten-border">
     <div class="card-header">
-      Create Category
+      Edit City
     </div>
     <div class="card-body">
-      <form method="post" action="{{ route('admin.category.store') }}">
+      <form method="post" action="{{ route('admin.cities.update') }}">
+        <input type="hidden" name="id" value="{{ $city->id }}" />
         <div class="row">
           <div class="col">
             <div class="form-group">
-              <label>Cateogry Title</label>
-              <input type="text" class="form-control" name="title" value="{{ old('title') }}" />
+              <label>Name</label>
+              <input type="text" class="form-control" name="name" value="{{ $city->name }}" />
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col">
-            <div class="form-group">
-              <label>Prefix</label>
-              <input type="text" class="form-control" name="prefix" value="{{ old('prefix') }}" />
-            </div>
-          </div>
-        </div>
+        
         <div class="row mt-2">
           <div class="col">
             <div class="form-group">

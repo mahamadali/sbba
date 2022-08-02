@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title><?php echo setting('app.title', 'Quotations'); ?></title>
+    <title><?php echo setting('app.title'); ?></title>
     
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/feather/feather.css'); ?>">
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/ti-icons/css/themify-icons.css'); ?>">
@@ -74,7 +74,7 @@
 
       <li class="nav-item <?php echo (request()->matchesTO('/admin/cities/*')) ? 'active' : ''; ?>">
         <a class="nav-link" data-toggle="collapse" href="#cities" aria-expanded="false" aria-controls="cities">
-          <i class="ti-list menu-icon"></i>
+          <i class="icon-head menu-icon"></i>
           <span class="menu-title">Cities</span>
           <i class="menu-arrow"></i>
         </a>
@@ -82,20 +82,6 @@
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="<?php echo route('admin.cities.create'); ?>"> Add </a></li>
             <li class="nav-item"> <a class="nav-link" href="<?php echo route('admin.cities.list'); ?>"> Cities </a></li>
-          </ul>
-        </div>
-      </li>
-
-      <li class="nav-item <?php echo (request()->matchesTO('/admin/practice_area/*')) ? 'active' : ''; ?>">
-        <a class="nav-link" data-toggle="collapse" href="#practice_area" aria-expanded="false" aria-controls="practice_area">
-          <i class="ti-list menu-icon"></i>
-          <span class="menu-title">Practice Area</span>
-          <i class="menu-arrow"></i>
-        </a>
-        <div class="collapse <?php echo (request()->matchesTO('/admin/practice_area/*')) ? 'show' : ''; ?>" id="practice_area">
-          <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="<?php echo route('admin.practice_area.create'); ?>"> Add </a></li>
-            <li class="nav-item"> <a class="nav-link" href="<?php echo route('admin.practice_area.list'); ?>"> Practice Area </a></li>
           </ul>
         </div>
       </li>
@@ -135,59 +121,32 @@
     <span><?php echo session()->flash('info'); ?></span>
   </div>
 <?php } ?>
-                    <div class="row">
-  <div class="col-md-12">
-    <div class="card card-inverse-light-with-black-text flatten-border">
-      <div class="card-header">
+                    <div class="card card-inverse-light-with-black-text flatten-border">
+    <div class="card-header">
+      Edit City
+    </div>
+    <div class="card-body">
+      <form method="post" action="<?php echo route('admin.cities.update'); ?>">
+        <input type="hidden" name="id" value="<?php echo $city->id; ?>" />
         <div class="row">
-          <div class="col-md-2">
-            <h6>Users</h6>
-          </div>
           <div class="col">
-           
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" class="form-control" name="name" value="<?php echo $city->name; ?>" />
+            </div>
           </div>
         </div>
-      </div>
-      <div class="card-body">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              
-              <th>Create At</th>
-              
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-            <?php if($totalUsers > 0) { ?>
-              <?php foreach($users as $user) { ?>
-              <tr>
-                <td><?php echo $user->full_name; ?></td>
-                <td><?php echo $user->email; ?></td>
-               
-                <td><?php echo date('M d, Y H:i', strtotime($user->created_at)); ?></td>
-             
-                <td>
-                  <a href="<?php echo url('admin/users/view/'.$user->id); ?>" class="btn btn-sm btn-success">
-                    <span><i class="ti-eye"></i></span>
-                  </a>
-                </td>
-              </tr>
-              <?php } ?>
-            <?php } else { ?>
-            <tr>
-              <td colspan="4" class="text-center text-muted">No data found</td>
-            </tr>
-            <?php } ?>
-          </tbody>
-        </table>
-      </div>
+        
+        <div class="row mt-2">
+          <div class="col">
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary btn-lg">Save</button>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
-</div>
                 </div>
                 <footer class="footer">
   <div class="d-sm-flex justify-content-center justify-content-sm-between">
