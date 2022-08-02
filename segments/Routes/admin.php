@@ -7,6 +7,8 @@ use Controllers\AuthController;
 use Barriers\Admin\IsAuthenticated;
 use Controllers\Backend\CityController;
 use Controllers\Backend\PracticeAreaController;
+use Controllers\Backend\SettingController;
+
 
 
 Router::bunch('/admin', ['as' => 'admin.', 'barrier' => [IsAuthenticated::class]], function() {
@@ -32,6 +34,11 @@ Router::bunch('/admin', ['as' => 'admin.', 'barrier' => [IsAuthenticated::class]
 		Router::get('/edit/{user}', [ PracticeAreaController::class, 'edit' ])->name('edit');
 		Router::post('/update', [ PracticeAreaController::class, 'update' ])->name('update');
 		Router::post('/delete/{user}', [ PracticeAreaController::class, 'delete' ])->name('delete');
+	});
+
+	Router::bunch('/settings', ['as' => 'settings.'], function() {
+		Router::get('/list', [ SettingController::class, 'index' ])->name('list');
+		Router::post('/update', [ SettingController::class, 'update' ])->name('update');
 	});
 });
 

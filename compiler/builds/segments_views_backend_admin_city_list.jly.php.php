@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/css/vendor.bundle.base.css'); ?>">
     <link rel="stylesheet" href="<?php echo url('assets/backend/css/vertical-layout-light/style.css'); ?>">
     <link rel="stylesheet" href="<?php echo url('assets/backend/vendors/dataTables.net-bs4/dataTables.bootstrap4.css'); ?>">
+    
 
     
 
@@ -82,6 +83,20 @@
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="<?php echo route('admin.cities.create'); ?>"> Add </a></li>
             <li class="nav-item"> <a class="nav-link" href="<?php echo route('admin.cities.list'); ?>"> Cities </a></li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="nav-item <?php echo (request()->matchesTO('/admin/practice_area/*')) ? 'active' : ''; ?>">
+        <a class="nav-link" data-toggle="collapse" href="#practice_area" aria-expanded="false" aria-controls="practice_area">
+          <i class="ti-list menu-icon"></i>
+          <span class="menu-title">Practice Area</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse <?php echo (request()->matchesTO('/admin/practice_area/*')) ? 'show' : ''; ?>" id="practice_area">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="<?php echo route('admin.practice_area.create'); ?>"> Add </a></li>
+            <li class="nav-item"> <a class="nav-link" href="<?php echo route('admin.practice_area.list'); ?>"> Practice Area </a></li>
           </ul>
         </div>
       </li>

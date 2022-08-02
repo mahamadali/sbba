@@ -198,7 +198,7 @@ class Model extends Database
         return $this;
     }
 
-    public function ___whereNull($whereProp, $cond = 'AND')
+    public function ___whereNull($whereProp, $cond = ' AND')
     {
         $this->db->__where($whereProp, NULL, 'IS', $cond);
         return $this;

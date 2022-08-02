@@ -69,7 +69,7 @@
       <li class="nav-item <?php echo (request()->matchesTo('/admin/users/*')) ? 'active' : ''; ?>">
         <a class="nav-link" href="<?php echo route('admin.users.list'); ?>">
           <i class="icon-head menu-icon"></i>
-          <span class="menu-title">Users</span>
+          <span class="menu-title">Members</span>
         </a>
       </li>
 
@@ -143,62 +143,30 @@
         <div class="card-body">
             <div class="row">
             <div class="col-lg-4">
-                <div class="border-bottom text-center pb-4">
-                
-                
-                <div class="mb-3">
-                    <h3><?php echo $user->getFullNameProperty(); ?></h3>
-                    <div class="d-flex align-items-center justify-content-center">
+                <div class="text-center pb-4">
+                    <div >
+                        <h3><?php echo $user->full_name; ?></h3><hr>
+                        <h4 class="text-muted"><?php echo $user->email; ?></h4>
+                        <div class="d-flex align-items-center justify-content-center mt-2">
+                        <?php echo $user->city_id != '' ?  $user->city()->name .' | ' : ''; ?> <?php echo $user->law_firm ?? ''; ?>
+                        </div>
                     </div>
                 </div>
-                
-                </div>
-                
-                <div class="py-4">
-                <p class="clearfix">
-                    <span class="float-left">
-                    Name
-                    </span>
-                    <span class="float-right text-muted">
-                    <?php echo $user->getFullNameProperty(); ?>
-                    </span>
-                </p>
-               
-                <p class="clearfix">
-                    <span class="float-left">
-                    Email
-                    </span>
-                    <span class="float-right text-muted">
-                    <?php echo $user->email; ?>
-                    </span>
-                </p>
-
-                <p class="clearfix">
-                    <span class="float-left">
-                    City
-                    </span>
-                    <span class="float-right text-muted">
-                        <?php echo $user->city_id != '' ?  $user->getCity()->name : 'N/A'; ?>
-                    </span>
-                </p>
-
-                </div>
+              
             </div>
 
             <div class="col-lg-8">
-            <h3>Practice Area</h3>
-              <div class="card">
-              <div class="table-responsive">  
+            <h3>Practice Areas</h3>
+              <div class="card" style="border: 1px solid #CED4DA;padding:20px;">
+              <div class="table-responsive" >  
                     <table id="user-listing" class="table dataTable no-footer">
                     <thead>
-                        <th class="sorting_asc">#</th>
                         <th>Name</th>
                     </thead>
                     <tbody>
                         <?php if(!empty($user->practiceArea())) { ?>
                         <?php foreach($user->practiceArea() as $key => $practice_area) { ?>
                             <tr>
-                                <td><?php echo $key + 1; ?></td>
                                 <td>
                                     <?php if(!empty($practice_area->other)) { ?>
                                         <?php echo $practice_area->other; ?>
