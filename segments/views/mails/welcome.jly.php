@@ -5,7 +5,7 @@
 		<td class="pad">
 			<div style="color:#000000;direction:ltr;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size:15px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:18px;">
 				<h5>Hey Admin</h5>
-				<p style="margin: 0;">{{ $user->full_name }} is registered from {{ $user->getCity->name }} with {{ $user->law_firm }}.</p>
+				<p style="margin: 0;">{{ $user->full_name }} is registered from {{ $user->city->name }} with {{ $user->law_firm }}.</p>
 				<p>Please click below link to access admin portal.</p>
 			</div>
 		</td>
