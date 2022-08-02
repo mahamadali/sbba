@@ -8,7 +8,7 @@
     display: flex;
     align-items: center;
     background-color: #21b17d;
-    background-image: url(../img/img-landing-bg.webp);
+    /*background-image: url(../img/img-landing-bg.webp);*/
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: contain;
@@ -130,7 +130,7 @@
     bottom: 0;
     left: 0;
     z-index: 1;
-    max-width: 100vh;
+    max-width: 110vh;
     margin: auto;
     display: grid;
 }
@@ -145,6 +145,7 @@
 }
 
 .ui-onboard__wr-in-main {
+    /*position: absolute;*/
     position: absolute;
     top: 0;
     right: 0;
@@ -155,16 +156,16 @@
     grid-template-rows: 1fr -webkit-max-content 1fr;
     grid-template-rows: 1fr max-content 1fr;
     grid-template-areas:
-        "ui-top"
-        "ui-middle"
-        "ui-bottom";
+    "ui-top"
+    "ui-middle"
+    "ui-bottom";
 }
 
 .ui-onboard__wr-in-main--top {
     grid-area: ui-top;
     text-align: center;
     align-self: center;
-    padding: 20px;
+    padding: 10px;
 }
 
 .ui-onboard__wr-in-main--middle {
@@ -233,4 +234,30 @@
         border-radius: 24px;
         background-color: #fff;
     }
+
+}
+
+@media only screen and (max-width:898px) {
+     .signup_logo_div_mb
+     {
+        display:block !important;
+    }
+    .signup_logo_div
+    {
+        display:none !important;
+    }
+}
+
+.signup_logo_div
+{
+    position: relative;
+    display:block;
+}
+.signup_logo_div img
+{
+    position: absolute;
+    top: 40%;
+    right: 0px;
+    height:200px !important;
+    width: 200px !important;
 }
