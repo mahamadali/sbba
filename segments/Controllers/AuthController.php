@@ -8,6 +8,8 @@ use Bones\Session;
 use Jolly\Engine;
 use Models\Role;
 use Models\User;
+use Models\PracticeArea;
+use Models\UserPracticeArea;
 
 class AuthController
 {
@@ -42,16 +44,16 @@ class AuthController
 		$role = $user->role->name ?? '';
 		switch ($role) {
 			case 'admin':
-				return redirect()->to(route('admin.dashboard'))->go();
-				break;
+			return redirect()->to(route('admin.dashboard'))->go();
+			break;
 			case 'user':
-				return redirect()->to(route('user.dashboard'))->go();
-				break;
+			return redirect()->to(route('user.dashboard'))->go();
+			break;
 			default:
-				return Engine::error([
-					'error' => 'Unauthorised Access!'
-				]);
-				break;
+			return Engine::error([
+				'error' => 'Unauthorised Access!'
+			]);
+			break;
 		}
 		
 	}
@@ -61,9 +63,52 @@ class AuthController
 		return redirect()->to(route('auth.login'))->go();
 	}
 
-    public function signup()
-    {
-        return render('auth/signup');
-    }
+	public function signup()
+	{
+		$practice_areas = PracticeArea::get();
+		return render('auth/signup', [
+			'practice_areas' => $practice_areas
+		]);
+	}
+
+	public function register(Request $request)
+	{
+
+		$validator = $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'law_firm' => 'required',
+            'email' => 'required|unique:users,email'
+        ],[
+            'email.unique' => 'Email must be unique'
+        ]);
+
+        if ($validator->hasError()) {
+            return response()->json(['status' => 304, 'errors' => $validator->errors()]);
+        }
+
+		$user = new User();
+		$user->first_name = $request->first_name;
+		$user->last_name = $request->last_name;
+		$user->email = $request->email;
+		$user->city_id = $request->city_id;
+		$user->law_firm = $request->law_firm;
+		$user->role_id = Role::where('name', 'user')->first()->id;
+		$user = $user->save();
+
+		foreach($request->practice_areas as $key => $practice_area) {
+			$user_practice_area = new UserPracticeArea();
+			$user_practice_area->user_id = $user->id;
+			$user_practice_area->practice_area_id = ($practice_area == 'other') ? NULL : $practice_area;
+			$user_practice_area->other = $request->other_practice_area[$key];
+			$user_practice_area->save();
+		}
+
+		return response()->json([
+				'status' => 200,
+				'message' => 'Registration success!'
+			]);
+
+	}
 
 }
