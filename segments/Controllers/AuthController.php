@@ -108,7 +108,7 @@ class AuthController
 			$user_practice_area->save();
 		}
 
-		Alert::as(new WelcomeEmail(User::where('id', $user->id)->with('getCity')->first()))->notify();
+		Alert::as(new WelcomeEmail(User::where('id', $user->id)->with('city')->first()))->notify();
 
 		return response()->json([
 				'status' => 200,
