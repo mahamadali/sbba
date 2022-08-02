@@ -1,4 +1,5 @@
 <?php
+use Models\User;
 
 if (! function_exists('generateOTP')) {
     /**
@@ -14,5 +15,20 @@ if (! function_exists('generateOTP')) {
         else {
             return sprintf('%0'.$length.'d', mt_rand(1, str_repeat('9', $length)));
         }
+    }
+}
+
+if (! function_exists('auth')) {
+    function auth()
+    {
+        return session()->get('auth');
+    }
+}
+
+if (! function_exists('user')) {
+    function user()
+    {
+        $user = User::find(session()->get('auth')->id);
+        return $user;
     }
 }
