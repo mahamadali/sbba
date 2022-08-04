@@ -19,7 +19,11 @@ return new class
 
 	public function fall()
 	{
-		DataWing::dropColumn('city_id');
+		DataWing::modify($this->table, function (Skeleton $table)
+		{
+			$table->dropColumn('city_id');
+			return $table;
+		});
 	}
 
 };

@@ -19,7 +19,7 @@
           <div class="ui-onboard__wr-in-main--top">
            <div class="signup_logo_div_mb" style="display:none;">
              <a href="<?php echo url('/'); ?>">
-              <img src="<?php echo url('assets/frontend/img/logo.png'); ?>" alt="logo" class="top-logo">
+              <img src="<?php echo url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png'); ?>" alt="logo" class="top-logo">
             </a>  
           </div>
           <h2 class="onboard-navbar-text"><?php echo setting('app.title'); ?></h2>
@@ -28,7 +28,7 @@
           <div class="row">
             <div class="col-3 col-md-2 signup_logo_div">
               <a href="<?php echo url('/'); ?>">
-                <img src="<?php echo url('assets/frontend/img/logo.png'); ?>" alt="logo" class="top-logo">
+                <img src="<?php echo url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png'); ?>" alt="logo" class="top-logo">
               </a>
             </div> <!-- 25% -->
             <div class="col-12 col-md-8">
@@ -117,7 +117,7 @@
       </div> <!-- 75% -->
       <div class="col-3 col-md-2 signup_logo_div">
         <a href="<?php echo url('/'); ?>">
-          <img src="<?php echo url('assets/frontend/img/logo.png'); ?>" alt="logo" class="top-logo">
+          <img src="<?php echo url('assets/frontend/img/Solo_Boutique_Bar_Association-02.png'); ?>" alt="logo" class="top-logo">
         </a>
       </div> <!-- 25% -->
     </div>

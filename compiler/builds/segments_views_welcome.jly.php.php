@@ -30,7 +30,7 @@
                   <div data-v-4031e0bf="" class="ui-wrapper-navbar__inner">
                      <span data-v-4031e0bf="" class="navbar-logo__span">
                         <a href="<?php echo url('/'); ?>">
-                           <img src="<?php echo url('assets/frontend/img/logo.png'); ?>" alt="logo" class="navbar-logo">
+                           <img src="<?php echo url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png'); ?>" alt="logo" class="navbar-logo">
                         </a>
                      </span>
                      <div data-v-4031e0bf="">
@@ -185,7 +185,7 @@
     <!-- <div data-v-3c12640f="" class="cnt-main cnt-main--mobile ui-hide-none-mobile"><img data-v-3c12640f="" src="<?php echo url('assets/frontend/img/logo.png'); ?>" class="logo"><img data-v-3c12640f="" src="<?php echo url('assets/frontend/img/img-newsletter-mobile.f57bfb75.png'); ?>" class="img"><button data-v-3c12640f="" class="ui-btn">Sign Up Today!</button></div> -->
 
     <div data-v-3c12640f="" class="cnt-social">
-        <div class="ui-landing__footer-inner"><span class="footer-logo__span"><img src="<?php echo url('assets/frontend/img/logo.png'); ?>" alt="logo" class="footer-logo"></span></div>
+        <div class="ui-landing__footer-inner"><span class="footer-logo__span"><img src="<?php echo url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png'); ?>" alt="logo" class="footer-logo"></span></div>
         <p>Follow us on social media</p>
         <div data-v-3c12640f="">
             <a data-v-3c12640f="" href="javascript:void(0)" class="follow-ic follow-ic__fb"></a>

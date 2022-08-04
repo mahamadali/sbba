@@ -6,7 +6,7 @@
                   <div data-v-4031e0bf="" class="ui-wrapper-navbar__inner">
                      <span data-v-4031e0bf="" class="navbar-logo__span">
                         <a href="{{ url('/') }}">
-                           <img src="{{ url('assets/frontend/img/logo.png') }}" alt="logo" class="navbar-logo">
+                           <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="navbar-logo">
                         </a>
                      </span>
                      <div data-v-4031e0bf="">
