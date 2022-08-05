@@ -52,11 +52,21 @@
 </section> -->
 <!-- <section data-v-6c47e4b3="" data-v-88cae4b0="" class="section4"> -->
 
+<section data-v-70ba3ad3="" data-v-88cae4b0="" class="section1">
+  <div data-v-70ba3ad3="" class="section1__inner">
+     <div data-v-70ba3ad3="" class="section1__inner-txt">
+        <h1 data-v-70ba3ad3="">Keep Me In The Loop</h1>
+        <h2 class="home-subtitle">Sign-up today — we’ll get you out of the office (or off the laptop) and have a beverage in your hand in no time. Let's have fun! And make getting referrals easier for all of us.</h2>
+        <a href="{{ route('auth.sign-up')}}" class="ui-btn home-signup-footer">Sign Up</a>
+    </div>
+    <div data-v-70ba3ad3="" class="section1__inner-img">
+        
+    </div>
+</div>
+</section>
 
-
-<section data-v-76c57121="" data-v-88cae4b0="" class="section3">
+<!-- <section data-v-76c57121="" data-v-88cae4b0="" class="section3">
   <div data-v-6c47e4b3="" class="section4__inner" style="padding-left:12%;display: block;">
-    <!--  <div data-v-6c47e4b3="" class="section4__inner-img"><img data-v-6c47e4b3="" src="{{url('assets/frontend/img/keep_me_in_that_loop.png')}}"></div> -->
      <div data-v-6c47e4b3="" class="section4__inner-txt-top">
         <h1 data-v-6c47e4b3="">Keep Me In The Loop</h1>
     </div>
@@ -65,7 +75,7 @@
         <a href="{{ route('auth.sign-up')}}" class="ui-btn home-signup-footer">Sign Up</a>
     </div>
 </div>
-</section>
+</section> -->
 
 <!-- <section data-v-0a90d734="" data-v-88cae4b0="" class="section5">
   <div data-v-0a90d734="" class="section5__inner">

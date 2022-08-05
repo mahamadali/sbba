@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{{ url('assets/css/welcome.css') }}" />
 <style type="text/css">
   #terms-of-use {
-    background-color: #00d481;
+    background-color: #ec1f27;
   }
   .terms-of-use-info {
     background-color: #fff;

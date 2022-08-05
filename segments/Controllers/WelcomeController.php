@@ -8,7 +8,7 @@ class WelcomeController
     public function index()
     {
         $cities = City::get();
-        return render('welcome', [
+        return render('home', [
             'cities' => $cities
         ]);
      

@@ -21,16 +21,16 @@
               <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="top-logo">
             </a>  
           </div>
-          <h2 class="onboard-navbar-text">{{ setting('app.title') }}</h2>
+          <h2 class="onboard-navbar-text">{{ strtoupper(setting('app.title')) }}</h2>
         </div>
         <div class="ui-onboard__wr-in-main--middle">
           <div class="row">
-            <div class="col-3 col-md-2 signup_logo_div">
+            <div class="col-md-3 signup_logo_div text-right">
               <a href="{{ url('/') }}">
                 <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="top-logo">
               </a>
             </div> <!-- 25% -->
-            <div class="col-12 col-md-8">
+            <div class="col-md-6">
               <div class="myform form ui-onboard-form onboard-main">
                <div class="logo">
                  <div class="col-md-12">
@@ -60,7 +60,7 @@
                   @foreach($cities as $city):
                   <option value="{{ $city->id }}">{{ $city->name }}</option>
                   @endforeach
-            </select>
+                  </select>
                 </div>
                 <div class="form-group  mt-4">
                   <label for="law_firm">Law Firm</label>
@@ -114,7 +114,7 @@
 
         </div>
       </div> <!-- 75% -->
-      <div class="col-3 col-md-2 signup_logo_div">
+      <div class="col-md-3 signup_logo_div">
         <a href="{{ url('/') }}">
           <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-02.png') }}" alt="logo" class="top-logo">
         </a>
@@ -134,7 +134,7 @@
 
 
   /* $(document).on('click', '.practice_area_add', function(){
-    $(this).closest("div.add_new").after('<div class="row add_new mt-1"><div class="form-group col-11"><input id="practice_area" name="practice_area[]" placeholder="Practice Area" class="form-control practice_area" type="text" required></div><div class="form-group col-1 mt-2" style="font-size:20px"><a href="#" class="practice_area_remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></div></div>');
+    $(this).closest("div.add_new").after('<div class="row add_new mt-1"><div class="form-group col-11"><input id="practice_area" name="practice_area[]" placeholder="Practice Area" class="form-control practice_area" type="text" required></div><div class="form-group col-1 mt-2" style="font-size:20px"><a href="javascript:void(0);" class="practice_area_remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></div></div>');
     var i = $(".row.add_new .practice_area").length;
     $(".row.add_new:last input[name='practice_area["+i+"]']").rules("add", {
       required: true
@@ -142,7 +142,7 @@
   });*/
   
   $(document).on('click', '.practice_area_add', function(){
-    $("div.add_new:last").after('<div class="row add_new mt-1"><div class="form-group col-11"><select class="form-control practice_areas" name="practice_areas[]" required><option value="">Select</option>@foreach ($practice_areas as $area):<option value="{{ $area->id }}">{{ $area->title }}</option>@endforeach<option value="other">Other</option></select></div><div class="form-group col-1 mt-2" style="font-size:20px"><a href="#" class="practice_area_remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></div><div class="row mt-2 other_practice_area_section" style="display:none"><div class="form-group col-12"><input name="other_practice_area[]" placeholder="Enter Practice Area" class="form-control" type="text" required></div></div></div>');
+    $("div.add_new:last").after('<div class="row add_new mt-1"><div class="form-group col-11"><select class="form-control practice_areas" name="practice_areas[]" required><option value="">Select</option>@foreach ($practice_areas as $area):<option value="{{ $area->id }}">{{ $area->title }}</option>@endforeach<option value="other">Other</option></select></div><div class="form-group col-1 mt-2" style="font-size:20px"><a href="javascript:void(0);" class="practice_area_remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></div><div class="row mt-2 other_practice_area_section" style="display:none"><div class="form-group col-12"><input name="other_practice_area[]" placeholder="Enter Practice Area" class="form-control" type="text" required></div></div></div>');
     var i = $(".row.add_new .practice_area").length;
     $(".row.add_new:last input[name='practice_area["+i+"]']").rules("add", {
       required: true
