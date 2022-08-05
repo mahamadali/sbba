@@ -13,7 +13,7 @@
         <h1 data-v-70ba3ad3="">Have Fun & Get More Referrals</h1>
         <h2 class="home-subtitle">SBBA is a free bar association for solo and boutique law firms that provide services to companies. Enjoy social events and benefit from referrals from other members.</h2>
     </div>
-    <div data-v-70ba3ad3="" class="section1__inner-img"><img data-v-70ba3ad3="" src="{{url('assets/frontend/img/Solo_Boutique_Bar_Association-02.png')}}"></div>
+    <div data-v-70ba3ad3="" class="section1__inner-img"><img data-v-70ba3ad3="" src="{{url('assets/frontend/img/Solo_Boutique_Bar_Association-02.jpg')}}"></div>
 </div>
 </section>
 <section data-v-76520ee6="" data-v-88cae4b0="" class="section2">
