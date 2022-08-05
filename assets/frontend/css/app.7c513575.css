@@ -3182,7 +3182,7 @@ p[data-v-4031e0bf]{
     min-height:124px;
     margin:0;
     z-index:1;
-    border-bottom:1px solid #00d481
+    border-bottom:1px solid #ec1f27
 }
 @media(max-width:991px){
     .ui-wrapper-navbar[data-v-4031e0bf]{
@@ -3233,7 +3233,7 @@ p[data-v-4031e0bf]{
 .ui-wrapper-navbar__inner .ui-btn[data-v-4031e0bf]{
     height:40px;
     border-radius:10px;
-    background-color:#00d481;
+    background-color:#ec1f27;
     font-size:22px;
     font-weight:400;
     margin-top:24px;
@@ -3244,9 +3244,9 @@ p[data-v-4031e0bf]{
 }
 .ui-wrapper-navbar__inner .ui-btn__outline[data-v-4031e0bf]{
     background-color:transparent;
-    color:#00d481;
+    color:#ec1f27;
     font-weight:500;
-    box-shadow:inset 0 0 0 1px #00d481
+    box-shadow:inset 0 0 0 1px #ec1f27
 }
 @media(max-width:991px){
     .ui-wrapper-navbar__inner .ui-btn[data-v-4031e0bf]{

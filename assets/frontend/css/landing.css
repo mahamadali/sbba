@@ -16,7 +16,7 @@
     min-height: 124px;
     margin: 0;
     z-index: 1;
-    border-bottom: 1px solid #00d481;
+    border-bottom: 1px solid #ec1f27;
 }
 .ui-wrapper-navbar__inner {
     display: flex;
@@ -38,7 +38,7 @@
     color: #fff;
     line-height: 1.2;
     padding: 5px 0 5px 20px;
-    border-left: 5px solid #00d481;
+    border-left: 5px solid #ec1f27;
     margin: 48px 0;
 }
 
@@ -46,7 +46,7 @@
     font-family: Roboto,sans-serif;
     font-weight: 700;
     font-size: 48px;
-    color: #00d481;
+    color: #ec1f27;
     line-height: 1.2;
 }
 
@@ -71,7 +71,7 @@
 .home-signup-footer, .home-signup-footer:hover, .home-signup-footer:focus {
     height: 55px;
     border-radius: 10px;
-    background-color: #00d481;
+    background-color: #ec1f27;
     font-size: 28px;
     font-weight: 400;
     margin-top: 24px;
@@ -89,7 +89,7 @@
     font-family: Roboto,sans-serif;
     font-weight: 700;
     font-size: 40px;
-    color: #00d481;
+    color: #ec1f27;
     line-height: 1.2;
     padding-left: 5%;
 }
@@ -97,7 +97,7 @@
     font-family: Roboto,sans-serif;
     font-weight: 700;
     font-size: 40px;
-    color: #00d481;
+    color: #ec1f27;
     line-height: 1.2;
 }
 
@@ -241,5 +241,15 @@
         height: 50px;
         margin: 0 8px 8px 0;
     }
+
+    .section2__inner-txt-bottom{
+        padding-left: 0% !important;
+    }
+}
+.section2__inner-txt-bottom{
+    padding-left: 15%;
+}
+.logo_hover:hover{
+    color: #25aae1;
 }
 

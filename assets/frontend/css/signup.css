@@ -258,6 +258,6 @@
     position: absolute;
     top: 40%;
     right: 0px;
-    height:200px !important;
-    width: 200px !important;
+    /* height:200px !important; */
+    /* width: 200px !important; */
 }

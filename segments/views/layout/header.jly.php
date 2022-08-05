@@ -4,15 +4,15 @@
             <div data-v-88cae4b0="" class="ui-landing">
                <div data-v-4031e0bf="" data-v-88cae4b0="" class="ui-wrapper-navbar">
                   <div data-v-4031e0bf="" class="ui-wrapper-navbar__inner">
-                     <span data-v-4031e0bf="" class="navbar-logo__span">
-                        <a href="{{ url('/') }}">
-                           <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="navbar-logo">
+                     <span data-v-4031e0bf="" class="navbar-logo__span" style="color:#ec1f27;text-align: center;">
+                        <a href="{{ url('/') }}" class="logo_hover">
+                           <!-- <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="navbar-logo"> -->
+                           <h5>SOLO & BOUTIQUE<br>BAR ASSOCIATION</h5>
+                           
                         </a>
                      </span>
                      <div data-v-4031e0bf="">
-                        <!-- <button data-v-4031e0bf="" class="ui-btn">Sign Up</button> -->
-                        <a href="{{ route('auth.sign-up')}}" data-v-4031e0bf="" class="ui-btn home-signup">Sign Up</a>
-                        <button data-v-4031e0bf="" class="ui-btn ui-btn__outline">Login</button>
+                        <a href="{{ route('auth.sign-up')}}" data-v-4031e0bf="" class="ui-btn ui-btn__outline" style="padding:5px;padding-left: 20px;padding-right: 20px;">Sign Up</a>
                      </div>
                   </div>
                </div>
