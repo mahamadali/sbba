@@ -1,9 +1,25 @@
-  @extends('app')
+<?php class_exists('Jolly\Engine') or exit; ?>
+  <html>
+<head>
+    <title><?php echo 'Terms - '.setting('app.title', 'Ali Rocks!'); ?></title>
+    <meta charset="utf-8">
+    <html lang="" data-theme="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no,maximum-scale=1,user-scalable=0">
+    <link rel="icon" href="<?php echo url('assets/frontend/img/favicon.png'); ?>">
 
-@block("title") {{ 'Terms - '.setting('app.title', 'Ali Rocks!') }} @endblock
+    
+      <link href=" <?php echo url('assets/frontend/js/app.186570a1.js'); ?> " rel="preload" as="script">
+      <link href=" <?php echo url('assets/frontend/js/chunk-vendors.8af9899c.js'); ?> " rel="preload" as="script">
+      <link href=" <?php echo url('assets/frontend/css/app.7c513575.css'); ?> " rel="stylesheet">
+      <link rel="stylesheet" type="text/css" href=" <?php echo url('assets/frontend/css/chunk-10e6a05d.0a76f51e.css'); ?> ">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href=" <?php echo url('assets/frontend/css/landing.css'); ?> ">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-@block("styles")
-<link rel="stylesheet" href="{{ url('assets/css/welcome.css') }}" />
+
+        <link rel="stylesheet" href="<?php echo url('assets/css/welcome.css'); ?>" />
 <style type="text/css">
   #terms-of-use {
     background-color: #ec1f27;
@@ -19,11 +35,30 @@
     text-align: center;
   }
 </style>
-@endblock
+    </head>
+    <body>
+        <noscript><strong>We're sorry but Bizfluence doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript>
+      <div id="app">
+         <div>
+            <div data-v-88cae4b0="" class="ui-landing">
+               <div data-v-4031e0bf="" data-v-88cae4b0="" class="ui-wrapper-navbar">
+                  <div data-v-4031e0bf="" class="ui-wrapper-navbar__inner">
+                     <span data-v-4031e0bf="" class="navbar-logo__span" style="color:#ec1f27;text-align: center;">
+                        <a href="<?php echo url('/'); ?>" class="logo_hover">
+                           <!-- <img src="<?php echo url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png'); ?>" alt="logo" class="navbar-logo"> -->
+                           <h5>SOLO & BOUTIQUE<br>BAR ASSOCIATION</h5>
+                           
+                        </a>
+                     </span>
+                     <div data-v-4031e0bf="">
+                        <a href="<?php echo route('auth.sign-up'); ?>" data-v-4031e0bf="" class="ui-btn ui-btn__outline" style="padding:5px;padding-left: 20px;padding-right: 20px;">Sign Up</a>
+                     </div>
+                  </div>
+               </div>
+               
 
-@block("content")
 
-  <section id="terms-of-use" class="terms-of-use section-bg pt-3 pb-3">
+        <section id="terms-of-use" class="terms-of-use section-bg pt-3 pb-3">
     <div class="container aos-init aos-animate" data-aos="fade-up">
       <div class="section-title">
         <h2>TERMS OF SERVICE</h2>
@@ -202,7 +237,7 @@
                     <br><br>
                     WITHOUT LIMITING THE GENERALITY OF THE FOREGOING, ANY MATERIALS, DATA, TEXT, IMAGES, VIDEO, AUDIO OR SOFTWARE DOWNLOADED OR OTHERWISE OBTAINED THROUGH THE GAME USED WEB PLATFORMS ARE ACCESSED, DOWNLOADED OR OBTAINED AT YOUR OWN DISCRETION AND RISK, AND YOU WILL BE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM, MOBILE DEVICE OR OTHER PROPERTY THAT RESULTS THEREFROM OR FROM YOUR USE OF ANY SUCH MATERIALS.
                     <br><br>
-                    IN NO EVENT SHALL THE TOTAL AGGREGATE LIABILITY OF THE RELEASED PARTIES FOR ALL DAMAGES, LOSSES, AND CAUSES OF ACTION (WHETHER IN CONTRACT OR TORT, INCLUDING, BUT NOT LIMITED TO, NEGLIGENCE OR OTHERWISE) ARISING FROM THESE TERMS OF SERVICE OR YOUR USE OF THE GAME USED WEB PLATFORMS OR THE CONTENT, MATERIALS, INFORMATION, FUNCTIONS OR PRODUCTS AVAILABLE THROUGH THE GAME USED WEB PLATFORMS EXCEED, IN THE AGGREGATE, FIFTY DOLLARS ($50.00).
+                    IN NO EVENT SHALL THE TOTAL AGGREGATE LIABILITY OF THE RELEASED PARTIES FOR ALL DAMAGES, LOSSES, AND CAUSES OF ACTION (WHETHER IN CONTRACT OR TORT, INCLUDING, BUT NOT LIMITED TO, NEGLIGENCE OR OTHERWISE) ARISING FROM THESE TERMS OF SERVICE OR YOUR USE OF THE GAME USED WEB PLATFORMS OR THE CONTENT, MATERIALS, INFORMATION, FUNCTIONS OR PRODUCTS AVAILABLE THROUGH THE GAME USED WEB PLATFORMS EXCEED, IN THE AGGREGATE, FIFTY DOLLARS (.00).
                   </li>
                   <li>
                     <u>Dispute Resolution</u>. EXCEPT AS OTHERWISE PROVIDED UNDER THESE TERMS OF SERVICE, ALL DISPUTES AND CLAIMS BETWEEN YOU AND GAME USED AUTHORITY THAT ARISE OUT OF OR IN CONNECTION WITH, OR RELATE TO, THESE TERMS OF SERVICE SHALL BE RESOLVED, AT THE FILING PARTY'S ELECTION, IN EITHER A SMALL CLAIMS COURT OR BY FINAL AND BINDING ARBITRATION ADMINISTERED BY THE AMERICAN ARBITRATION ASSOCIATION UNDER ITS COMMERCIAL ARBITRATION RULES AND SUPPLEMENTARY PROCEDURES FOR CONSUMER-RELATED DISPUTES, WHICH ARBITRATION SHALL TAKE PLACE IN CHICAGO, ILLINOIS. ALL DISPUTES IN ARBITRATION WILL BE HANDLED SOLELY BETWEEN THE NAMED PARTIES, AND NOT ON ANY REPRESENTATIVE OR CLASS BASIS. FURTHER, UNLESS BOTH YOU AND GAME USED AUTHORITY AGREE OTHERWISE, THE ARBITRATOR MAY NOT CONSOLIDATE MORE THAN ONE PERSON'S CLAIMS, AND MAY NOT OTHERWISE PRESIDE OVER ANY FORM OF A REPRESENTATIVE OR CLASS PROCEEDING. THE ARBITRATOR MAY AWARD DECLARATORY OR INJUNCTIVE RELIEF ONLY IN FAVOR OF THE INDIVIDUAL PARTY SEEKING RELIEF AND ONLY TO THE EXTENT NECESSARY TO PROVIDE RELIEF WARRANTED BY THAT PARTY'S INDIVIDUAL CLAIM WITHOUT AFFECTING OTHER INDIVIDUALS.
@@ -231,8 +266,41 @@
       </div>
     </div>
   </section>
-@endblock
+            
+    <section data-v-3c12640f="" data-v-88cae4b0="" class="sectionContact">
+      <div class="sectionContact__inner">
+       <!-- <div data-v-3c12640f="" class="cnt-main ui-hide-mobile">
+        <h1 data-v-3c12640f="">Sign Up Today!</h1>
+        <button data-v-3c12640f="" class="ui-btn">Sign Up!</button>
+    </div> -->
+    <!-- <div data-v-3c12640f="" class="cnt-main cnt-main--mobile ui-hide-none-mobile"><img data-v-3c12640f="" src="<?php echo url('assets/frontend/img/logo.png'); ?>" class="logo"><img data-v-3c12640f="" src="<?php echo url('assets/frontend/img/img-newsletter-mobile.f57bfb75.png'); ?>" class="img"><button data-v-3c12640f="" class="ui-btn">Sign Up Today!</button></div> -->
 
-@block("scripts")
-<script src="{{ url('assets/js/app.js') }}" type="text/javascript"></script>
-@endblock
+    <div data-v-3c12640f="" class="cnt-social">
+        <div class="ui-landing__footer-inner"><span class="footer-logo__span"><img src="<?php echo url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png'); ?>" alt="logo" class="footer-logo"></span></div>
+        <p>Follow us on social media</p>
+        <div data-v-3c12640f="">
+            <a data-v-3c12640f="" href="javascript:void(0)" class="follow-ic follow-ic__fb"></a>
+            <a data-v-3c12640f="" href="javascript:void(0)" class="follow-ic follow-ic__ig"></a>
+            <a data-v-3c12640f="" href="javascript:void(0)" class="follow-ic follow-ic__in"></a>
+            <p><a href="<?php echo route('terms-condition'); ?>" target="_blank" class="text-white">Terms & Conditions</a></p>
+        </div>
+    </div>
+    </div>
+    </section>
+
+    <!-- <footer data-v-88cae4b0="" class="ui-landing__footer">
+                  <div data-v-88cae4b0="" class="ui-landing__footer-inner"><span data-v-88cae4b0="" class="footer-logo__span"><img data-v-88cae4b0="" src="<?php echo url('assets/frontend/img/logo.png'); ?>" alt="logo" class="footer-logo"></span></div>
+               </footer> -->
+            </div>
+         </div>
+      </div>
+        <script src="<?php echo url('assets/js/app.js'); ?>" type="text/javascript"></script>
+    </body>
+</html>
+
+
+
+
+
+
+

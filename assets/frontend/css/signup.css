@@ -130,7 +130,7 @@
     bottom: 0;
     left: 0;
     z-index: 1;
-    max-width: 110vh;
+    /*max-width: 110vh;*/
     margin: auto;
     display: grid;
 }
@@ -151,7 +151,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    display: grid;
+    /*display: grid;*/
     grid-template-columns: 1fr;
     grid-template-rows: 1fr -webkit-max-content 1fr;
     grid-template-rows: 1fr max-content 1fr;
@@ -180,7 +180,7 @@
     font-weight: 300;
     color: #fff;
     margin: 10px 0 7px;
-    opacity: .75;
+    opacity: 1;
     letter-spacing: .02em;
     font-family: Inter,sans-serif;
 }
@@ -255,9 +255,11 @@
 }
 .signup_logo_div img
 {
-    position: absolute;
-    top: 40%;
-    right: 0px;
-    /* height:200px !important; */
-    /* width: 200px !important; */
+    position: relative;
+    top: 20%;
+    /*position: absolute;
+    top: 20%;
+    right: -15px;*/
+    height:200px !important;
+    /*width: 200px !important;*/
 }
