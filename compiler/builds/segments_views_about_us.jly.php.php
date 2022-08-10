@@ -1,7 +1,7 @@
 <?php class_exists('Jolly\Engine') or exit; ?>
   <html>
 <head>
-    <title><?php echo 'Terms - '.setting('app.title', 'Ali Rocks!'); ?></title>
+    <title><?php echo 'AboutUs - '.setting('app.title', 'Ali Rocks!'); ?></title>
     <meta charset="utf-8">
     <html lang="" data-theme="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -58,7 +58,7 @@
                   </div>
                </div> -->
 
-               <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+               <nav class="navbar navbar-expand-lg navbar-dark header-bg">
                  <div class="container-fluid">
                    <a class="navbar-brand" href="<?php echo url('/'); ?>">
                       <img src="<?php echo url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png'); ?>" alt="logo" class="navbar-logo bg-white" style="border-radius:4px">
@@ -75,8 +75,11 @@
                        <li class="nav-item">
                          <a class="nav-link <?php echo (Bones\Str::contains(request()->currentPage(), '/about-us')) ? 'active' : ''; ?>" href="<?php echo route('about-us'); ?>">About Us</a>
                        </li>
-                       <li class="nav-item">
-                         <button class="btn btn-outline-danger" type="submit">Sign Up</button>
+                       <li class="nav-item signup_desk">
+                         <a class="btn btn-header <?php echo (Bones\Str::contains(request()->currentPage(), '/sign-up')) ? 'active' : ''; ?>" href="<?php echo route('auth.sign-up'); ?>">Sign Up</a>
+                       </li>
+                        <li class="nav-item signup_mb">
+                         <a class="nav-link <?php echo (Bones\Str::contains(request()->currentPage(), '/sign-up')) ? 'active' : ''; ?>" href="<?php echo route('auth.sign-up'); ?>">Sign Up</a>
                        </li>
                      </ul>
                    </div>

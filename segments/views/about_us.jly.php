@@ -1,6 +1,6 @@
   @extends('app')
 
-@block("title") {{ 'Terms - '.setting('app.title', 'Ali Rocks!') }} @endblock
+@block("title") {{ 'AboutUs - '.setting('app.title', 'Ali Rocks!') }} @endblock
 
 @block("styles")
 <link rel="stylesheet" href="{{ url('assets/css/welcome.css') }}" />
