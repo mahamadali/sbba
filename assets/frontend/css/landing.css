@@ -285,6 +285,25 @@
 {
     color: #ec1f27;
 }
+.header-bg
+{
+    background-color:#1b2330;
+}
+.btn-header
+{
+    height: auto;
+    border-radius: 5px;
+    background-color: #ec1f27;
+    font-size: 18px;
+    font-weight: 400;
+    font-family: Roboto,sans-serif;
+    min-width: 110px;
+    text-decoration: none;
+    width: inherit;
+    text-align: center;
+    padding: 5px;
+    color:#fff;
+}
 
 @media only screen and (max-width: 600px) {
   .title_desk
