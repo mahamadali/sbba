@@ -30,10 +30,10 @@
                    <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                      <ul class="navbar-nav">
                        <li class="nav-item">
-                         <a class="nav-link active" aria-current="page" href="{{ route('landing')}}">Home</a>
+                         <a class="nav-link {{ (Bones\Str::contains(request()->currentPage(), '/home')) ? 'active' : '' }}" aria-current="page" href="{{ route('landing')}}">Home</a>
                        </li>
                        <li class="nav-item">
-                         <a class="nav-link" href="{{ route('about-us')}}">About Us</a>
+                         <a class="nav-link {{ (Bones\Str::contains(request()->currentPage(), '/about-us')) ? 'active' : '' }}" href="{{ route('about-us')}}">About Us</a>
                        </li>
                        <li class="nav-item">
                          <button class="btn btn-outline-danger" type="submit">Sign Up</button>
