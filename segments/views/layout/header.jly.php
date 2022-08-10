@@ -35,8 +35,11 @@
                        <li class="nav-item">
                          <a class="nav-link {{ (Bones\Str::contains(request()->currentPage(), '/about-us')) ? 'active' : '' }}" href="{{ route('about-us')}}">About Us</a>
                        </li>
-                       <li class="nav-item">
-                         <button class="btn btn-header" type="submit">Sign Up</button>
+                       <li class="nav-item signup_desk">
+                         <a class="btn btn-header {{ (Bones\Str::contains(request()->currentPage(), '/sign-up')) ? 'active' : '' }}" href="{{ route('auth.sign-up')}}">Sign Up</a>
+                       </li>
+                        <li class="nav-item signup_mb">
+                         <a class="nav-link {{ (Bones\Str::contains(request()->currentPage(), '/sign-up')) ? 'active' : '' }}" href="{{ route('auth.sign-up')}}">Sign Up</a>
                        </li>
                      </ul>
                    </div>
