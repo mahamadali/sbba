@@ -1,7 +1,7 @@
 
 
 .ui-landing {
-    font-family: inherit;
+    /*font-family: inherit;*/
     font-weight: inherit;
     font-style: inherit;
     text-decoration: none;
@@ -34,7 +34,7 @@
 }
 
 .home-subtitle {
-    font-family: Roboto,sans-serif;
+    /*font-family: Roboto,sans-serif;*/
     font-weight: 400;
     font-size: 28px;
     color: #fff;
@@ -45,7 +45,7 @@
 }
 
 .home-tite {
-    font-family: Roboto,sans-serif;
+    /*font-family: Roboto,sans-serif;*/
     font-weight: 700;
     font-size: 48px;
     color: #ec1f27;
@@ -64,7 +64,7 @@
 }
 
 .choose-city-label {
-    font-family: Roboto,sans-serif;
+    /*font-family: Roboto,sans-serif;*/
     font-weight: 400;
     font-size: 18px;
     color: #fff;
@@ -80,7 +80,7 @@
     font-weight: 400;
     /*margin-top: 24px;
     margin-bottom: 30px;*/
-    font-family: Roboto,sans-serif;
+    /*font-family: Roboto,sans-serif;*/
     min-width: 220px;
     /*padding-top: 10px;
     padding-bottom: 10px;
@@ -93,7 +93,7 @@
 }
 
 .keep-me-loop-text {
-    font-family: Roboto,sans-serif;
+    /*font-family: Roboto,sans-serif;*/
     font-weight: 700;
     font-size: 40px;
     color: #ec1f27;
@@ -101,7 +101,7 @@
     padding-left: 5%;
 }
 .build-referel-network-text {
-    font-family: Roboto,sans-serif;
+    /*font-family: Roboto,sans-serif;*/
     font-weight: 700;
     font-size: 40px;
     color: #ec1f27;
@@ -146,7 +146,7 @@
 }
 
 .sectionContact__inner .cnt-social {
-    font-family: Roboto,sans-serif;
+    /*font-family: Roboto,sans-serif;*/
     font-weight: 400;
     font-size: 28px;
     color: #fff;
@@ -197,7 +197,7 @@
 }*/
 
 .section1__inner-txt h1 {
-    font-family: Roboto,sans-serif;
+    /*font-family: Roboto,sans-serif;*/
     font-weight: 700;
     font-size: 48px;
     color: #ec1f27;
@@ -208,7 +208,7 @@
 {
     .home-subtitle {
         font-size: 16px;
-        font-family: Roboto,sans-serif;
+        /*font-family: Roboto,sans-serif;*/
         font-weight: 400;
         color: #fff;
         line-height: 1.2;
@@ -296,7 +296,7 @@
     background-color: #ec1f27;
     font-size: 18px;
     font-weight: 400;
-    font-family: Roboto,sans-serif;
+    /*font-family: Roboto,sans-serif;*/
     min-width: 110px;
     text-decoration: none;
     width: inherit;
