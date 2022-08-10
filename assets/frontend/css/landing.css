@@ -304,11 +304,27 @@
     padding: 5px;
     color:#fff;
 }
+ .signup_desk
+    {
+        display:block;
+    }
+    .signup_mb
+    {
+        display:none;
+    }
 
 @media only screen and (max-width: 600px) {
   .title_desk
     {
         display:none;
+    }
+    .signup_desk
+    {
+        display:none;
+    }
+    .signup_mb
+    {
+        display:block;
     }
 }
 

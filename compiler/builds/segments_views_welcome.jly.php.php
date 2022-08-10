@@ -60,8 +60,11 @@
                        <li class="nav-item">
                          <a class="nav-link <?php echo (Bones\Str::contains(request()->currentPage(), '/about-us')) ? 'active' : ''; ?>" href="<?php echo route('about-us'); ?>">About Us</a>
                        </li>
-                       <li class="nav-item">
-                         <button class="btn btn-header" type="submit">Sign Up</button>
+                       <li class="nav-item signup_desk">
+                         <a class="btn btn-header <?php echo (Bones\Str::contains(request()->currentPage(), '/sign-up')) ? 'active' : ''; ?>" href="<?php echo route('auth.sign-up'); ?>">Sign Up</a>
+                       </li>
+                        <li class="nav-item signup_mb">
+                         <a class="nav-link <?php echo (Bones\Str::contains(request()->currentPage(), '/sign-up')) ? 'active' : ''; ?>" href="<?php echo route('auth.sign-up'); ?>">Sign Up</a>
                        </li>
                      </ul>
                    </div>
