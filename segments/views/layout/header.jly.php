@@ -30,16 +30,16 @@
                    <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                      <ul class="navbar-nav">
                        <li class="nav-item">
-                         <a class="nav-link {{ (Bones\Str::contains(request()->currentPage(), '/home')) ? 'active' : '' }}" aria-current="page" href="{{ route('landing')}}">Home</a>
+                         <a class="nav-link {{ (request()->matchesTo('/home') || request()->matchesTo('/')) ? 'active' : '' }}" aria-current="page" href="{{ route('landing')}}">Home</a>
                        </li>
                        <li class="nav-item">
-                         <a class="nav-link {{ (Bones\Str::contains(request()->currentPage(), '/about-us')) ? 'active' : '' }}" href="{{ route('about-us')}}">About Us</a>
+                         <a class="nav-link {{ (request()->matchesTo('/about-us')) ? 'active' : '' }}" href="{{ route('about-us')}}">About Us</a>
                        </li>
                        <li class="nav-item signup_desk">
-                         <a class="btn btn-header {{ (Bones\Str::contains(request()->currentPage(), '/sign-up')) ? 'active' : '' }}" href="{{ route('auth.sign-up')}}">Sign Up</a>
+                         <a class="btn btn-header {{ (request()->matchesTo('/sign-up')) ? 'active' : '' }}" href="{{ route('auth.sign-up')}}">Sign Up</a>
                        </li>
                         <li class="nav-item signup_mb">
-                         <a class="nav-link {{ (Bones\Str::contains(request()->currentPage(), '/sign-up')) ? 'active' : '' }}" href="{{ route('auth.sign-up')}}">Sign Up</a>
+                         <a class="nav-link {{ (request()->matchesTo('/sign-up')) ? 'active' : '' }}" href="{{ route('auth.sign-up')}}">Sign Up</a>
                        </li>
                      </ul>
                    </div>
