@@ -10,8 +10,8 @@
 <section data-v-70ba3ad3="" data-v-88cae4b0="" class="section1">
   <div data-v-70ba3ad3="" class="section1__inner">
      <div data-v-70ba3ad3="" class="section1__inner-txt">
-        <h1 data-v-70ba3ad3="">Have Fun & Get More Referrals</h1>
-        <h2 class="home-subtitle">SBBA is a free bar association for solo and boutique law firms that provide services to companies. Enjoy social events and benefit from referrals from other members.</h2>
+        <h1 data-v-70ba3ad3="">Who Are We?</h1>
+        <h2 class="home-subtitle">We are a free bar association for solo and boutique law firms that provide services to companies. Enjoy social events and benefit from referrals from other members.</h2>
     </div>
     <div data-v-70ba3ad3="" class="section1__inner-img"><img data-v-70ba3ad3="" src="{{url('assets/frontend/img/Solo_Boutique_Bar_Association-02.jpg')}}"></div>
 </div>
@@ -55,7 +55,7 @@
 <section data-v-70ba3ad3="" data-v-88cae4b0="" class="section1">
   <div data-v-70ba3ad3="" class="section1__inner">
      <div data-v-70ba3ad3="" class="section1__inner-txt">
-        <h1 data-v-70ba3ad3="">Keep Me In The Loop</h1>
+        <h1 data-v-70ba3ad3="">How To Join</h1>
         <h2 class="home-subtitle">Sign-up today — we’ll get you out of the office (or off the laptop) and have a beverage in your hand in no time. Let's have fun! And make getting referrals easier for all of us.</h2>
         <a href="{{ route('auth.sign-up')}}" class="ui-btn home-signup-footer">Sign Up</a>
     </div>
@@ -160,6 +160,7 @@
     $(document).on('change', '.city_name', function(){        
     var city_id = this.value;
      setCookie('city_id',city_id,1);
+     window.location.href = '{{ route("auth.sign-up") }}';
 });
     function setCookie(name, value, daysToLive) {
     // Encode value in order to escape semicolons, commas, and whitespace
