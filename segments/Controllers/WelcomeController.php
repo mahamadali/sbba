@@ -19,4 +19,10 @@ class WelcomeController
     {
         return render('terms_conditions');
     }
+
+    
+    public function about_us()
+    {
+        return render('about_us');
+    }
 }

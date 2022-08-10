@@ -1,10 +1,11 @@
+<?php class_exists('Jolly\Engine') or exit; ?>
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sign Up - {{ setting('app.title') }}</title>
-  <link rel="stylesheet" type="text/css" href="{{ url('assets/frontend/css/signup.css') }}">
+  <title>Sign Up - <?php echo setting('app.title'); ?></title>
+  <link rel="stylesheet" type="text/css" href="<?php echo url('assets/frontend/css/signup.css'); ?>">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   
@@ -17,17 +18,17 @@
         <div class="ui-onboard__wr-in-main">
           <div class="ui-onboard__wr-in-main--top">
            <div class="signup_logo_div_mb" style="display:none;">
-             <a href="{{ url('/') }}">
-              <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="top-logo">
+             <a href="<?php echo url('/'); ?>">
+              <img src="<?php echo url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png'); ?>" alt="logo" class="top-logo">
             </a>  
           </div>
-          <h2 class="onboard-navbar-text">{{ strtoupper(setting('app.title')) }}</h2>
+          <h2 class="onboard-navbar-text"><?php echo strtoupper(setting('app.title')); ?></h2>
         </div>
         <div class="ui-onboard__wr-in-main--middle">
           <div class="row">
             <div class="col-md-3 signup_logo_div text-right">
-              <a href="{{ url('/') }}">
-                <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="top-logo">
+              <a href="<?php echo url('/'); ?>">
+                <img src="<?php echo url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png'); ?>" alt="logo" class="top-logo">
               </a>
             </div> <!-- 25% -->
             <div class="col-md-6">
@@ -57,9 +58,9 @@
                   <!-- <label for="email">City</label> -->
                   <select class="city-options city_name form-control" name="city_id" id="city_name" required style="background-color:#f5f7fa">
                   <option value="">City</option>
-                  @foreach($cities as $city):
-                  <option value="{{ $city->id }}">{{ $city->name }}</option>
-                  @endforeach
+                  <?php foreach($cities as $city) { ?>
+                  <option value="<?php echo $city->id; ?>"><?php echo $city->name; ?></option>
+                  <?php } ?>
                   </select>
                 </div>
                 <div class="form-group  mt-4">
@@ -85,9 +86,9 @@
                 <div class="form-group col-11">
                   <select class="form-control practice_areas" name="practice_areas[]" required style="background-color:#f5f7fa">
                     <option value="">Primary Practice Area(s)</option>
-                    @foreach ($practice_areas as $area):
-                    <option value="{{ $area->id }}">{{ $area->title }}</option>
-                    @endforeach
+                    <?php foreach($practice_areas as $area) { ?>
+                    <option value="<?php echo $area->id; ?>"><?php echo $area->title; ?></option>
+                    <?php } ?>
                     <option value="other">Other</option>
                   </select>
                 </div>
@@ -115,8 +116,8 @@
         </div>
       </div> <!-- 75% -->
       <div class="col-md-3 signup_logo_div">
-        <a href="{{ url('/') }}">
-          <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-02.png') }}" alt="logo" class="top-logo">
+        <a href="<?php echo url('/'); ?>">
+          <img src="<?php echo url('assets/frontend/img/Solo_Boutique_Bar_Association-02.png'); ?>" alt="logo" class="top-logo">
         </a>
       </div> <!-- 25% -->
     </div>
@@ -142,7 +143,7 @@
   });*/
   
   $(document).on('click', '.practice_area_add', function(){
-    $("div.add_new:last").after('<div class="row add_new mt-1"><div class="form-group col-11"><select class="form-control practice_areas" name="practice_areas[]" required style="background-color:#f5f7fa"><option value="">Primary Practice Area(s)</option>@foreach ($practice_areas as $area):<option value="{{ $area->id }}">{{ $area->title }}</option>@endforeach<option value="other">Other</option></select></div><div class="form-group col-1 mt-2" style="font-size:20px"><a href="javascript:void(0);" class="practice_area_remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></div><div class="row mt-2 other_practice_area_section" style="display:none"><div class="form-group col-12"><input name="other_practice_area[]" placeholder="Enter Practice Area" class="form-control" type="text" required></div></div></div>');
+    $("div.add_new:last").after('<div class="row add_new mt-1"><div class="form-group col-11"><select class="form-control practice_areas" name="practice_areas[]" required style="background-color:#f5f7fa"><option value="">Primary Practice Area(s)</option><?php foreach($practice_areas as $area) { ?><option value="<?php echo $area->id; ?>"><?php echo $area->title; ?></option><?php } ?><option value="other">Other</option></select></div><div class="form-group col-1 mt-2" style="font-size:20px"><a href="javascript:void(0);" class="practice_area_remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></div><div class="row mt-2 other_practice_area_section" style="display:none"><div class="form-group col-12"><input name="other_practice_area[]" placeholder="Enter Practice Area" class="form-control" type="text" required></div></div></div>');
     var i = $(".row.add_new .practice_area").length;
     $(".row.add_new:last input[name='practice_area["+i+"]']").rules("add", {
       required: true
@@ -200,7 +201,7 @@
        $(form).find('button[type="submit"]').prop('disabled', true);
 
        $.ajax({
-      url : '{{route("auth.register")}}',
+      url : '<?php echo route("auth.register"); ?>',
       type : 'POST',
       data : $(form).serializeArray(),
       dataType: 'json',

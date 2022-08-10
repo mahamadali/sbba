@@ -13,7 +13,7 @@
         <div data-v-3c12640f="">
             <a data-v-3c12640f="" href="javascript:void(0)" class="follow-ic follow-ic__fb"></a>
             <a data-v-3c12640f="" href="javascript:void(0)" class="follow-ic follow-ic__ig"></a>
-            <a data-v-3c12640f="" href="javascript:void(0)" class="follow-ic follow-ic__in"></a>
+            <!-- <a data-v-3c12640f="" href="javascript:void(0)" class="follow-ic follow-ic__in"></a> -->
             <p><a href="{{ route('terms-condition')}}" target="_blank" class="text-white">Terms & Conditions</a></p>
         </div>
     </div>

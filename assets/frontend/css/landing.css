@@ -55,11 +55,12 @@
 .city-options {
     font-size: 18px;
      padding: 10px 60px 10px 10px;
-    color: #fff;
-    background-color: #1b2330;
+    color: black;
+    /*background-color: #1b2330;*/
+    background-image: linear-gradient(110deg,#72aed9,#40E0D0);
     margin-left: 12px;
     /* width: 18%; */
-    border-color: #fff;
+    border-color: black;
 }
 
 .choose-city-label {
