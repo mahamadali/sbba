@@ -1,0 +1,5 @@
+.htaccess
+settings/app.php
+settings/database.php
+settings/alert.php
+compiler/builds/
