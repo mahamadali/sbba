@@ -18,7 +18,7 @@
                   </div>
                </div> -->
 
-               <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+               <nav class="navbar navbar-expand-lg navbar-dark header-bg">
                  <div class="container-fluid">
                    <a class="navbar-brand" href="{{ url('/') }}">
                       <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="navbar-logo bg-white" style="border-radius:4px">
@@ -36,7 +36,7 @@
                          <a class="nav-link {{ (Bones\Str::contains(request()->currentPage(), '/about-us')) ? 'active' : '' }}" href="{{ route('about-us')}}">About Us</a>
                        </li>
                        <li class="nav-item">
-                         <button class="btn btn-outline-danger" type="submit">Sign Up</button>
+                         <button class="btn btn-header" type="submit">Sign Up</button>
                        </li>
                      </ul>
                    </div>
