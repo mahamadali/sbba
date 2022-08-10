@@ -54094,7 +54094,7 @@ html[data-theme=ui-dark-mode] .modal-content .ui-btn__close{
     width:95vw;
     max-width:1200px
 }
-.nav.nav-tabs{
+/*.nav.nav-tabs{
     border:0;
     margin:10px 0 22px
 }
@@ -54174,7 +54174,7 @@ html[data-theme=ui-dark-mode] .modal-content .ui-btn__close{
 }
 .dropdown.navbar-avatar .btn.dropdown-toggle:after{
     color:#2f80ed
-}
+}*/
 .carousel .carousel-caption,.carousel .carousel-inner,.carousel .carousel-item{
     width:100%;
     height:100%
