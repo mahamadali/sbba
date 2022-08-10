@@ -277,4 +277,19 @@
 .logo_hover:hover{
     color: #25aae1;
 }
+.title_desk
+{
+    display:block;
+}
+.theme-text-red
+{
+    color: #ec1f27;
+}
+
+@media only screen and (max-width: 600px) {
+  .title_desk
+    {
+        display:none;
+    }
+}
 

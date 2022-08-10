@@ -47,8 +47,8 @@
                  <div class="container-fluid">
                    <a class="navbar-brand" href="<?php echo url('/'); ?>">
                       <img src="<?php echo url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png'); ?>" alt="logo" class="navbar-logo bg-white" style="border-radius:4px">
-                      SOLO & BOUTIQUE BAR ASSOCIATION
                    </a>
+                     <h3 class="title_desk theme-text-red">SOLO & BOUTIQUE BAR ASSOCIATION</h3>
                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                      <span class="navbar-toggler-icon"></span>
                    </button>
