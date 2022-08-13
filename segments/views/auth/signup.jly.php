@@ -8,6 +8,19 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
    <link rel="icon" href="{{ url('assets/frontend/img/favicon.png') }}">
+   <style type="text/css">
+     .bg-img
+     {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 40%;
+        background-image: url('../assets/frontend/img/Solo_Boutique_Bar_Association-01.png');    
+        background-repeat: no-repeat;
+        background-size: cover;
+        position: relative;
+     }
+   </style>
 </head>
 <body>
   <div class="ui-onboard" id="signup-page">
@@ -25,13 +38,14 @@
         </div>
         <div class="ui-onboard__wr-in-main--middle">
           <div class="row">
-            <div class="col-md-3 signup_logo_div text-right">
+            <!-- <div class="col-md-3 signup_logo_div text-right">
               <a href="{{ url('/') }}">
                 <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="top-logo">
               </a>
-            </div> <!-- 25% -->
-            <div class="col-md-6">
-              <div class="myform form ui-onboard-form onboard-main">
+            </div> --> <!-- 25% -->
+           <!--  <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="" > -->
+            <div class="col-md-12 bg-img">
+              <div class="myform form ui-onboard-form onboard-main" style="opacity:0.9;">
                <div class="logo">
                  <div class="col-md-12">
                   <h1 class="ui-onboard-title">Sign Up</h1>
@@ -114,11 +128,11 @@
 
         </div>
       </div> <!-- 75% -->
-      <div class="col-md-3 signup_logo_div">
+      <!-- <div class="col-md-3 signup_logo_div">
         <a href="{{ url('/') }}">
           <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-02.png') }}" alt="logo" class="top-logo">
         </a>
-      </div> <!-- 25% -->
+      </div> --> <!-- 25% -->
     </div>
   </div>
   <div class="ui-onboard__wr-in-main--bottom"></div>
