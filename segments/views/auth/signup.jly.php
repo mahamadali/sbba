@@ -19,8 +19,8 @@
         background-repeat: no-repeat;
         /*background-size: cover;
         position: relative;*/
-        width: 30%;
-        height: 45%;
+        width: 40%;
+        height: 60%;
         background-size: cover;
         content: "";
         position: fixed;
