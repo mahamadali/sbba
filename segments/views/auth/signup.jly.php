@@ -19,8 +19,8 @@
         background-repeat: no-repeat;
         /*background-size: cover;
         position: relative;*/
-        width: 40%;
-        height: 60%;
+        width: 30%;
+        height: 45%;
         background-size: cover;
         content: "";
         position: fixed;
@@ -28,9 +28,7 @@
         right: 0;
         top: 60px;
         bottom: 0px;
-        /* z-index: -1; */
         display: block;
-        /* filter: blur(2px);
      }
    </style>
 </head>
