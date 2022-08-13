@@ -11,14 +11,26 @@
    <style type="text/css">
      .bg-img
      {
-        display: block;
+        /*display: block;*/
         margin-left: auto;
         margin-right: auto;
-        width: 40%;
+        /*width: 50%;*/
         background-image: url('../assets/frontend/img/Solo_Boutique_Bar_Association-01.png');    
         background-repeat: no-repeat;
+        /*background-size: cover;
+        position: relative;*/
+        width: 40%;
+        height: 60%;
         background-size: cover;
-        position: relative;
+        content: "";
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 60px;
+        bottom: 0px;
+        /* z-index: -1; */
+        display: block;
+        /* filter: blur(2px);
      }
    </style>
 </head>
