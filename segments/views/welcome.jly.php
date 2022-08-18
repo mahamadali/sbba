@@ -14,12 +14,12 @@
         <h1 data-v-70ba3ad3="">Who Are We?</h1>
         <h2 class="home-subtitle home-page-text-color">We are a free bar association for solo and boutique law firms. Enjoy social events and benefit from referrals from other members.</h2>
     </div>
-    <div data-v-70ba3ad3="" class="section1__inner-img" style="margin-bottom:5rem;margin-right:3rem"><img data-v-70ba3ad3="" src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}"></div>
+    <div data-v-70ba3ad3="" class="section1__inner-img" style="margin-bottom:3.5rem;margin-right:3.5rem"><img data-v-70ba3ad3="" src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}"></div>
 </div>
 </section>
 <section data-v-76520ee6="" data-v-88cae4b0="" class="section2">
   <div data-v-76520ee6="" class="section2__inner">
-     <div data-v-76520ee6="" class="section2__inner-img"><img data-v-76520ee6="" src="{{url('assets/frontend/img/cities1.png')}}"></div>
+     <div data-v-76520ee6="" class="section2__inner-img" style="margin-bottom:1.5rem;"><img data-v-76520ee6="" src="{{url('assets/frontend/img/cities1.png')}}"></div>
      <div data-v-76520ee6="" class="section2__inner-txt">
         <h1 data-v-76520ee6="">Where Are We?</h1>
         <h2 class="home-page-text-color" data-v-76520ee6="">We’ve started in {{ strtolower(convert_number(count($cities))) }}  cities. Choose a city and sign up. We’ll alert you when we have networking events near you!</h2>
