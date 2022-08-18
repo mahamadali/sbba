@@ -51,16 +51,27 @@
     color: #ec1f27;
     line-height: 1.2;
 }
+.city-options:focus  {
+    outline: none;
+}
 
 .city-options {
-    font-size: 18px;
+    /*font-size: 18px;
      padding: 10px 60px 10px 10px;
     color: black;
-    /*background-color: #1b2330;*/
     background-image: linear-gradient(110deg,#72aed9,#40E0D0);
     margin-left: 12px;
-    /* width: 18%; */
-    border-color: black;
+    border-color: black;*/
+    padding: 17px 65px 18px 39px;
+    font-size: 21px;
+    border: 1px solid black;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url(https://www.iconpacks.net/icons/2/free-arrow-down-icon-3101-thumb.png) 100% / 14% no-repeat #ddd;
+    background-position: right 10% bottom 45%;
+    background-color: initial;
+    font-weight: 600;
 }
 
 .choose-city-label {

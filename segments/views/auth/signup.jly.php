@@ -21,7 +21,7 @@
               <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="top-logo">
             </a>  
           </div>
-          <h2 class="onboard-navbar-text">{{ strtoupper(setting('app.title')) }}</h2>
+          <h2 class="onboard-navbar-text"><a href="{{ url('/') }}" style="color:white;text-decoration:none;">{{ strtoupper(setting('app.title')) }}</a></h2>
         </div>
         <div class="ui-onboard__wr-in-main--middle">
           <div class="">

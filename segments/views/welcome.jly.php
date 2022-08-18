@@ -4,6 +4,7 @@
 
 @block("styles")
 <!-- <link rel="stylesheet" href="{{ url('assets/css/welcome.css') }}" /> -->
+
 @endblock
 
 @block("content")
@@ -11,9 +12,9 @@
   <div data-v-70ba3ad3="" class="section1__inner">
      <div data-v-70ba3ad3="" class="section1__inner-txt">
         <h1 data-v-70ba3ad3="">Who Are We?</h1>
-        <h2 class="home-subtitle">We are a free bar association for solo and boutique law firms that provide services to companies. Enjoy social events and benefit from referrals from other members.</h2>
+        <h2 class="home-subtitle home-page-text-color">We are a free bar association for solo and boutique law firms. Enjoy social events and benefit from referrals from other members.</h2>
     </div>
-    <div data-v-70ba3ad3="" class="section1__inner-img"><img data-v-70ba3ad3="" src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}"></div>
+    <div data-v-70ba3ad3="" class="section1__inner-img" style="margin-bottom:5rem;margin-right:3rem"><img data-v-70ba3ad3="" src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}"></div>
 </div>
 </section>
 <section data-v-76520ee6="" data-v-88cae4b0="" class="section2">
@@ -21,7 +22,7 @@
      <div data-v-76520ee6="" class="section2__inner-img"><img data-v-76520ee6="" src="{{url('assets/frontend/img/cities1.png')}}"></div>
      <div data-v-76520ee6="" class="section2__inner-txt">
         <h1 data-v-76520ee6="">Where Are We?</h1>
-        <h2 data-v-76520ee6="">We’ve started in {{ strtolower(convert_number(count($cities))) }}  cities. Choose a city and sign up. We’ll alert you when we have networking events near you!</h2>
+        <h2 class="home-page-text-color" data-v-76520ee6="">We’ve started in {{ strtolower(convert_number(count($cities))) }}  cities. Choose a city and sign up. We’ll alert you when we have networking events near you!</h2>
     </div>
     <div data-v-76520ee6="" class="section2__inner-txt-bottom">
         <h3 class="choose-city-label">  
@@ -56,7 +57,7 @@
   <div data-v-70ba3ad3="" class="section1__inner">
      <div data-v-70ba3ad3="" class="section1__inner-txt">
         <h1 data-v-70ba3ad3="">How To Join</h1>
-        <h2 class="home-subtitle">Sign-up today — we’ll get you out of the office (or off the laptop) and have a beverage in your hand in no time. Let's have fun! And make getting referrals easier for all of us.</h2>
+        <h2 class="home-subtitle home-page-text-color">Sign-up today — we’ll get you out of the office (or off the laptop) and have a beverage in your hand in no time. Let's have fun! And make getting referrals easier for all of us.</h2>
         <a href="{{ route('auth.sign-up')}}" class="ui-btn home-signup-footer">Sign Up</a>
     </div>
     <div data-v-70ba3ad3="" class="section1__inner-img">

@@ -21,9 +21,9 @@
                <nav class="navbar navbar-expand-lg navbar-dark header-bg">
                  <div class="container-fluid">
                    <a class="navbar-brand" href="{{ url('/') }}">
-                      <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="navbar-logo bg-white" style="border-radius:4px">
+                      <!-- <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="navbar-logo bg-white" style="border-radius:4px"> -->
                    </a>
-                     <h3 class="title_desk theme-text-red">SOLO & BOUTIQUE BAR ASSOCIATION</h3>
+                     <h1 class="title_desk theme-text-red">SOLO & BOUTIQUE BAR ASSOCIATION</h1>
                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                      <span class="navbar-toggler-icon"></span>
                    </button>

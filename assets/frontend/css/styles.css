@@ -38,8 +38,10 @@
 @media only screen and (max-width: 600px) {
   .title_desk
     {
-        display:none;
+        font-size:17px;
+         margin: 0rem;
     }
+  
     .signup_desk
     {
         display:none;
@@ -50,6 +52,10 @@
     }
 }
 
+.home-page-text-color
+{
+    color:#000000 !important;
+}
 
 @media (min-width: 992px)
 {
@@ -57,4 +63,12 @@
 	    padding-right: 2.5rem;
 	    padding-left: 0.5rem;
 	}
+}
+
+@media (min-width: 992px)
+{
+    .navbar-expand-lg .navbar-collapse {
+    display: contents!important;
+    flex-basis: auto;
+    }
 }
