@@ -13,6 +13,7 @@
       background-color: #fff;
       padding: 10px;
       border-radius: 10px;
+      font-weight: bold;
     }
     .section-title {
       color: #fff;
