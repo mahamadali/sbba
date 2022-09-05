@@ -32,7 +32,7 @@
       </div>
       <div class="row justify-content-center terms-of-use-info">
         <div class="terms-of-use-container">
-            <span class="author-info">- Updated February 7, 2022</span>
+            <span class="author-info">- Updated September 3, 2022</span>
             <p class="mt-3">
               Thank you for your interest in Solo & Boutique Bar Association LLC (“SBBA”). Before enjoying our website, however, please read and make sure you understand and abide by all of the following terms of service (the “Terms of Service”). Doing so is a condition of accessing the SBBA Web Platform (as defined below) and will improve the experience for all of us.<br><br>
               These Terms of Service set forth important information regarding your rights and obligations, as well as conditions, limitations, and exclusions that apply to you. <strong>If you do not agree to all of these Terms of Service, as well as the SBBA <a href="#">Privacy Policy</a> (the “Privacy Policy”) that is incorporated herein by reference, you may not use the SBBA Web Platform.</strong>
