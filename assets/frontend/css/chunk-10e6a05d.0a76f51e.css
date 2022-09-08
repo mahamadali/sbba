@@ -965,6 +965,19 @@ p[data-v-70ba3ad3]{
     --dropdown-color:#3a3c43;
     --hub-arrow-color:#a0abbb
 }
+
+@media only screen and (max-width: 600px) {
+  .img-section1 {
+    display:none;
+  }
+  .section2__inner[data-v-76520ee6] {
+    grid-template-columns:inherit !important;
+  }
+   .img-section3 {
+    display:none;
+  }
+}
+
 @media(max-width:991px){
     [data-theme=ui-dark-mode][data-v-70ba3ad3]{
         --color-bg:#242933;
@@ -986,11 +999,11 @@ p[data-v-70ba3ad3]{
 }
 .section1__inner[data-v-70ba3ad3]{
     width:100%;
-    max-width:1600px;
-    margin:0 40px;
+    /*max-width:1600px;*/
+    /*margin:0 40px;*/
     display:flex;
-    align-items:flex-end;
-    justify-content:space-evenly;
+    /*align-items:flex-end;*/
+    /*justify-content:space-evenly;*/
     padding:80px 0 20px
 }
 @media(max-width:991px){
@@ -1002,11 +1015,11 @@ p[data-v-70ba3ad3]{
     }
 }
 .section1__inner-txt[data-v-70ba3ad3]{
-    width:60%;
-    max-width:640px;
-    display:flex;
-    flex-direction:column;
-    margin:auto
+    width:40%;
+    /*max-width:640px;*/
+    /*display:flex;
+    flex-direction:column;*/
+    /*margin:auto*/
 }
 .section1__inner-txt h1[data-v-70ba3ad3]{
     /*font-family:Roboto,sans-serif;*/
@@ -1062,8 +1075,8 @@ p[data-v-70ba3ad3]{
     }
 }
 .section1__inner-img[data-v-70ba3ad3]{
-    width:40%;
-    max-width:360px
+    width:60%;
+    /*max-width:360px*/
 }
 @media(max-width:991px){
     .section1__inner-img[data-v-70ba3ad3]{
@@ -2078,13 +2091,10 @@ p[data-v-76520ee6]{
 }
 @media(max-width:991px){
     .section2__inner[data-v-76520ee6]{
-        grid-template-columns:.5fr .5fr;
-        grid-template-rows:-webkit-max-content -webkit-max-content;
-        grid-template-rows:max-content max-content;
-        gap:0 0;
-        grid-template-areas:"cnt-1 cnt-2" "cnt-3 cnt-3";
-        padding:20px 0 30px;
-        margin:0 20px
+        align-items:flex-start;
+        padding:20px 0 20px 0;
+        margin:0 20px;
+        position:relative
     }
 }
 .section2__inner-txt[data-v-76520ee6]{
@@ -2118,7 +2128,7 @@ p[data-v-76520ee6]{
     padding:5px 0 5px 20px;
     border-left:5px solid #ec1f27;
     max-width:520px;
-    margin:48px 48px
+    margin:48px 0
 }
 @media(max-width:991px){
     .section2__inner-txt h2[data-v-76520ee6]{
@@ -2158,7 +2168,7 @@ p[data-v-76520ee6]{
     }
 }
 .section2__inner-img[data-v-76520ee6]{
-    width:100%;
+    width:25%;
     text-align:right;
     flex-grow:1;
     grid-area:cnt-1
@@ -2170,21 +2180,24 @@ p[data-v-76520ee6]{
     }
 }
 .section2__inner-img img[data-v-76520ee6]{
-    width:100%;
-    min-width:260px;
+    /*width:100%;*/
+    min-width:560px;
     max-width:400px;
     margin-left:auto
 }
 @media(max-width:991px){
     .section2__inner-img img[data-v-76520ee6]{
-        min-width:210px
-        height: 50%;
+        min-width:160px;
+        width: 100%;
+        display:none;
+
     }
 }
 @media(max-width:575px){
     .section2__inner-img img[data-v-76520ee6]{
-        min-width:150px;
-        height: 50%;
+        min-width:120px
+        width: 100%;
+        display:none;
     }
 }
 [class*=" icon-"][data-v-76c57121],[class^=icon-][data-v-76c57121]{
@@ -2964,34 +2977,34 @@ div a[data-v-76c57121],div h1[data-v-76c57121],div h2[data-v-76c57121],div h3[da
 h1[data-v-76c57121]{
     font-size:40px;
     line-height:48px;
-    letter-spacing:-.02em;
+    letter-spacing:-.02em
 }
 @media(max-width:991px){
     h1[data-v-76c57121]{
         font-size:36px;
-        line-height:44px;
+        line-height:44px
     }
 }
 h2[data-v-76c57121]{
     font-size:36px;
     line-height:44px;
-    letter-spacing:-.02em;
+    letter-spacing:-.02em
 }
 @media(max-width:991px){
     h2[data-v-76c57121]{
         font-size:32px;
-        line-height:40px;
+        line-height:40px
     }
 }
 h3[data-v-76c57121]{
     font-size:32px;
     line-height:40px;
-    letter-spacing:-.02em;
+    letter-spacing:-.02em
 }
 @media(max-width:991px){
     h3[data-v-76c57121]{
         font-size:28px;
-        line-height:36px;
+        line-height:36px
     }
 }
 h4[data-v-76c57121]{
@@ -3002,7 +3015,7 @@ h4[data-v-76c57121]{
 @media(max-width:991px){
     h4[data-v-76c57121]{
         font-size:24px;
-        line-height:32px;
+        line-height:32px
     }
 }
 h5[data-v-76c57121]{
