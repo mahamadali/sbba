@@ -2964,34 +2964,34 @@ div a[data-v-76c57121],div h1[data-v-76c57121],div h2[data-v-76c57121],div h3[da
 h1[data-v-76c57121]{
     font-size:40px;
     line-height:48px;
-    letter-spacing:-.02em
+    letter-spacing:-.02em;
 }
 @media(max-width:991px){
     h1[data-v-76c57121]{
         font-size:36px;
-        line-height:44px
+        line-height:44px;
     }
 }
 h2[data-v-76c57121]{
     font-size:36px;
     line-height:44px;
-    letter-spacing:-.02em
+    letter-spacing:-.02em;
 }
 @media(max-width:991px){
     h2[data-v-76c57121]{
         font-size:32px;
-        line-height:40px
+        line-height:40px;
     }
 }
 h3[data-v-76c57121]{
     font-size:32px;
     line-height:40px;
-    letter-spacing:-.02em
+    letter-spacing:-.02em;
 }
 @media(max-width:991px){
     h3[data-v-76c57121]{
         font-size:28px;
-        line-height:36px
+        line-height:36px;
     }
 }
 h4[data-v-76c57121]{
@@ -3002,7 +3002,7 @@ h4[data-v-76c57121]{
 @media(max-width:991px){
     h4[data-v-76c57121]{
         font-size:24px;
-        line-height:32px
+        line-height:32px;
     }
 }
 h5[data-v-76c57121]{
