@@ -60,9 +60,7 @@
         <h2 class="home-subtitle home-page-text-color">Sign-up today — we’ll get you out of the office (or off the laptop) and have a beverage in your hand in no time. Let's have fun! And make getting referrals easier for all of us.</h2>
         <a href="{{ route('auth.sign-up')}}" class="ui-btn home-signup-footer">Sign Up</a>
     </div>
-    <div data-v-70ba3ad3="" class="section1__inner-img">
-        
-    </div>
+    <div data-v-70ba3ad3="" class="section3__inner-img"><img data-v-70ba3ad3="" src="{{ url('assets/frontend/img/slide3-img.png') }}"></div>
 </div>
 </section>
 

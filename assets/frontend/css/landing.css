@@ -249,6 +249,10 @@
     .section1__inner-img {
         max-width:  0px !important;
     }
+
+    .section3__inner-img {
+        max-width:  0px !important;
+    }
 }
 
 @media (max-width: 575px)
