@@ -290,3 +290,7 @@
 .logo_hover:hover{
     color: #25aae1;
 }
+.city-dropdown {
+    text-align: center;
+    padding-bottom: 30px;
+}
