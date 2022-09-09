@@ -14,7 +14,7 @@
         <h1 data-v-70ba3ad3="">Who Are We?</h1>
         <h2 class="home-subtitle home-page-text-color">We are a free bar association for solo and boutique law firms. Enjoy social events and benefit from referrals from other members.</h2>
     </div>
-    <div data-v-70ba3ad3="" class="section1__inner-img" style="margin-bottom:3.5rem;margin-right:3.5rem;text-align: right;"><img data-v-70ba3ad3="" src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" class="img-section1" style="height: 239px;
+    <div data-v-70ba3ad3="" class="section1__inner-img" style="margin-bottom:3.5rem;margin-right:3.5rem;text-align: right;"><img data-v-70ba3ad3="" src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" class="img-section1" style="height: 250px;
     width: 349px;"></div>
 </div>
 </section>
