@@ -1015,7 +1015,7 @@ p[data-v-70ba3ad3]{
     }
 }
 .section1__inner-txt[data-v-70ba3ad3]{
-    width:40%;
+    width:45%;
     /*max-width:640px;*/
     /*display:flex;
     flex-direction:column;*/
@@ -1075,7 +1075,7 @@ p[data-v-70ba3ad3]{
     }
 }
 .section1__inner-img[data-v-70ba3ad3]{
-    width:60%;
+    width:55%;
     /*max-width:360px*/
 }
 @media(max-width:991px){
