@@ -7,6 +7,10 @@
 {
     color: #ec1f27;
 }
+.theme-text-red a:hover
+{
+    color: #ec1f27 !important;
+}
 .header-bg
 {
     background-color:#1b2330;

@@ -33,7 +33,7 @@
       <div class="row justify-content-center about-us-info">
         <div class="about-us-container mb-4">
           <p class="mt-3">
-           <h2>Who are we?</h2>
+           <h2>What is The SBBA?</h2>
          </p>
          <p>
           Solo & Boutique Bar Association LLC (“SBBA”) is a new free bar association focusing on building personal connections and synergy between small and boutique law firms. We don’t promise CLE’s or zoom meetings, and we don’t take ourselves too seriously. But we do promise fun events that will help you foster meaningful connections. Sign up, and we’ll let you know when we have our next free event nearby!

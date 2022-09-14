@@ -10,7 +10,7 @@
    <link rel="icon" href="{{ url('assets/frontend/img/favicon.png') }}">
 </head>
 <body>
-  <div class="ui-onboard" id="signup-page">
+  <div class="ui-onboard" id="signup-page" style="background-image: linear-gradient(110deg,#72aed9,#fefbb8) !important;">
     <div class="ui-onboard__bg bg-img"></div>
     <div class="ui-onboard__wr">
       <div class="ui-onboard__wr-in">

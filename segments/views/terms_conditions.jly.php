@@ -160,7 +160,8 @@
                           c/o Goldstein & McClintock LLLP<br>
                           111 W. Washington St., Suite 1221<br>
                           Chicago, IL 60602<br>
-                          E-mail: <a href="mailto:declans@goldmclaw.com">declans@goldmclaw.com</a>
+                          <!-- E-mail: <a href="mailto:declans@goldmclaw.com">declans@goldmclaw.com</a> -->
+                          E-mail: <a href="mailto:sbbacommunity@gmail.com">sbbacommunity@gmail.com</a>
                         </p>
                     </li>
                   </ul>
@@ -198,7 +199,7 @@
                     <u>Miscellaneous</u>. The Terms of Service incorporate the applicable Privacy Policy and any other terms applying to your use of the SBBA Website by reference. These Terms of Service and the relationship between you and us shall be governed by the laws of the State of Illinois, without regard to its conflict of law provisions. You agree that any cause of action that may arise under the Terms of Service shall be commenced and be heard in the appropriate court in the State of Illinois, County of Cook. Subject to the terms of Section 18 above (Dispute Resolution), you agree to submit to the personal and exclusive jurisdiction of the courts located within Cook County in the City of Chicago. Our failure to exercise or enforce any right or provision of the Terms of Service shall not constitute a waiver of such right or provision. Except as otherwise set forth herein, these Terms of Service may only be amended by a written agreement executed by you and an authorized representative of SBBA specifically referencing these Terms of Service. Any waiver of any provision of these Terms of Service by SBBA must be made in writing and signed by an authorized representative of SBBA and the provision to be waived. Headings used in these Terms of Service are for convenience only and are not to be relied upon. If any provision of the Terms of Service is found by a court of competent jurisdiction to be invalid, the parties nevertheless agree that the court should endeavor to give effect to the parties' intentions as reflected in the provision, and the other provisions of the Terms of Service remain in full force and effect. These Terms of Service will inure to the benefit of, and are intended to be enforceable by, SBBA successors, assigns and licensees. There are no third party beneficiaries to this Agreement.
                   </li>
                   <li>
-                    <u>Further Inquiries</u>. You may direct questions about these Terms of Service, or other issues, by sending an email to <a href="mailto:declans@goldmclaw.com" style="color:blue;">declans@goldmclaw.com</a>.
+                    <u>Further Inquiries</u>. You may direct questions about these Terms of Service, or other issues, by sending an email to <a href="mailto:sbbacommunity@gmail.com" style="color:blue;">sbbacommunity@gmail.com</a>.
                   </li>
               </ol>
             </p>

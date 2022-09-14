@@ -112,7 +112,7 @@ class AuthController
 
 		return response()->json([
 				'status' => 200,
-				'message' => 'Registration success!'
+				'message' => 'Thank you for joining the SBBA community. We look forward to meeting you!'
 			]);
 
 	}
