@@ -84,7 +84,7 @@ class AuthController
             'law_firm' => 'required',
             'email' => 'required|unique:users,email'
         ],[
-            'email.unique' => 'Email must be unique'
+            'email.unique' => 'Above email is already registered'
         ]);
 
         if ($validator->hasError()) {
@@ -112,9 +112,14 @@ class AuthController
 
 		return response()->json([
 				'status' => 200,
-				'message' => 'Thank you for joining the SBBA community. We look forward to meeting you!'
+				'message' => 'Thank you for joining the Solo & Boutique Bar Association. We hope to see you soon!',
+				'redirect_url' => route('auth.sign-up.thank-you')
 			]);
 
+	}
+
+	public function thankYou() {
+		return render('auth/signup-thank-you');
 	}
 
 }

@@ -218,9 +218,10 @@
         }
 
         if(response.status == 200) {
-            $('#messages').append('<p align="center" style="color:green;">'+response.message+'</p>');
+            // $('#messages').append('<p align="center" style="color:green;">'+response.message+'</p>');
             form.reset();
             document.cookie = 'city_id=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            window.location.href = response.redirect_url
         }
       },
       error: function() {
