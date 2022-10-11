@@ -40,6 +40,7 @@
                 </div>
               </div>
               <form action="" method="post" name="register">
+                {{ prevent_csrf_field() }}
                <div class="form-row">
                 <div class="form-group">
                   <!-- <label for="first_name" class="ui-label">First Name</label> -->
