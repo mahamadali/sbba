@@ -85,7 +85,7 @@ class Adjustor
         } else if ($commandAttrs == '--fresh') {
 
             $this->console->showMsgAndContinue('dbgram(s) fresh in progress...' . PHP_EOL);
-            $statementPairs = Database::rawQuery("SELECT concat('DROP TABLE IF EXISTS `', table_name, '`;') as statement, table_name
+            $statementPairs = Database::rawQuery("SELECT concat('DROP TABLE IF EXISTS `', table_name, '`;') as statement, table_name as table_name
             FROM information_schema.tables
             WHERE table_schema = '" . Database::primaryDB()['db'] . "';");
 
