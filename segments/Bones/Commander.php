@@ -4,19 +4,25 @@ namespace Bones;
 
 use Bones\Skeletons\DBFiller\Refill;
 use Bones\Skeletons\DBGram\Adjustor;
+use Bones\Skeletons\Supporters\BackgroundAction;
+use Bones\Skeletons\Supporters\BaseCodeTemplate;
 
 class Commander
 {
     protected $commands = [];
     protected $attribute;
     protected $extraAttrs;
+    protected $baseCodeTemplate;
     public $appStopperFile = 'locker/system/stop';
     public $settingDir = 'settings';
+    protected $agent = '[COMMANDER VIA JOLLY]: ';
 
     public function __construct($commands = [])
     {
         unset($commands[0]);
         $this->commands = array_values($commands);
+        $this->baseCodeTemplate = new BaseCodeTemplate(array_values($this->commands));
+        session()->set('from_cli', true, true);
     }
 
     public static function run(string $args)
@@ -36,6 +42,7 @@ class Commander
         }
         $this->extraAttrs = array_values($this->commands);
         $this->authenticate($action);
+        $this->baseCodeTemplate = new BaseCodeTemplate($this->extraAttrs);
     }
 
     public function authenticate(string $action)
@@ -76,6 +83,12 @@ class Commander
             case 'set':
                 $this->set($commandFor);
                 break;
+            case 'listen':
+                $this->listen($commandFor);
+                break;
+            case 'self-update':
+                $this->selfUpdate();
+                break;
             default:
                 return $this->throwError('%s is not a valid command', [$command]);
                 break;
@@ -102,6 +115,15 @@ class Commander
                 break;
             case 'dbfiller':
                 $this->createDBFillerFile();
+                break;
+            case 'mailer':
+                $this->createMailerFile();
+                break;
+            case 'texter':
+                $this->createTexterFile();
+                break;
+            case 'bg-action':
+                $this->createBGAction();
                 break;
             default:
                 return $this->throwError('%s is not a valid segment to create', [$commandFor]);
@@ -130,6 +152,12 @@ class Commander
             case 'dbfiller':
                 $this->removeDBFillerFile();
                 break;
+            case 'mailer':
+                $this->removeMailerFile();
+                break;
+            case 'texter':
+                $this->removeTexterFile();
+                break;
             default:
                 return $this->throwError('%s is not a valid segment to remove', [$commandFor]);
                 break;
@@ -144,6 +172,10 @@ class Commander
                 break;
             case 'db-backups':
                 $this->clearDir('locker/system/db/backups/');
+                break;
+            case 'bg-actions':
+                (new BackgroundAction())->clearAll();
+                return $this->showMsg('All background processes are cleared', [], 'success');
                 break;
             default:
                 return $this->throwError('%s is not a valid segment to clear', [$commandFor]);
@@ -175,6 +207,9 @@ class Commander
             case 'dbfiller':
                 $this->execDBFillers();
                 break;
+            case 'bg-actions':
+                $this->execBGActions();
+                break;
             default:
                 return $this->throwError('%s is not a valid segment to run (NOT EXECUTABLE)', [$commandFor]);
                 break;
@@ -205,13 +240,30 @@ class Commander
         }
     }
 
+    public function listen(string $commandFor)
+    {
+        switch ($commandFor) {
+            case 'bg-actions':
+                $this->listenBGActions();
+                break;
+            default:
+                return $this->throwError('%s is not a valid segment to listen (NOT LISTENABLE)', [$commandFor]);
+                break;
+        }
+    }
+
+    public function selfUpdate()
+    {
+        return (new JollyManager($this))->update();
+    }
+
     public function createModelFile()
     {
         if (empty($this->attribute)) {
             return $this->throwError('EMPTY [Model] FILE CAN NOT BE CREATED' . PHP_EOL);
         }
 
-        $modelFilePath = 'segments/Models/' . $this->getDeCamelizedPath() . '.php';
+        $modelFilePath = 'segments/Models/' . $this->getDecamelizedPath() . '.php';
         if (file_exists($modelFilePath)) {
             return $this->throwError('[Model] FILE ALREADY EXISTS at %s' . PHP_EOL, [$modelFilePath]);
         }
@@ -231,9 +283,9 @@ class Commander
         if (!$f) {
             return $this->throwError('%s can not create model file at ', [$modelFilePath]);
         }
-        fwrite($f, $this->getBaseModelCode($modelFileNameParts[0], $nameSpace));
+        fwrite($f, $this->baseCodeTemplate->model($modelFileNameParts[0], $nameSpace));
         fclose($f);
-        return $this->showMsg('Model saved at ' . $modelFilePath . '!');
+        return $this->showMsg('Model saved at ' . $modelFilePath . '!', [], 'success');
     }
 
     public function createControllerFile()
@@ -242,7 +294,7 @@ class Commander
             return $this->throwError('EMPTY [Controller] FILE CAN NOT BE CREATED' . PHP_EOL);
         }
 
-        $controllerFilePath = 'segments/Controllers/' . $this->getDeCamelizedPath() . 'Controller.php';
+        $controllerFilePath = 'segments/Controllers/' . $this->getDecamelizedPath() . 'Controller.php';
         if (file_exists($controllerFilePath)) {
             return $this->throwError('[Controller] FILE ALREADY EXISTS at %s' . PHP_EOL, [$controllerFilePath]);
         }
@@ -263,9 +315,9 @@ class Commander
         if (!$f) {
             return $this->throwError('%s can not create controller file at ', [$controllerFilePath]);
         }
-        fwrite($f, $this->getBaseControllerCode($controllerFileNameParts[0], $nameSpace));
+        fwrite($f, $this->baseCodeTemplate->controller($controllerFileNameParts[0], $nameSpace));
         fclose($f);
-        return $this->showMsg('Controller saved at ' . $controllerFilePath . '!');
+        return $this->showMsg('Controller saved at ' . $controllerFilePath . '!', [], 'success');
     }
 
     public function createViewFile()
@@ -287,9 +339,9 @@ class Commander
         if (!$f) {
             return $this->throwError('%s can not create view file at ', [$viewFilePath]);
         }
-        fwrite($f, $this->getBaseViewCode());
+        fwrite($f, $this->baseCodeTemplate->view());
         fclose($f);
-        return $this->showMsg('View saved at ' . $viewFilePath . '!');
+        return $this->showMsg('View saved at ' . $viewFilePath . '!', [], 'success');
     }
 
     public function createBarrierFile()
@@ -298,7 +350,7 @@ class Commander
             return $this->throwError('EMPTY [Barrier] FILE CAN NOT BE CREATED' . PHP_EOL);
         }
 
-        $barrierFilePath = 'segments/Barriers/' . $this->getDeCamelizedPath() . '.php';
+        $barrierFilePath = 'segments/Barriers/' . $this->getDecamelizedPath() . '.php';
         if (file_exists($barrierFilePath)) {
             return $this->throwError('[Barrier] FILE ALREADY EXISTS at %s' . PHP_EOL, [$barrierFilePath]);
         }
@@ -318,9 +370,9 @@ class Commander
         if (!$f) {
             return $this->throwError('%s can not create barrier file at ', [$barrierFilePath]);
         }
-        fwrite($f, $this->getBaseBarrierCode($barrierFileNameParts[0], $nameSpace));
+        fwrite($f, $this->baseCodeTemplate->barrier($barrierFileNameParts[0], $nameSpace));
         fclose($f);
-        return $this->showMsg('Barrier saved at ' . $barrierFilePath . '!');
+        return $this->showMsg('Barrier saved at ' . $barrierFilePath . '!', [], 'success');
     }
 
     public function createDBGramFile()
@@ -333,28 +385,123 @@ class Commander
         return (new Refill())->create($this->attribute, $this->extraAttrs);
     }
 
+    public function createMailerFile()
+    {
+        if (empty($this->attribute)) {
+            return $this->throwError('EMPTY [Mailer] FILE CAN NOT BE CREATED' . PHP_EOL);
+        }
+
+        $mailerFilePath = 'segments/Mail/' . $this->getDecamelizedPath() . '.php';
+        if (file_exists($mailerFilePath)) {
+            return $this->throwError('[Mailer] FILE ALREADY EXISTS at %s' . PHP_EOL, [$mailerFilePath]);
+        }
+        $mailerFileDoors = explode('/', $mailerFilePath);
+        $mailerFileNameParts = explode('.php', basename($mailerFileDoors[count($mailerFileDoors) - 1]));
+        $nameSpace = 'Mail';
+        unset($mailerFileDoors[count($mailerFileDoors) - 1]);
+        foreach ($mailerFileDoors as $doorName => $door) {
+            $mailerFileDoors[$doorName] = Str::decamelize($door);
+            if (!in_array($door, ['segments', 'Mail'])) {
+                $nameSpace .= '\\' . $door;
+            }
+        }
+        if (!file_exists(implode('/', $mailerFileDoors))) {
+            mkdir(implode('/', $mailerFileDoors), 0644, true);
+        }
+        $f = fopen($mailerFilePath, 'wb');
+        if (!$f) {
+            return $this->throwError('%s can not create mailer file at ', [$mailerFilePath]);
+        }
+        fwrite($f, $this->baseCodeTemplate->mailer($mailerFileNameParts[0], $nameSpace));
+        fclose($f);
+        return $this->showMsg('Mailer saved at ' . $mailerFilePath . '!', [], 'success');
+    }
+
+    public function createTexterFile()
+    {
+        if (empty($this->attribute)) {
+            return $this->throwError('EMPTY [Texter] FILE CAN NOT BE CREATED' . PHP_EOL);
+        }
+
+        $texterFilePath = 'segments/SMS/' . $this->getDecamelizedPath() . '.php';
+        if (file_exists($texterFilePath)) {
+            return $this->throwError('[Texter] FILE ALREADY EXISTS at %s' . PHP_EOL, [$texterFilePath]);
+        }
+        $texterFileDoors = explode('/', $texterFilePath);
+        $texterFileNameParts = explode('.php', basename($texterFileDoors[count($texterFileDoors) - 1]));
+        $nameSpace = 'SMS';
+        unset($texterFileDoors[count($texterFileDoors) - 1]);
+        foreach ($texterFileDoors as $doorName => $door) {
+            $texterFileDoors[$doorName] = Str::decamelize($door);
+            if (!in_array($door, ['segments', 'SMS'])) {
+                $nameSpace .= '\\' . $door;
+            }
+        }
+        if (!file_exists(implode('/', $texterFileDoors))) {
+            mkdir(implode('/', $texterFileDoors), 0644, true);
+        }
+        $f = fopen($texterFilePath, 'wb');
+        if (!$f) {
+            return $this->throwError('%s can not create texter file at ', [$texterFilePath]);
+        }
+        fwrite($f, $this->baseCodeTemplate->texter($texterFileNameParts[0], $nameSpace));
+        fclose($f);
+        return $this->showMsg('Texter saved at ' . $texterFilePath . '!', [], 'success');
+    }
+
+    public function createBGAction()
+    {
+        if (empty($this->attribute)) {
+            return $this->throwError('EMPTY [Background Action] FILE CAN NOT BE CREATED' . PHP_EOL);
+        }
+
+        $bgActionFilePath = 'segments/BackgroundActions/' . $this->getDecamelizedPath() . '.php';
+        if (file_exists($bgActionFilePath)) {
+            return $this->throwError('[Background Action] FILE ALREADY EXISTS at %s' . PHP_EOL, [$bgActionFilePath]);
+        }
+        $bgActionFileDoors = explode('/', $bgActionFilePath);
+        $bgActionFileNameParts = explode('.php', basename($bgActionFileDoors[count($bgActionFileDoors) - 1]));
+        $nameSpace = '';
+        unset($bgActionFileDoors[count($bgActionFileDoors) - 1]);
+        foreach ($bgActionFileDoors as $doorName => $door) {
+            $bgActionFileDoors[$doorName] = Str::decamelize($door);
+            if (!in_array($door, ['segments'])) {
+                if (!empty($nameSpace))
+                    $nameSpace .= '\\';
+                $nameSpace .= $door;
+            }
+        }
+        if (!file_exists(implode('/', $bgActionFileDoors))) {
+            mkdir(implode('/', $bgActionFileDoors), 0644, true);
+        }
+        $f = fopen($bgActionFilePath, 'wb');
+        if (!$f) {
+            return $this->throwError('%s can not create texter file at ', [$bgActionFilePath]);
+        }
+        fwrite($f, $this->baseCodeTemplate->backgroundAction($bgActionFileNameParts[0], $nameSpace));
+        fclose($f);
+        return $this->showMsg('Background Action file saved at ' . $bgActionFilePath . '!', [], 'success');
+    }
+
     public function setConfigSettings()
     {
         if (file_exists($this->settingDir)) {
             $this->showMsgAndContinue($this->settingDir . ' directory already exists. Do you want to remove it and set a fresh config files?' . PHP_EOL);
 
-            $confirm = $this->confirm('Enter Y for [Yes] or N for [No]: ');
-
-            if (strtoupper($confirm) == 'Y' || ucfirst(strtolower($confirm)) == 'Yes') {
-                $this->showMsgAndContinue('Setting up setting files in %s' . PHP_EOL, [ $this->settingDir ]);
+            if ($this->confirm('Enter Y for [Yes] or N for [No]: ')) {
+                $this->showMsgAndContinue('Setting up setting files in %s' . PHP_EOL, [$this->settingDir], 'info');
             } else {
-                return $this->showMsg('config setup process stopped' . PHP_EOL);
+                return $this->showMsg('config setup process stopped' . PHP_EOL, [], 'error');
             }
         }
 
         if (!file_exists($this->settingDir)) {
-            $this->showMsgAndContinue('Creating %s [SETTING DIRECTORY]' . PHP_EOL, [ $this->settingDir ]);
+            $this->showMsgAndContinue('Creating %s [SETTING DIRECTORY]' . PHP_EOL, [$this->settingDir], 'warning');
             mkdir($this->settingDir, 655, true);
-            $this->showMsgAndContinue('%s [SETTING DIRECTORY] created!' . PHP_EOL, [ $this->settingDir ]);
+            $this->showMsgAndContinue('%s [SETTING DIRECTORY] created!' . PHP_EOL, [$this->settingDir], 'success');
         }
 
         return $this->createFreshSettingFiles();
-        
     }
 
     public function createFreshSettingFiles()
@@ -362,6 +509,8 @@ class Commander
         $this->createSettingAppFile();
         $this->createSettingAliasFile();
         $this->createSettingDatabaseFile();
+        $this->createSettingSessionFile();
+        $this->createSettingAlertFile();
         $this->createSettingTemplateFile();
 
         return true;
@@ -370,172 +519,103 @@ class Commander
     public function createSettingAppFile()
     {
         $settingAppFile = $this->settingDir . '/app.php';
-        
-        $this->showMsgAndContinue('Creating %s [FILE]...' . PHP_EOL, [$settingAppFile]);
 
-        $settingContent = '<?php' . PHP_EOL . PHP_EOL;
-        $settingContent .= "return [" . PHP_EOL . PHP_EOL;
-        $settingContent .= "\t// Set base url of your project" . PHP_EOL;
-        $settingContent .= "\t'base_url' => 'http://localhost'," . PHP_EOL . PHP_EOL;
-        $settingContent .= "\t// Enter sub directory where your project is hosted or set it blank if your project is on host root" . PHP_EOL;
-        $settingContent .= "\t'sub_dir' => 'jolly'," . PHP_EOL . PHP_EOL;
-        $settingContent .= "\t// Set application stage (local || production)" . PHP_EOL;
-        $settingContent .= "\t'stage' => 'local'," . PHP_EOL . PHP_EOL;
-        $settingContent .= "\t'title' => 'Jolly - A tiny PHP Framework'," . PHP_EOL . PHP_EOL;
-        $settingContent .= "\t// Set default language for your application, this will be used when there is no language has been set or if any translation string is not" . PHP_EOL;
-        $settingContent .= "\t//found then it will be returned from default_lang" . PHP_EOL;
-        $settingContent .= "\t'default_lang' => 'en'," . PHP_EOL . PHP_EOL;
-        $settingContent .= "];";
+        $settingContent = $this->baseCodeTemplate->setting('app');
 
         $f = fopen($settingAppFile, 'wb');
         if (!$f) {
-            return $this->throwError('Setting file can not be created at %s' . PHP_EOL, [ $settingAppFile ]);
+            return $this->throwError('Setting file can not be created at %s' . PHP_EOL, [$settingAppFile]);
         }
 
         fwrite($f, $settingContent);
         fclose($f);
 
-        $this->showMsgAndContinue('%s [SETTING FILE] created!' . PHP_EOL, [$settingAppFile]);
+        $this->showMsgAndContinue('%s [SETTING FILE] created!' . PHP_EOL, [$settingAppFile], 'success');
     }
 
     public function createSettingAliasFile()
     {
         $settingAliasFile = $this->settingDir . '/aliases.php';
 
-        $settingContent = '<?php' . PHP_EOL . PHP_EOL;
-        $settingContent .= 'use Barriers\VerifyToken;' . PHP_EOL . PHP_EOL;
-        $settingContent .= "return [" . PHP_EOL . PHP_EOL;
-        $settingContent .= "\t// Add Barrier aliases to use as an alias" . PHP_EOL;
-        $settingContent .= "\t'Barriers' => [" . PHP_EOL;
-        $settingContent .= "\t\t'verify-token' => VerifyToken::class," . PHP_EOL;
-        $settingContent .= "\t]," . PHP_EOL . PHP_EOL;
-        $settingContent .= "];";
+        $settingContent = $this->baseCodeTemplate->setting('alias');
 
         $f = fopen($settingAliasFile, 'wb');
         if (!$f) {
-            return $this->throwError('Setting file can not be created at %s' . PHP_EOL, [ $settingAliasFile ]);
+            return $this->throwError('Setting file can not be created at %s' . PHP_EOL, [$settingAliasFile]);
         }
 
         fwrite($f, $settingContent);
         fclose($f);
 
-        $this->showMsgAndContinue('%s [SETTING FILE] created!' . PHP_EOL, [$settingAliasFile]);
+        $this->showMsgAndContinue('%s [SETTING FILE] created!' . PHP_EOL, [$settingAliasFile], 'success');
     }
 
     public function createSettingDatabaseFile()
     {
         $settingDatabaseFile = $this->settingDir . '/database.php';
 
-        $settingContent = '<?php' . PHP_EOL . PHP_EOL;
-        $settingContent .= "return [" . PHP_EOL . PHP_EOL;
-        $settingContent .= "\t// Set this false if you do not want to use database" . PHP_EOL;
-        $settingContent .= "\t'enable' => true," . PHP_EOL . PHP_EOL;
-        $settingContent .= "\t// Database details [ Key of this set is database name ]" . PHP_EOL;
-        $settingContent .= "\t'database_name' => [" . PHP_EOL;
-        $settingContent .= "\t\t'host' => 'localhost'," . PHP_EOL;
-        $settingContent .= "\t\t'username' => 'root'," . PHP_EOL;
-        $settingContent .= "\t\t'password' => ''," . PHP_EOL;
-        $settingContent .= "\t\t'port' => 3306," . PHP_EOL;
-        $settingContent .= "\t\t'prefix' => ''," . PHP_EOL;
-        $settingContent .= "\t\t'charset' => 'utf8'," . PHP_EOL;
-        $settingContent .= "\t\t'socket' => null," . PHP_EOL;
-        $settingContent .= "\t\t'is_primary' => true," . PHP_EOL;
-        $settingContent .= "\t]," . PHP_EOL . PHP_EOL;
-        $settingContent .= "];";
+        $settingContent = $this->baseCodeTemplate->setting('database');
 
         $f = fopen($settingDatabaseFile, 'wb');
         if (!$f) {
-            return $this->throwError('Setting file can not be created at %s' . PHP_EOL, [ $settingDatabaseFile ]);
+            return $this->throwError('Setting file can not be created at %s' . PHP_EOL, [$settingDatabaseFile]);
         }
 
         fwrite($f, $settingContent);
         fclose($f);
 
-        $this->showMsgAndContinue('%s [SETTING FILE] created!' . PHP_EOL, [$settingDatabaseFile]);
+        $this->showMsgAndContinue('%s [SETTING FILE] created!' . PHP_EOL, [$settingDatabaseFile], 'success');
+    }
+
+    public function createSettingSessionFile()
+    {
+        $settingSessionFile = $this->settingDir . '/session.php';
+
+        $settingContent = $this->baseCodeTemplate->setting('session');
+
+        $f = fopen($settingSessionFile, 'wb');
+        if (!$f) {
+            return $this->throwError('Setting file can not be created at %s' . PHP_EOL, [$settingSessionFile]);
+        }
+
+        fwrite($f, $settingContent);
+        fclose($f);
+
+        $this->showMsgAndContinue('%s [SETTING FILE] created!' . PHP_EOL, [$settingSessionFile], 'success');
+    }
+
+    public function createSettingAlertFile()
+    {
+        $settingAliasFile = $this->settingDir . '/alert.php';
+
+        $settingContent = $this->baseCodeTemplate->setting('alert');
+
+        $f = fopen($settingAliasFile, 'wb');
+        if (!$f) {
+            return $this->throwError('Setting file can not be created at %s' . PHP_EOL, [$settingAliasFile]);
+        }
+
+        fwrite($f, $settingContent);
+        fclose($f);
+
+        $this->showMsgAndContinue('%s [SETTING FILE] created!' . PHP_EOL, [$settingAliasFile], 'success');
     }
 
     public function createSettingTemplateFile()
     {
         $settingAliasFile = $this->settingDir . '/templates.php';
 
-        $settingContent = '<?php' . PHP_EOL . PHP_EOL;
-        $settingContent .= "\$sysDefaultDir = 'defaults/';" . PHP_EOL . PHP_EOL;
-        $settingContent .= "return [" . PHP_EOL . PHP_EOL;
-        $settingContent .= "\t'404' => \$sysDefaultDir . '404'," . PHP_EOL;
-        $settingContent .= "\t'503' => \$sysDefaultDir . '503'," . PHP_EOL . PHP_EOL;
-        $settingContent .= "];";
+        $settingContent = $this->baseCodeTemplate->setting('template');
 
         $f = fopen($settingAliasFile, 'wb');
         if (!$f) {
-            return $this->throwError('Setting file can not be created at %s' . PHP_EOL, [ $settingAliasFile ]);
+            return $this->throwError('Setting file can not be created at %s' . PHP_EOL, [$settingAliasFile]);
         }
 
         fwrite($f, $settingContent);
         fclose($f);
 
-        $this->showMsgAndContinue('%s [SETTING FILE] created!' . PHP_EOL, [$settingAliasFile]);
-    }
-
-    public function getBaseModelCode(string $name, string $nameSpace)
-    {
-        $baseModelCode = '<?php' . PHP_EOL . PHP_EOL;
-        $baseModelCode .= 'namespace ' . $nameSpace . ';' . PHP_EOL . PHP_EOL;
-        $baseModelCode .= 'use Models\Base\Model;' . PHP_EOL . PHP_EOL;
-        $baseModelCode .= 'class ' . Str::decamelize($name) . ' extends Model' . PHP_EOL;
-        $baseModelCode .= '{' . PHP_EOL;
-        if (!empty($this->extraAttrs)) {
-            foreach ($this->extraAttrs as $extraAttr) {
-                $attribute = explode('=', $extraAttr);
-                $attrName = $attribute[0];
-                if (Str::startsWith($attrName, '--') && count($attribute) > 0) {
-                    $attrVal = $attribute[1];
-                    $attrName = str_replace('--', '', $attrName);
-                    $baseModelCode .= "\tprotected \$" . $attrName . " = '" . $attrVal . "';" . PHP_EOL;
-                }
-            }
-        }
-        $baseModelCode .= PHP_EOL . '}';
-        return $baseModelCode;
-    }
-
-    public function getBaseControllerCode(string $name, string $nameSpace)
-    {
-        $baseControllerCode = '<?php' . PHP_EOL . PHP_EOL;
-        $baseControllerCode .= 'namespace ' . $nameSpace . ';' . PHP_EOL . PHP_EOL;
-        $baseControllerCode .= 'use Bones\Request;' . PHP_EOL . PHP_EOL;
-        $baseControllerCode .= 'class ' . Str::decamelize($name) . PHP_EOL;
-        $baseControllerCode .= '{' . PHP_EOL;
-        $baseControllerCode .= "\tpublic function index(Request \$request)" . PHP_EOL;
-        $baseControllerCode .= "\t{" . PHP_EOL;
-        $baseControllerCode .= "\t\t// Paint your jolly stuff with code..." . PHP_EOL;
-        $baseControllerCode .= "\t}" . PHP_EOL;
-        if (!empty($this->extraAttrs)) {
-        }
-        $baseControllerCode .= '}';
-        return $baseControllerCode;
-    }
-
-    public function getBaseViewCode()
-    {
-        $baseViewCode = "@php " . PHP_EOL . "\t// Paint your jolly stuff with code... " . PHP_EOL . "@endphp";
-        return $baseViewCode;
-    }
-
-    public function getBaseBarrierCode(string $name, string $nameSpace)
-    {
-        $baseBarrierCode = '<?php' . PHP_EOL . PHP_EOL;
-        $baseBarrierCode .= 'namespace ' . $nameSpace . ';' . PHP_EOL . PHP_EOL;
-        $baseBarrierCode .= 'use Bones\Request;' . PHP_EOL . PHP_EOL;
-        $baseBarrierCode .= 'class ' . Str::decamelize($name) . PHP_EOL;
-        $baseBarrierCode .= '{' . PHP_EOL;
-        $baseBarrierCode .= "\tpublic function check(Request \$request)" . PHP_EOL;
-        $baseBarrierCode .= "\t{" . PHP_EOL;
-        $baseBarrierCode .= "\t\treturn true;" . PHP_EOL;
-        $baseBarrierCode .= "\t}" . PHP_EOL;
-        if (!empty($this->extraAttrs)) {
-        }
-        $baseBarrierCode .= '}';
-        return $baseBarrierCode;
+        $this->showMsgAndContinue('%s [SETTING FILE] created!' . PHP_EOL, [$settingAliasFile], 'success');
     }
 
     public function removeModelFile()
@@ -578,6 +658,18 @@ class Commander
         return (new Refill())->removeAllFiles($this->attribute);
     }
 
+    public function removeMailerFile()
+    {
+        $mailerFilePath = 'segments/Mail/' . $this->attribute . '.php';
+        return $this->removeAsset($mailerFilePath, 'Mailer');
+    }
+
+    public function removeTexterFile()
+    {
+        $texterFilePath = 'segments/SMS/' . $this->attribute . '.php';
+        return $this->removeAsset($texterFilePath, 'Texter');
+    }
+
     public function removeAsset($assetPath, $assetType = '')
     {
         if (!file_exists($assetPath))
@@ -585,7 +677,7 @@ class Commander
         if (!unlink($assetPath))
             return $this->throwError('Error while removing [' . $assetType . ' File] %s', [$assetPath]);
 
-        return $this->showMsg('[' . $assetType . ' File] %s removed successfully!', [$assetPath]);
+        return $this->showMsg('[' . $assetType . ' File] %s removed successfully!', [$assetPath], 'warning');
     }
 
     public function startApp()
@@ -599,11 +691,11 @@ class Commander
                 return $this->throwError('Processing Issue: App can not be started. Kindly remove %s file to start the app manually.', [$this->appStopperFile]);
             } else {
                 $this->writeMessageToAppStopper();
-                return $this->showMsg('App successfully started!');
+                return $this->showMsg('App successfully started!', [], 'success');
             }
         } else {
             $this->writeMessageToAppStopper();
-            return $this->showMsg('App is already in running mode!');
+            return $this->showMsg('App is already in running mode!', [], 'info');
         }
     }
 
@@ -612,18 +704,18 @@ class Commander
         if (!file_exists('locker/system')) {
             mkdir('locker/system/', 655);
         }
-        
+
         $this->writeMessageToAppStopper();
         if (!file_exists($this->appStopperFile)) {
             if (!touch($this->appStopperFile)) {
                 return $this->throwError('Processing Issue: App can not be stopped. Kindly add %s file to stop the app manually.', [$this->appStopperFile]);
             } else {
                 $this->setAppStopperMsg();
-                return $this->showMsg('App successfully stopped!');
+                return $this->showMsg('App successfully stopped!', [], 'warning');
             }
         } else {
             $this->setAppStopperMsg();
-            return $this->showMsg('App is already in stop mode!');
+            return $this->showMsg('App is already in stop mode!', [], 'warning');
         }
     }
 
@@ -656,7 +748,7 @@ class Commander
             foreach (glob($dir . '*') as $file) {
                 unlink($file);
             }
-            return $this->showMsg('{%s} [DIR] is clear now' . PHP_EOL, [$dir]);
+            return $this->showMsg('{%s} [DIR] is clear now' . PHP_EOL, [$dir], 'success');
         }
         return $this->throwError('{%s} [DIR] does not exists ' . PHP_EOL, [$dir]);
     }
@@ -671,13 +763,15 @@ class Commander
         echo '----------------------------------------------------------------------------------------------------' . PHP_EOL;
         echo count($routes) . ' routes registered' . PHP_EOL;
         echo '----------------------------------------------------------------------------------------------------' . PHP_EOL;
-        $mask = "%5.5s | %-30.30s | %-10s | %s\n";
+        $mask = "%6s | %-30.30s | %-10s | %s\n";
 
-        foreach ($routes as $route) {
-            if (empty($route['caption'])) $route['caption'] = '/';
-            $namedAs = (!empty($route['namedAs']) && !$route['nameFromParent']) ? $route['namedAs'] : 'N/A';
-            $barriersCount = (!empty($route['barriers'])) ? count($route['barriers']) . ' barrier(s)' : 'No barrier';
-            printf($mask, strtoupper($route['method']), $namedAs, $barriersCount, $route['caption']);
+        foreach ($routes as $routeMethod => $routeInfo) {
+            foreach ($routeInfo as $route) {
+                if (empty($route['caption'])) $route['caption'] = '/';
+                $namedAs = (!empty($route['namedAs']) && !$route['nameFromParent']) ? $route['namedAs'] : 'N/A';
+                $barriersCount = (!empty($route['barriers'])) ? count($route['barriers']) . ' barrier(s)' : 'No barrier';
+                printf($mask, strtoupper($routeMethod), $namedAs, $barriersCount, $route['caption']);
+            }
         }
 
         return true;
@@ -718,7 +812,17 @@ class Commander
         return (new Refill())->proceedDBFillers($this->attribute);
     }
 
-    public function getDeCamelizedPath()
+    public function execBGActions()
+    {
+        return (new BackgroundAction())->proceedBGActions($this->attribute);
+    }
+
+    public function listenBGActions()
+    {
+        return (new BackgroundAction())->listenBGActions($this->attribute);
+    }
+
+    public function getDecamelizedPath()
     {
         $relativePathParts = explode('/', $this->attribute);
         foreach ($relativePathParts as &$part) {
@@ -728,31 +832,70 @@ class Commander
         return implode('/', $relativePathParts);
     }
 
-    public function throwError(string $errMsg, array $args = [])
-    {
-        $errMsg = '[COMMANDER VIA JOLLY]: ' . $errMsg;
-        $errorParts = array_merge([$errMsg], $args);
-        echo call_user_func_array('sprintf', $errorParts);
-        return false;
-    }
-
     public function confirm($message)
     {
-        return readline($message);
+        $confirm = readline($message);
+
+        return (strtoupper($confirm) == 'Y' || ucfirst(strtolower($confirm)) == 'Yes');
     }
 
-    public function showMsg(string $errMsg, array $args = [])
+    public function throwError(string $error_message, array $args = [])
     {
-        $errMsg = '[COMMANDER VIA JOLLY]: ' . $errMsg;
-        $errorParts = array_merge([$errMsg], $args);
-        echo call_user_func_array('sprintf', $errorParts);
+        $error_message = $this->agent() . $this->printedMsg($error_message, 'error');
+        $error_parts = array_merge([$error_message], $args);
+        echo call_user_func_array('sprintf', $error_parts);
+        exit;
+    }
+
+    public function showMsg(string $message, array $args = [], $type = '')
+    {
+        $message = $this->agent(). $this->printedMsg($message, $type);
+        $error_parts = array_merge([$message], $args);
+        echo call_user_func_array('sprintf', $error_parts);
         return true;
     }
 
-    public function showMsgAndContinue(string $errMsg, array $args = [])
+    public function showMsgAndExit(string $message, array $args = [], $type = '')
     {
-        $errMsg = '[COMMANDER VIA JOLLY]: ' . $errMsg;
-        $errorParts = array_merge([$errMsg], $args);
-        echo call_user_func_array('sprintf', $errorParts);
+        $this->showMsgAndContinue($message, $args, $type);
+        exit;
+    }
+
+    public function showMsgAndContinue(string $message, array $args = [], $type = '')
+    {
+        $message = $this->agent() . $this->printedMsg($message, $type);
+        $error_parts = array_merge([$message], $args);
+        echo call_user_func_array('sprintf', $error_parts);
+    }
+
+    public function agent()
+    {
+        return $this->printedMsg($this->agent, 'important');
+    }
+
+    public function printedMsg($str, $type = '')
+    {
+        switch ($type) {
+            case 'warning' :
+                $color_code = 93;
+                break;
+            case 'info' :
+                $color_code = 95;
+                break;
+            case 'error' :
+                $color_code = 91;
+                break;
+            case 'success' :
+                $color_code = 92;
+                break;
+            case 'important' :
+                $color_code = 96;
+                break;
+            default:
+                $color_code = 0;
+                break;
+        }
+
+        return "\033[" . $color_code . "m" . $str . "\033[0m";
     }
 }

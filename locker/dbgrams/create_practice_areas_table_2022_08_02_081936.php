@@ -15,7 +15,7 @@ return new class
 			$table->id()->primaryKey();
 			$table->string('title')->nullable(false);
 			$table->timestamps();
-			$table->softDelete();
+			$table->trashMask();
 			return $table;
 		});
 	}

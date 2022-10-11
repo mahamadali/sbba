@@ -2,19 +2,20 @@
 
 namespace Bones;
 
+use Barriers\System\PreventCSRFToken;
 use Bones\Str;
 use Bones\Request;
 use Bones\Session;
 use Bones\Commander;
 use Closure;
-use Jolly\Engine;
-use JollyException\RouteException;
-use JollyException\BadMethodException;
+use Bones\RouteException;
+use Bones\BadMethodException;
 
 class Router
 {
     protected static $routes;
     protected static $current;
+    protected static $currentRouteMethod;
     protected static $parent;
     protected static $parentPrefixSet;
     protected static $parentSettingSet;
@@ -55,6 +56,7 @@ class Router
             }
         }
         self::$current = $route;
+        self::$currentRouteMethod = strtoupper($method);
         return self::getInstance();
     }
 
@@ -65,7 +67,26 @@ class Router
         call_user_func($callback);
         array_pop(self::$parent);
     }
-    
+
+    public static function modules($modules = [])
+    {
+        foreach ($modules as $prefix => $action) {
+            $singular_prefix = (isset($action['entity-alias']) && !empty($action['entity-alias'])) ? $action['entity-alias'] : Str::singular(Str::toSlug($prefix));
+            $barriers = (isset($action['barriers']) && !empty($action['barriers'])) ? $action['barriers'] : [];
+            $segments = (isset($action['segments']) && !empty($action['segments'])) ? $action['segments'] : [];
+
+            self::bunch($prefix, ['as' => ltrim($prefix, '/') . '.', 'barrier' => [$barriers]], function () use ($action, $singular_prefix, $segments) {
+                self::get('/', [$action['controller'], 'index'])->name('index');
+                self::get('/' . (!empty($segments['create']) ? $segments['create'] : 'create') . '', [$action['controller'], 'create'])->name('create');
+                self::post('/', [$action['controller'], 'store'])->name('store');
+                self::get('/{' . $singular_prefix . '}', [$action['controller'], 'show'])->name('show');
+                self::get('/{' . $singular_prefix . '}/' . (!empty($segments['edit']) ? $segments['edit'] : 'edit') . '', [$action['controller'], 'edit'])->name('edit');
+                self::patch('/{' . $singular_prefix . '}', [$action['controller'], 'update'])->name('update');
+                self::delete('/{' . $singular_prefix . '}', [$action['controller'], 'destroy'])->name('destroy');
+            });
+        }
+    }
+
     public static function bunchAttrs($parentAttrs)
     {
         $prefixSet = '';
@@ -91,7 +112,6 @@ class Router
                         $settingSet['as'] = $parentAttr[1]['as'];
                     }
                 }
-
             }
         }
 
@@ -102,18 +122,19 @@ class Router
     {
         $route = trim($route, '/');
         if (empty($method)) $method = 'ANY';
-        self::$routes[$route]['caption'] = $route;
-        self::$routes[$route]['method'] = strtolower($method);
-        self::$routes[$route]['callback'] = $callback;
+        $method = strtoupper($method);
+        self::$routes[$method][$route]['caption'] = $route;
+        self::$routes[$method][$route]['method'] = strtolower($method);
+        self::$routes[$method][$route]['callback'] = $callback;
         if (!empty($parentSettings)) {
             if (!empty($parentSettings['barrier'])) {
-                self::barrier($parentSettings['barrier'], $route);
+                self::barrier($parentSettings['barrier'], $route, $method);
             }
             if (!empty($parentSettings['as'])) {
-                self::name($parentSettings['as'], $route, true);
+                self::name($parentSettings['as'], $route, true, $method);
             }
             if (!empty($parentSettings['response'])) {
-                self::response($parentSettings['response'], $route);
+                self::response($parentSettings['response'], $route, $method);
             }
         }
     }
@@ -123,25 +144,31 @@ class Router
         if (!self::__validateGlobalChecks()) {
             return false;
         }
-        
-        $route = trim($route, '/');
+
+        $routeSegments = explode('?', $route);
+        $route = trim($routeSegments[0], '/');
         Session::appendSetReserved('latest_routes', $route);
         self::clearSavedRoutes();
-        if (empty(self::$routes[$route])) {
-            if (!empty($matchedRoute = self::checkRoutePatternMatch($route))) {
-                if (empty($matchedRoute['route']))
-                    return self::setError(404);
 
-                $callback = self::$routes[$matchedRoute['route']]['callback'];
-                if (!self::validateMethod(self::$routes[$matchedRoute['route']])) {
-                    return self::setError(402);
+        $method = self::requestMethod();
+        self::validateRequestMethod($method);
+        $method = self::$currentRouteMethod;
+
+        if (empty(self::$routes[$method][$route])) {
+            if (!empty($matchedRoute = self::checkRoutePatternMatch($route, $method))) {
+                if (empty($matchedRoute['route']))
+                    self::setError(404);
+
+                $callback = self::$routes[$matchedRoute['method']][$matchedRoute['route']]['callback'];
+                if (!self::validateRequest(self::$routes[$matchedRoute['method']][$matchedRoute['route']])) {
+                    self::setError(401);
                 }
-                
+
                 if (!empty($matchedRoute['optionalParams'])) {
                     $callbackParams = array_values($matchedRoute['optionalParams']);
                     if (gettype($callback) == 'object') {
-                        $response = call_user_func_array($callback, array_merge([new Request($_REQUEST, $_FILES, self::$routes[$matchedRoute['route']])], $callbackParams));
-                        self::serve($response, self::$routes[$matchedRoute['route']]);
+                        $response = call_user_func_array($callback, array_merge([new Request($_REQUEST, $_FILES, self::$routes[$matchedRoute['method']][$matchedRoute['route']])], $callbackParams));
+                        self::serve($response, self::$routes[$matchedRoute['method']][$matchedRoute['route']]);
                     } else if (gettype($callback) == 'array') {
                         $invokableCallbackParams = $callback;
                         $classToInvoke = $invokableCallbackParams[0];
@@ -150,27 +177,27 @@ class Router
                             throw new RouteException($classToInvoke . ' not found in route file', 404);
                         if (!method_exists($classToInvoke, $methodToInvoke))
                             throw new RouteException($methodToInvoke . ' not found in ' . $classToInvoke, 404);
-                        $response = self::verifyBarriers(self::$routes[$matchedRoute['route']], [
+                        $response = self::verifyBarriers(self::$routes[$matchedRoute['method']][$matchedRoute['route']], [
                             $classToInvoke,
                             $methodToInvoke,
                             $callbackParams
                         ]);
-                        self::serve($response, self::$routes[$matchedRoute['route']]);
+                        self::serve($response, self::$routes[$matchedRoute['method']][$matchedRoute['route']]);
                     } else {
                         op($callback);
                     }
                 }
             } else {
-                return self::setError(404);
+                self::setError(404);
             }
         } else {
-            $callback = self::$routes[$route]['callback'];
-            if (!self::validateMethod(self::$routes[$route])) {
-                return self::setError(402);
+            $callback = self::$routes[$method][$route]['callback'];
+            if (!self::validateRequest(self::$routes[$method][$route])) {
+                self::setError(401);
             }
             if ($callback instanceof Closure) {
-                $response = call_user_func($callback, new Request($_REQUEST, $_FILES, self::$routes[$route]));
-                self::serve($response, self::$routes[$route]);
+                $response = call_user_func($callback, new Request($_REQUEST, $_FILES, self::$routes[$method][$route]));
+                self::serve($response, self::$routes[$method][$route]);
             } else if (gettype($callback) == 'array') {
                 $callbackParams = $callback;
                 $classToInvoke = $callbackParams[0];
@@ -179,19 +206,69 @@ class Router
                     throw new RouteException($classToInvoke . ' not found in route file', 404);
                 if (!method_exists($classToInvoke, $methodToInvoke))
                     throw new RouteException($methodToInvoke . ' not found in ' . $classToInvoke, 404);
-                $response = self::verifyBarriers(self::$routes[$route], [
+                $response = self::verifyBarriers(self::$routes[$method][$route], [
                     $classToInvoke,
                     $methodToInvoke,
                     []
                 ]);
-                self::serve($response, self::$routes[$route]);
+                self::serve($response, self::$routes[$method][$route]);
             } else {
                 op($callback);
             }
         }
     }
 
-    public static function validateMethod(array $route = [])
+    public static function requestMatchedRoutes($method = null)
+    {
+        $matchedRoutes = [];
+
+        if (isset(self::$routes)) {
+            foreach (self::$routes as $routeMethod => $routeInfo) {
+                if (!empty($method) && strtolower($routeMethod) != 'any' && strtolower($method) != strtolower($routeMethod))
+                    continue;
+
+                foreach ($routeInfo as $route) {
+                    if (request()->matchesTo(self::toPattern($route['caption'])))
+                        $matchedRoutes[$routeMethod . '://' . $route['caption']] = $route;
+                }
+            }
+        }
+
+        return $matchedRoutes;
+    }
+
+    public static function validateRequestMethod($method)
+    {
+        $matchedRoutes = self::requestMatchedRoutes();
+
+        if (empty($matchedRoutes)) self::setError(404);
+
+        $is_authenticated = false;
+        $has_matched_route = false;
+        $current_uri = ltrim(URL::removeQuery(request()->currentUri()), '/');
+        foreach ($matchedRoutes as $matchedRoute) {
+
+            $matched_route_segments = explode('/', $matchedRoute['caption']);
+            $current_page_segments = explode('/', ltrim(URL::removeQuery(request()->currentUri()), '/'));
+
+            if (count($matched_route_segments) === count($current_page_segments) && Url::matchesTo($current_uri, self::toPattern($matchedRoute['caption']))) {
+                $has_matched_route = true;
+                if (!$is_authenticated && strtolower($matchedRoute['method']) == 'any') {
+                    self::$currentRouteMethod = 'ANY';
+                    $is_authenticated = true;
+                }
+
+                if (!$is_authenticated && strtolower($matchedRoute['method']) == strtolower($method)) {
+                    self::$currentRouteMethod = strtoupper($matchedRoute['method']);
+                    $is_authenticated = true;
+                }
+            }
+        }
+
+        if ($has_matched_route && !$is_authenticated) self::setError(401);
+    }
+
+    public static function validateRequest(array $route = [])
     {
         if ($route['method'] == 'any') return true;
         $isValid = true;
@@ -200,7 +277,37 @@ class Router
             if ($method !== strtoupper($_SERVER['REQUEST_METHOD'])) {
                 $isValid = false;
             }
+
+            if (!in_array($method, ['GET', 'POST'])) {
+                if (!empty($_REQUEST['_method']) && $method == strtoupper($_REQUEST['_method'])) {
+                    $isValid = true;
+                }
+            }
+
+            if (!in_array($method, ['GET'])) {
+                $preventCSRFTokenBarrierClass = PreventCSRFToken::class;
+                if (class_exists($preventCSRFTokenBarrierClass)) {
+                    $preventCSRFTokenBarrier = new $preventCSRFTokenBarrierClass();
+
+                    // Skip defined $excludeRoutes from csrf-token check
+                    $skipCSRFCheck = false;
+                    if (isset($preventCSRFTokenBarrier->excludeRoutes) && !empty($excludeRoutes = $preventCSRFTokenBarrier->excludeRoutes)) {
+                        foreach ($excludeRoutes as $excludedRoute) {
+                            if (!$skipCSRFCheck && request()->matchesTo($excludedRoute)) {
+                                $skipCSRFCheck = true;
+                            }
+                        }
+                    }
+
+                    if (!$skipCSRFCheck && !$preventCSRFTokenBarrier->check(request())) {
+                        throw new RouteException('Unauthenticated: request denied by ' . $preventCSRFTokenBarrierClass . ' check', 402);
+                    }
+                } else {
+                    throw new RouteException('Unauthenticated: Barriers\System\PreventCSRFToken must exist with check method to prevent CSRF attack', 402);
+                }
+            }
         }
+
         return $isValid;
     }
 
@@ -218,7 +325,7 @@ class Router
                     } else {
                         if ((Str::startsWith($barrier['name'], 'Barrier') && Str::endsWith($barrier['name'], 'Barrier')))
                             $barrierClass = $barrier['name'];
-                        else if(Str::startsWith($barrier['name'], 'Barrier'))
+                        else if (Str::startsWith($barrier['name'], 'Barrier'))
                             $barrierClass = $barrier['name'];
                         else
                             $barrierClass = '\\Barriers\\' . $barrier['name'];
@@ -231,8 +338,24 @@ class Router
                         if (!method_exists($barrierClass, 'check')) {
                             throw new BadMethodException('Method not found: check() method must present in ' . $barrierClass, 404);
                         }
-                        if (!(new $barrierClass())->check(new Request($_REQUEST, $_FILES, $route))) {
-                            throw new RouteException('Unauthenticated: request denied by ' . $barrierClass . ' check', 402);
+
+                        $barrierObj = new $barrierClass();
+
+                        // Skip defined $excludeRoutes from csrf-token check
+                        $skipBarrierCheck = false;
+                        if (isset($barrierObj->excludeRoutes) && !empty($excludeRoutes = $barrierObj->excludeRoutes)) {
+                            foreach ($excludeRoutes as $excludedRoute) {
+                                if (!$skipBarrierCheck && request()->matchesTo($excludedRoute)) {
+                                    $skipBarrierCheck = true;
+                                }
+                            }
+                        }
+
+                        if (!$skipBarrierCheck && !$barrierObj->check(request())) {
+                            if (method_exists($barrierObj, 'throwback'))
+                                return $barrierObj->throwback();
+                            else
+                                throw new RouteException('Unauthenticated: request denied by ' . $barrierClass . ' check', 402);
                         }
                     } else {
                         throw new RouteException(((!empty($barrierClass)) ? $barrierClass : $barrier['name']) . ' barrier not found');
@@ -258,7 +381,7 @@ class Router
         return $aliases['barriers'][$barrier];
     }
 
-    public static function checkRoutePatternMatch($pageRoute)
+    public static function checkRoutePatternMatch($pageRoute, $method)
     {
         if (empty(self::$routes)) {
             throw new RouteException('No routes defined for the application');
@@ -268,10 +391,18 @@ class Router
         $pageRouteSegments = array_map(function ($pageRouteSegment) {
             return urldecode($pageRouteSegment);
         }, $pageRouteSegments);
-        $routeNames = array_keys(self::$routes);
+
+        $routeNames = [];
+        $requestMatchedRoutes = self::requestMatchedRoutes($method);
+        foreach ($requestMatchedRoutes as $key => $routeInfo) {
+            $routeNames[$key] = $routeInfo['caption'];
+        }
+
         $matchedRoute = null;
         $optionalParams = [];
-        foreach ($routeNames as $route) {
+        foreach ($routeNames as $routeMethod => $route) {
+            $routeMethodSegments = explode('://', $routeMethod);
+            $routeMethod = (!empty($routeMethodSegments[0])) ? $routeMethodSegments[0] : 'GET';
             if (empty($matchedRoute) && Str::contains($route, '{') && Str::contains($route, '}')) {
                 $routeSegments = explode('/', $route);
                 $routeSegmentsPresence = [];
@@ -286,9 +417,9 @@ class Router
                     }
                 }
 
-                self::$routes[$route]['syntax'] = $routeSegmentsPresence;
+                self::$routes[$routeMethod][$route]['syntax'] = $routeSegmentsPresence;
 
-                // self::debugRoutePatterns([self::$routes[$route], $pageRouteSegments, $routeSegmentsPresence, $routeSegments], true);
+                // self::debugRoutePatterns([self::$routes[$method][$route], $pageRouteSegments, $routeSegmentsPresence, $routeSegments], true);
 
                 if (count($pageRouteSegments) >= $requiredSegmentsCount && count($pageRouteSegments) <= ($requiredSegmentsCount + $optionalSegmentsCount)) {
                     $rsAttendanceIndex = 0;
@@ -304,7 +435,7 @@ class Router
                             if ((string) $rsAttendance['type'] == 'optional' && empty($pageRouteSegments[$rsAttendanceIndex])) {
                                 $byPassWhereChecks = true;
                             }
-                            if (!$byPassWhereChecks && !self::verifySegmentWhereChecks($route, $rsAttendanceName, (!empty($pageRouteSegments[$rsAttendanceIndex])) ? $pageRouteSegments[$rsAttendanceIndex] : '')) {
+                            if (!$byPassWhereChecks && !self::verifySegmentWhereChecks($route, $routeMethod, $rsAttendanceName, (!empty($pageRouteSegments[$rsAttendanceIndex])) ? $pageRouteSegments[$rsAttendanceIndex] : '')) {
                                 throw new RouteException('Status 402: route ' . $route . ' does not match regex required for ' . $rsAttendanceName . ' segment');
                             }
                             $optionalParams[$rsAttendanceName] = (!empty($pageRouteSegments[$rsAttendanceIndex])) ? $pageRouteSegments[$rsAttendanceIndex] : '';
@@ -314,15 +445,18 @@ class Router
                     }
                     if ($isMatched) {
                         $matchedRoute = $route;
-                        $callback = self::$routes[$matchedRoute]['callback'];
+                        $matchedRouteInfo = self::$routes[$routeMethod][$matchedRoute];
+                        $method = $routeMethod;
+
+                        $callback = $matchedRouteInfo['callback'];
                         if ($callback instanceof Closure || $callback instanceof String) {
                             $closureInfo = new \ReflectionFunction($callback);
-                            $optionalParams = self::bindParamsImplicitly($matchedRoute, $closureInfo, $optionalParams);
+                            $optionalParams = self::bindParamsImplicitly($matchedRoute, $routeMethod, $closureInfo, $optionalParams);
                         } else if (is_array($callback)) {
                             $classToInvoke = $callback[0];
                             $methodToInvoke = $callback[1];
                             $classReflectionInfo = new \ReflectionMethod($classToInvoke, $methodToInvoke);
-                            $optionalParams = self::bindParamsImplicitly($matchedRoute, $classReflectionInfo, $optionalParams);
+                            $optionalParams = self::bindParamsImplicitly($matchedRoute, $routeMethod, $classReflectionInfo, $optionalParams);
                         }
                     }
                 }
@@ -331,29 +465,32 @@ class Router
 
         return [
             'route' => $matchedRoute,
+            'method' => $method,
             'optionalParams' => $optionalParams
         ];
     }
 
-    public static function bindParamsImplicitly(string $matchedRoute, $closure, $optionalParams = [])
+    public static function bindParamsImplicitly(string $matchedRoute, $method, $closure, $optionalParams = [])
     {
         $optionalParamsClone = array_values($optionalParams);
         $paramCount = 0;
         foreach ($closure->getParameters() as $param) {
             if ($paramCount >= count($optionalParamsClone)) {
-                throw new RouteException('Invalid Route Syntax: `' . self::$routes[$matchedRoute]['caption'] . '`. Dynamic parameters count [' . count($optionalParamsClone) . '] must be same with associated closure');
+                throw new RouteException('Invalid Route Syntax: `' . self::$routes[$method][$matchedRoute]['caption'] . '`. Dynamic parameters count [' . count($optionalParamsClone) . '] must be same with associated closure. Exactly {' . count($optionalParamsClone) . '} required and {' . (count($closure->getParameters()) - count($optionalParamsClone)) . '} found in ' . (string) $closure);
             }
-            $paramClass = (phpversion() >= 8) ? $param->getType() : $param->getClass()->name;
-            if ($param->hasType() && !Str::contains($paramClass, 'Bones\Request')) {
-                $bindModelImplicitly = (string) $paramClass;
-                $modelObj = (new $bindModelImplicitly);
-                $columnToBind = (property_exists($modelObj, 'route_bind_bolumn')) ? self::accessProtected($modelObj, 'route_bind_bolumn') : (self::accessProtected($modelObj, 'primary_key'));
-                $columnValueToCompare = $optionalParamsClone[$paramCount];
-                $optionalParamsClone[$paramCount] = $modelObj->where($columnToBind, $columnValueToCompare)->first();
-                if (empty($optionalParamsClone[$paramCount])) {
-                    throw new RouteException('No data found for {' . $columnValueToCompare . '} as {' . $columnToBind . '} [route_bind_bolumn] in {' . $bindModelImplicitly . '} while implicit binding');
+            if ($param->hasType()) {
+                $paramClass = (phpversion() >= 8) ? $param->getType() : $param->getClass()->name;
+                if (!Str::contains($paramClass, 'Bones\Request')) {
+                    $bindModelImplicitly = (string) $paramClass;
+                    $modelObj = (new $bindModelImplicitly);
+                    $columnToBind = (property_exists($modelObj, 'route_bind_column')) ? self::accessProtected($modelObj, 'route_bind_column') : (self::accessProtected($modelObj, 'primary_key'));
+                    $columnValueToCompare = $optionalParamsClone[$paramCount];
+                    $optionalParamsClone[$paramCount] = $modelObj->where($columnToBind, $columnValueToCompare)->first();
+                    if (empty($optionalParamsClone[$paramCount])) {
+                        return error(404);
+                    }
+                    $paramCount++;
                 }
-                $paramCount++;
             }
         }
 
@@ -368,12 +505,13 @@ class Router
         return $optionalParams;
     }
 
-    public static function accessProtected($obj, $prop) {
+    public static function accessProtected($obj, $prop)
+    {
         $reflection = new \ReflectionClass($obj);
         $property = $reflection->getProperty($prop);
         $property->setAccessible(true);
         return $property->getValue($obj);
-      }
+    }
 
     public static function getRouteSegmentPresenseAttrs($segment)
     {
@@ -402,10 +540,10 @@ class Router
         }
     }
 
-    public static function verifySegmentWhereChecks(string $route, string $segmentKey, string $segmentValue)
+    public static function verifySegmentWhereChecks(string $route, string $method, string $segmentKey, string $segmentValue)
     {
-        if (empty(self::$routes[$route]['routeParamChecks'])) return true;
-        $whereChecks = self::$routes[$route]['routeParamChecks'];
+        if (empty(self::$routes[$method][$route]['routeParamChecks'])) return true;
+        $whereChecks = self::$routes[$method][$route]['routeParamChecks'];
         $segmentKey = Str::multiReplace($segmentKey, ['{?', '{', '}'], ['', '', '']);
         $hasPassed = true;
         foreach ($whereChecks as $where) {
@@ -423,19 +561,20 @@ class Router
         return $hasPassed;
     }
 
-    public static function name(string $name, $route = null, bool $nameFromParent = false)
+    public static function name(string $name, $route = null, bool $nameFromParent = false, $method = null)
     {
         $route = (!empty($route)) ? $route : self::$current;
+        $method = (!empty($method)) ? $method : self::$currentRouteMethod;
 
         if (is_array($route)) {
             foreach ($route as $route) {
                 $route = trim($route, '/');
-                self::$routes[$route]['namedAs'] = (!empty(self::$routes[$route]['namedAs'])) ? self::$routes[$route]['namedAs'] . $name : $name;
-                self::$routes[$route]['nameFromParent'] = $nameFromParent;
+                self::$routes[$method][$route]['namedAs'] = (!empty(self::$routes[$method][$route]['namedAs'])) ? self::$routes[$method][$route]['namedAs'] . $name : $name;
+                self::$routes[$method][$route]['nameFromParent'] = $nameFromParent;
             }
         } else {
-            self::$routes[$route]['namedAs'] = (!empty(self::$routes[$route]['namedAs'])) ? self::$routes[$route]['namedAs'] . $name : $name;
-            self::$routes[$route]['nameFromParent'] = $nameFromParent;
+            self::$routes[$method][$route]['namedAs'] = (!empty(self::$routes[$method][$route]['namedAs'])) ? self::$routes[$method][$route]['namedAs'] . $name : $name;
+            self::$routes[$method][$route]['nameFromParent'] = $nameFromParent;
         }
         return self::getInstance();
     }
@@ -445,72 +584,80 @@ class Router
         if (is_array(self::$current)) {
             foreach (self::$current as $route) {
                 $route = trim($route, '/');
-                self::$routes[$route]['routeParamChecks'][] = ['name' => $param, 'regex' => $regex];
+                self::$routes[self::$currentRouteMethod][$route]['routeParamChecks'][] = ['name' => $param, 'regex' => $regex];
             }
         } else {
-            self::$routes[self::$current]['routeParamChecks'][] = ['name' => $param, 'regex' => $regex];
+            self::$routes[self::$currentRouteMethod][self::$current]['routeParamChecks'][] = ['name' => $param, 'regex' => $regex];
         }
         return self::getInstance();
     }
 
-    public static function barrier($barriers, $route = null)
+    public static function barrier($barriers, $route = null, $method = null)
     {
         $route = (!empty($route)) ? $route : self::$current;
+        $method = (!empty($method)) ? $method : self::$currentRouteMethod;
+
         if (is_array($route)) {
             foreach ($route as $route) {
                 $route = trim($route, '/');
                 if (gettype($barriers) == 'string') {
                     $barriers = explode(',', $barriers);
                 }
-                self::setBarriers($route, $barriers);
+                self::setBarriers($route, $method, $barriers);
             }
         } else {
             if (gettype($barriers) == 'string') {
                 $barriers = explode(',', $barriers);
             }
-            self::setBarriers($route, $barriers);
+            self::setBarriers($route, $method, $barriers);
         }
         return self::getInstance();
     }
 
-    public static function withoutBarrier($barriers, $route = null)
+    public static function withoutBarrier($barriers, $route = null, $method = null)
     {
         $route = (!empty($route)) ? $route : self::$current;
+        $method = (!empty($method)) ? $method : self::$currentRouteMethod;
+
         if (is_array($route)) {
             foreach ($route as $route) {
                 $route = trim($route, '/');
                 if (gettype($barriers) == 'string') {
                     $barriers = explode(',', $barriers);
                 }
-                self::removeBarriers($route, $barriers);
+                self::removeBarriers($route, $method, $barriers);
             }
         } else {
             if (gettype($barriers) == 'string') {
                 $barriers = explode(',', $barriers);
             }
-            self::removeBarriers($route, $barriers);
+            self::removeBarriers($route, $method, $barriers);
         }
         return self::getInstance();
     }
 
-    public static function setBarriers(string $route, array $barriers = [])
+    public static function setBarriers(string $route, string $method, array $barriers = [])
     {
-        if (!is_array($barriers)) return self::$routes[$route];
+        if (!is_array($barriers)) return self::$routes[$method][$route];
         foreach ($barriers as $barrier) {
-            $barrier = trim($barrier);
-            if (!empty($barrierAlias = self::findBarrierByName($barrier))) {
-                $barrier = $barrierAlias;
+            if (is_array($barrier)) {
+                self::setBarriers($route, $method, $barrier);
+            } else {
+                $barrier = trim($barrier);
+                if (!empty($barrierAlias = self::findBarrierByName($barrier))) {
+                    $barrier = $barrierAlias;
+                }
+                self::$routes[$method][$route]['barriers'][] = ['name' => $barrier];
             }
-            self::$routes[$route]['barriers'][] = ['name' => $barrier];
         }
-        return self::$routes[$route];
+        return self::$routes[$method][$route];
     }
 
-    public static function removeBarriers(string $route, array $barriers = [])
+    public static function removeBarriers(string $route, string $method, array $barriers = [])
     {
-        if (!is_array($barriers)) return self::$routes[$route];
+        if (!is_array($barriers)) return self::$routes[$method][$route];
 
-        if (empty(self::$routes[$route]['barriers'])) return self::$routes[$route];
+        if (empty(self::$routes[$method][$route]['barriers'])) return self::$routes[$method][$route];
 
         foreach ($barriers as $barrierIndex => $barrier) {
             $barrier = trim($barrier);
@@ -519,27 +666,29 @@ class Router
             }
         }
 
-        foreach (self::$routes[$route]['barriers'] as $barrierIndex => $barrier) {
+        foreach (self::$routes[$method][$route]['barriers'] as $barrierIndex => $barrier) {
             foreach ($barrier as $barrierName) {
-                if (in_array($barrierName, $barriers)) {   
-                    unset(self::$routes[$route]['barriers'][$barrierIndex]);
+                if (in_array($barrierName, $barriers)) {
+                    unset(self::$routes[$method][$route]['barriers'][$barrierIndex]);
                 }
             }
         }
-        return self::$routes[$route];
+        return self::$routes[$method][$route];
     }
 
-    public static function response(string $response, $route = null)
+    public static function response(string $response, $route = null, $method = null)
     {
         $route = (!empty($route)) ? $route : self::$current;
-        self::setResponse($route, $response);
+        $method = (!empty($method)) ? $method : self::$currentRouteMethod;
+
+        self::setResponse($route, $method, $response);
         return self::getInstance();
     }
 
-    public static function setResponse(string $route, string $response = '')
+    public static function setResponse(string $route, string $method, string $response = '')
     {
-        self::$routes[$route]['response'] = $response;
-        return self::$routes[$route];
+        self::$routes[$method][$route]['response'] = $response;
+        return self::$routes[$method][$route];
     }
 
     public static function serveAs($route = null)
@@ -552,6 +701,10 @@ class Router
     public static function serve($content, $route = null)
     {
         response()->format(self::serveAs($route));
+
+        // Calculate request->response total execution time in seconds
+        $current_time = microtime(true);
+        $execution_start_time = (float) session()->get('execution_start_time');
 
         if (is_string($content)) {
             echo $content;
@@ -582,21 +735,14 @@ class Router
             op($logsOf);
     }
 
-    public static function setError($status = 404, string $customMsg = '')
+    public static function setError($error_code = 404, $error = '')
     {
-        switch ($status) {
-            case 404:
-                return render(setting('templates.404', 'defaults/404'), [
-                    'error' => 'Page not found.' . $customMsg
-                ]);
-                break;
-            case 402:
-                return Engine::error([
-                    'error' => '402 - Unathenticated'
-                ]);
-                break;
+        if (in_array($error_code, [400, 401, 403, 404, 405, 429, 500, 501, 502, 503])) {
+            echo error($error_code, compact('error'));
+            exit;
         }
-        throw new RouteException('Error code ' . $status . ' returned');
+
+        throw new RouteException('Error code ' . $error_code . ' returned');
     }
 
     public static function clearSavedRoutes()
@@ -618,6 +764,17 @@ class Router
         return true;
     }
 
+    public static function requestMethod()
+    {
+        if (!empty($_SERVER['REQUEST_METHOD']) && in_array($_SERVER['REQUEST_METHOD'], ['GET']))
+            return $_SERVER['REQUEST_METHOD'];
+
+        if (!empty($_SERVER['REQUEST_METHOD']) && in_array($_SERVER['REQUEST_METHOD'], ['POST']) && !empty($_REQUEST['_method']))
+            return $_REQUEST['_method'];
+
+        return (!empty($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'ANY');
+    }
+
     public static function prevRoute()
     {
         $cachedRoutes = Session::getReserved('latest_routes');
@@ -635,24 +792,43 @@ class Router
         return self::$routes;
     }
 
+    public static function toPattern($route)
+    {
+        $routeSegments = explode('/', $route);
+        foreach ($routeSegments as &$routeSegment) {
+            if (Str::startsWith($routeSegment, '{') && Str::endsWith($routeSegment, '}'))
+                $routeSegment = '*';
+        }
+
+        return implode('/', $routeSegments);
+    }
+
     public static function url(string $path)
     {
-        return setting('app.base_url') .'/'. setting('app.sub_dir', '') .'/'. $path;
+        $url = setting('app.base_url') . '/';
+
+        if (!empty($subDir = setting('app.sub_dir', ''))) {
+            $url .= $subDir . '/';
+        }
+
+        return $url . $path;
     }
 
     public static function exists(string $routeToCheck, $return = false)
     {
         $isExists = false;
-        foreach (self::$routes as $routePattern => $route) {
-            if (isset($route['nameFromParent']) && !$route['nameFromParent'] && !empty($route['namedAs']) && $route['namedAs'] == $routeToCheck) {
-                if ($return) {
-                    return [
-                        'info' => $route,
-                        'pattern' => $routePattern
-                    ];
+        foreach (self::$routes as $routeInfo) {
+            foreach ($routeInfo as $routePattern => $route) {
+                if (isset($route['nameFromParent']) && !$route['nameFromParent'] && !empty($route['namedAs']) && $route['namedAs'] == $routeToCheck) {
+                    if ($return) {
+                        return [
+                            'info' => $route,
+                            'pattern' => $routePattern
+                        ];
+                    }
+                    $isExists = true;
+                    break;
                 }
-                $isExists = true;
-                break;
             }
         }
         return $isExists;
@@ -670,8 +846,22 @@ class Router
             if (!empty($routeInfo['pattern'])) {
                 $routeSyntax = explode('/', $routeInfo['pattern']);
                 $finalRouteBlocks = [];
-                
-                if (!empty($segmentValues) && !empty($segmentValues[0]) && !is_array($segmentValues[0])) {
+                $segmentHasSyntaxParam = false;
+
+                foreach ($routeSyntax as $syntaxParam) {
+                    if (Str::startsWith($syntaxParam, '{') && Str::endsWith($syntaxParam, '}')) {
+                        $syntaxParam = Str::removeCharAt($syntaxParam, 0);
+                        $syntaxParam = Str::removeCharAt($syntaxParam, strlen($syntaxParam) - 1);
+                    } else if (Str::startsWith($syntaxParam, '{?') && Str::endsWith($syntaxParam, '}')) {
+                        $syntaxParam = Str::removeCharAt($syntaxParam, 0);
+                        $syntaxParam = Str::removeCharAt($syntaxParam, 1);
+                        $syntaxParam = Str::removeCharAt($syntaxParam, strlen($syntaxParam) - 1);
+                    }
+                    if (!$segmentHasSyntaxParam && array_key_exists($syntaxParam, $segmentValues))
+                        $segmentHasSyntaxParam = true;
+                }
+
+                if ((count($segmentValues) == count($segmentValues, COUNT_RECURSIVE)) && !$segmentHasSyntaxParam) {
                     $dynamicSegmentCount = 0;
                     foreach ($routeSyntax as $segmentCount => $segment) {
                         if (Str::startsWith($segment, '{') && Str::endsWith($segment, '}')) {
@@ -682,7 +872,7 @@ class Router
                         } else {
                             $finalRouteBlocks[$segment] = $segment;
                         }
-                    }       
+                    }
                 } else {
                     foreach ($routeSyntax as $segment) {
                         if (Str::startsWith($segment, '{') && !Str::startsWith($segment, '{?') && Str::endsWith($segment, '}')) {
@@ -703,7 +893,9 @@ class Router
                     }
                 }
 
-                return url(implode('/', $finalRouteBlocks));
+                $queryParams = array_diff($segmentValues, $finalRouteBlocks);
+
+                return URL::addQueryParams(url(implode('/', $finalRouteBlocks)), $queryParams);
             } else {
                 return url($routeInfo['pattern']);
             }
@@ -717,12 +909,11 @@ class Router
         $proceedToNext = true;
         if (file_exists('locker/system/stop')) {
             render(setting('templates.503', 'defaults/503'), [
-                'stop_msg' => file_get_contents((new Commander())->appStopperFile)
+                'message' => file_get_contents((new Commander())->appStopperFile)
             ]);
             return false;
         }
 
         return $proceedToNext;
     }
-
 }

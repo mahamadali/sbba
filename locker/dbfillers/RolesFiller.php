@@ -10,14 +10,14 @@ return new class
 
 	public function fill()
 	{
-		Database::__insertMulti([
+		Database::table($this->table)->insertMulti([
 			[
 				'name' => 'admin',
 			],
 			[
 				'name' => 'user',
 			],
-		], null, $this->table);
+		]);
 	}
 
 };

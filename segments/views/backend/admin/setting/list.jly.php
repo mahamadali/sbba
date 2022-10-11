@@ -20,6 +20,7 @@
       </div>
       <div class="card-body">
       <form method="post" action="{{ route('admin.settings.update') }}">
+        {{ prevent_csrf_field() }}
         @foreach($settings as $setting):
           
           <div class="row mb-3">

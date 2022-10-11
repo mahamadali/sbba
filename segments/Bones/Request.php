@@ -2,9 +2,10 @@
 
 namespace Bones;
 
-use JollyException\RequestException;
-use JollyException\RequestManipulation;
-use JollyException\RequestParamNotFound;
+use Bones\RequestException;
+use Bones\RequestManipulation;
+use Bones\RequestParamNotFound;
+use Bones\URL;
 
 class Request extends Validation
 {
@@ -19,7 +20,7 @@ class Request extends Validation
     {
         foreach ($request as $param => $value) {
             if (is_array($value)) {
-                array_map(function($element) use ($request, $param) {
+                array_map(function ($element) use ($request, $param) {
                     $request[$param] = urldecode($element);
                 }, $value);
             } else {
@@ -97,8 +98,7 @@ class Request extends Validation
     {
         if (!empty($this->files[$fileName]) && (is_array($this->files[$fileName])) && !empty($this->files[$fileName][0])) {
             return (!empty($this->files)) ? (array_key_exists($fileName, $this->files) && !empty($this->files[$fileName][0]->file['tmp_name'])) : false;
-        }
-        else {
+        } else {
             return (!empty($this->files)) ? (array_key_exists($fileName, $this->files) && !empty($this->files[$fileName]->file['tmp_name'])) : false;
         }
     }
@@ -209,6 +209,26 @@ class Request extends Validation
     }
 
     /**
+     * Get current request uri
+     * 
+     */
+    public static function currentUri()
+    {
+        $appSubDir = rtrim(setting('app.sub_dir', ''), '/');
+
+        return str_replace($appSubDir, '', trim($_SERVER['REQUEST_URI'], '/'));
+    }
+
+    /**
+     * Get current request uri without query
+     * 
+     */
+    public static function currentUriWithoutQuery()
+    {
+        return URL::removeQuery(self::currentUri());
+    }
+
+    /**
      * Check current page matches to pattern
      * 
      * @param string $pattern
@@ -217,24 +237,21 @@ class Request extends Validation
      */
     public static function matchesTo($pattern)
     {
-        $currentPage = self::currentPage();
+        $currentPage = URL::removeQuery(self::currentPage());
 
         if ((empty($currentPage) || $currentPage == '/') && $pattern == '/') return true;
 
-        if (!Str::startsWith($pattern, '/')) {
-            $currentPage = ltrim($currentPage, '/');
-        }
-        
-        $currentPageParts = explode('/', $currentPage);
-        $patternParts = explode('/', $pattern);
+        return URL::matchesTo($currentPage, $pattern);
+    }
 
-        foreach ($patternParts as $index => $patternPart) {
-            if ($patternPart != '*' && (!isset($currentPageParts[$index]) || $patternPart != $currentPageParts[$index]))
-                return false;
-        }
-
-        return true;
-
+    /**
+     * Check request has valid signature
+     * 
+     * @return bool
+     */
+    public static function hasValidSignature()
+    {
+        return URL::verifySignature(url(self::currentPage()));
     }
 
     /**

@@ -13,7 +13,7 @@ return new class
 		DataWing::modify($this->table, function (Skeleton $table)
 		{
 			$table->string('email')->unique()->modify();
-			$table->softDelete();
+			$table->trashMask();
 			return $table;
 		});
 	}

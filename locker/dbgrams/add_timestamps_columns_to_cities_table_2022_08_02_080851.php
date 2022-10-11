@@ -13,7 +13,7 @@ return new class
 		DataWing::modify($this->table, function (Skeleton $table)
 		{
 			$table->timestamps();
-			$table->softDelete();
+			$table->trashMask();
 			return $table;
 		});
 	}

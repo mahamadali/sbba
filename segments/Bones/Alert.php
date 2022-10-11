@@ -4,11 +4,11 @@ namespace Bones;
 
 use Bones\Skeletons\Supporters\AutoMethodMap;
 use Contributors\Mail\Mailer;
-use JollyException\AlertException;
+use Contributors\SMS\Texter;
+use Bones\AlertException;
 
 class Alert extends AutoMethodMap
 {
-    protected $via = 'email';
     protected $notifiable;
 
     public function __construct($notifiable = null)
@@ -22,17 +22,23 @@ class Alert extends AutoMethodMap
         return $this;
     }
 
-    public function via($via)
+    protected function runInBackground()
     {
-        $this->via = (!empty($via)) ? $via : 'email';
-        return $this;
+        return !empty($this->notifiable->run_in_background) && $this->notifiable->run_in_background == true;
     }
 
     public function notify()
     {
         if (!empty($this->notifiable)) {
-            if (is_subclass_of($this->notifiable, Mailer::class)) {
-                return $this->notifiable->prepare()->send();
+            if ($this->runInBackground()) {
+                $this->notifiable->setAction();
+                return true;
+            } else {
+                if (is_subclass_of($this->notifiable, Mailer::class)) {
+                    return $this->notifiable->prepare()->send();
+                } else if (is_subclass_of($this->notifiable, Texter::class)) {
+                    return $this->notifiable->prepare()->send();
+                }
             }
         }
 

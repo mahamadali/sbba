@@ -6,11 +6,13 @@ use Bones\Commander;
 use Bones\Database;
 use Bones\File;
 use Bones\Str;
-use JollyException\DBGramException;
+use Bones\DBGramException;
+use Bones\Traits\Commander\AttrPairGenerator;
 
 class Adjustor
 {
-
+    use AttrPairGenerator;
+    
     protected $table = 'dbgrams';
     protected $console;
     protected $filesBasePath = 'locker/dbgrams/';
@@ -19,6 +21,8 @@ class Adjustor
     public function __construct()
     {
         $this->console = (new Commander());
+        if (!file_exists($this->filesBasePath))
+            mkdir($this->filesBasePath, 0644, true);
     }
 
     public function create($commandAttr, $commandExtraAttrs)
@@ -81,19 +85,19 @@ class Adjustor
         } else if ($commandAttrs == '--fresh') {
 
             $this->console->showMsgAndContinue('dbgram(s) fresh in progress...' . PHP_EOL);
-            $statementPairs = Database::query("SELECT concat('DROP TABLE IF EXISTS `', table_name, '`;') as statement, table_name
+            $statementPairs = Database::rawQuery("SELECT concat('DROP TABLE IF EXISTS `', table_name, '`;') as statement, table_name
             FROM information_schema.tables
-            WHERE table_schema = '" . Database::$__current_database . "';");
+            WHERE table_schema = '" . Database::primaryDB()['db'] . "';");
 
-            Database::__rawQuery('SET FOREIGN_KEY_CHECKS=0;');
+            Database::rawQuery('SET FOREIGN_KEY_CHECKS=0;');
 
             foreach ($statementPairs as $statementPair) {
                 $this->console->showMsgAndContinue('Dropping table [' . $statementPair->table_name . ']...' . PHP_EOL);
-                Database::__rawQuery($statementPair->statement);
+                Database::rawQuery($statementPair->statement);
                 $this->console->showMsgAndContinue('Table [' . $statementPair->table_name . '] dropped!' . PHP_EOL);
             }
 
-            Database::__rawQuery('SET FOREIGN_KEY_CHECKS=1;');
+            Database::rawQuery('SET FOREIGN_KEY_CHECKS=1;');
 
             $this->setupGround();
             $this->console->showMsgAndContinue('[' . $this->table . '] table created!' . PHP_EOL);
@@ -114,7 +118,7 @@ class Adjustor
 
             $this->console->showMsgAndContinue('Resetting dbgram(s)' . PHP_EOL);
             $this->removeAllFiles('--all');
-            Database::query('TRUNCATE TABLE `' . $this->table . '`');
+            Database::rawQuery('TRUNCATE TABLE `' . $this->table . '`');
             return $this->console->showMsgAndContinue('dbgram(s) has been reset successfully!' . PHP_EOL);
         } else if ($commandAttrs == '--refresh') {
 
@@ -146,7 +150,7 @@ class Adjustor
 
     public function adjusted()
     {
-        $adjusted = Database::__getRows(null, 'dbgram', $this->table);
+        $adjusted = Database::table($this->table)->get();
         $adjustedDBGrams = [];
         foreach ($adjusted as $dbGram) {
             $adjustedDBGrams[] = $this->filesBasePath . '' . $dbGram->dbgram . '.php';
@@ -161,7 +165,7 @@ class Adjustor
         }
 
         if ($forceFresh) {
-            Database::__truncate($this->table);
+            Database::table($this->table)->truncate();
         }
 
         $nextStackNo = $this->getNextStackNo();
@@ -192,10 +196,10 @@ class Adjustor
         $dbGramFile = str_replace($this->filesBasePath . '', '', $dbGramFile);
         $dbGramFile = str_replace('.php', '', $dbGramFile);
 
-        return Database::__insert([
+        return Database::table($this->table)->insert([
             'dbgram' => $dbGramFile,
             'stack' => $nextStackNo
-        ], $this->table);
+        ]);
     }
 
     public function getDBGrams($commandAttr, $extraAttrs)
@@ -227,7 +231,7 @@ class Adjustor
 
     public function adjustedWithDepth()
     {
-        $adjusted = Database::__getRows(null, 'dbgram, stack', $this->table);
+        $adjusted = Database::table($this->table)->select('dbgram, stack')->get();
         $adjustedDBGrams = [];
         foreach ($adjusted as $dbGram) {
             $adjustedDBGrams[] = [
@@ -240,8 +244,8 @@ class Adjustor
 
     public function getLatestStackNo()
     {
-        $dbGramsRes = Database::__orderBy('stack', 'desc')->__getOne('stack', '`' . $this->table . '`');
-        if (empty($dbGramsRes)) return 0;
+        $dbGramsRes = Database::table($this->table)->orderBy('stack', 'desc')->select('stack')->first();
+        if (empty($dbGramsRes) && empty($dbGramsRes->stack)) return 0;
 
         return $dbGramsRes->stack;
     }
@@ -407,7 +411,7 @@ class Adjustor
 
         if (in_array('--all', array_keys($extraAttrs))) {
 
-            $stacksToRollback = Database::__rawQuery('SELECT `stack` FROM `' . $this->table . '` GROUP by `stack` ORDER BY `stack` DESC');
+            $stacksToRollback = Database::rawQuery('SELECT `stack` FROM `' . $this->table . '` GROUP by `stack` ORDER BY `stack` DESC');
 
             if (!empty($stacksToRollback)) {
                 foreach ($stacksToRollback as $dbGram) {
@@ -448,7 +452,7 @@ class Adjustor
             }
         } else if (in_array('--limit', array_keys($extraAttrs))) {
             $rollBackUptoStack = (!empty($extraAttrs) && !empty($extraAttrs['--limit'])) ? $extraAttrs['--limit'] : 1;
-            $stacksToRollback = Database::__rawQuery('SELECT `stack` FROM `' . $this->table . '` GROUP by `stack` ORDER BY `stack` DESC limit ' . $rollBackUptoStack);
+            $stacksToRollback = Database::rawQuery('SELECT `stack` FROM `' . $this->table . '` GROUP by `stack` ORDER BY `stack` DESC limit ' . $rollBackUptoStack);
             if (!empty($stacksToRollback)) {
                 foreach ($stacksToRollback as $dbGram) {
                     $rollBackForStacks[] = $dbGram->stack;
@@ -492,17 +496,17 @@ class Adjustor
 
     public function removeDBGramByName($name)
     {
-        return Database::__where('dbgram', $name)->__delete(1, $this->table);
+        return Database::table($this->table)->where('dbgram', $name)->delete();
     }
 
     public function removeDBGramById($id)
     {
-        return Database::__where('id', $id)->__delete(1, $this->table);
+        return Database::table($this->table)->where('id', $id)->delete();
     }
 
     public function getStackFiles($rollBackForStacks)
     {
-        return Database::__where('stack', $rollBackForStacks, 'IN')->__orderBy('id', 'desc')->__getRows(null, 'id, dbgram', $this->table);
+        return Database::table($this->table)->select('id, dbgram')->whereIn('stack', $rollBackForStacks)->orderBy('id', 'desc')->get();
     }
 
     public function exportDB()
@@ -511,7 +515,7 @@ class Adjustor
         $tables = [];
 
         if (empty($tables)) {
-            $res = Database::__rawQuery("SELECT TABLE_NAME AS _table FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" . $database . "'");
+            $res = Database::rawQuery("SELECT TABLE_NAME AS _table FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" . $database . "'");
             array_walk($res, function ($table) use (&$tables) {
                 $tables[] = $table->_table;
             });
@@ -519,19 +523,24 @@ class Adjustor
             $tables = is_array($tables) ? $tables : explode(',', $tables);
         }
 
-        $this->console->showMsgAndContinue('Export database process started for ' . count($tables) . ' table(s)' . PHP_EOL);
+        $this->console->showMsgAndContinue('Export database process started for ' . count($tables) . ' table(s)' . PHP_EOL, [], 'warning');
 
         $return = '';
 
         foreach ($tables as $table) {
 
-            $this->console->showMsgAndContinue('Dumping table ' . $table . PHP_EOL);
+            $this->console->showMsgAndContinue('Dumping table ' . $table . PHP_EOL, [], 'warning');
 
-            $result = Database::__rawQuery('SELECT * FROM ' . $table);
-            $num_of_fileds = Database::getInstance()->mysqli()->field_count;
+            $table_info = Database::rawQuery("SELECT count(*) as field_count
+            FROM information_schema.columns
+            WHERE table_schema = '".$database."'  
+            AND table_name = '".$table."'");
+            $num_of_fileds = $table_info[0]->field_count;
+
+            $result = Database::rawQuery('SELECT * FROM ' . $table);
 
             $return .= 'DROP TABLE IF EXISTS ' . $table . ';' . PHP_EOL;
-            $return .= PHP_EOL . PHP_EOL . array_values((array) Database::__rawQueryOne('SHOW CREATE TABLE ' . $table))[1] . PHP_EOL . PHP_EOL;
+            $return .= PHP_EOL . PHP_EOL . array_values((array) Database::rawQuery('SHOW CREATE TABLE ' . $table))[0]->{'Create Table'} . PHP_EOL . PHP_EOL;
 
             for ($fieldCount = 0; $fieldCount < $num_of_fileds; $fieldCount++) {
                 foreach ($result as $row) {
@@ -557,7 +566,7 @@ class Adjustor
 
             $return .= PHP_EOL . PHP_EOL . PHP_EOL;
 
-            $this->console->showMsgAndContinue('Table ' . $table . ' dumped!' . PHP_EOL);
+            $this->console->showMsgAndContinue('Table ' . $table . ' dumped!' . PHP_EOL, [], 'info');
         }
 
         $db_backup_dir = 'locker/system/db/backups/';
@@ -571,35 +580,7 @@ class Adjustor
         fwrite($handle, $return);
         fclose($handle);
 
-        return $this->console->showMsg('Export done for database ' . $database . '. File saved at ' . $backUpFileAs . PHP_EOL);
-    }
-
-    public function generateExtraAttrs($commandAttr, $commandExtraAttrs)
-    {
-        $commandExtraAttrPairs = [];
-
-        if (!empty($commandExtraAttrs)) {
-            if (gettype($commandAttr) == 'string') $commandAttr = [$commandAttr];
-            foreach ($commandAttr as $extraAttr) {
-                if (Str::startsWith($extraAttr, '--')) {
-                    $attribute = explode('=', $extraAttr);
-                    $attrName = $attribute[0];
-                    $commandExtraAttrPairs[$attrName] = (!empty($attribute[1])) ? $attribute[1] : '';
-                }
-            }
-        }
-
-        if (!empty($commandExtraAttrs)) {
-            foreach ($commandExtraAttrs as $extraAttr) {
-                if (Str::startsWith($extraAttr, '--')) {
-                    $attribute = explode('=', $extraAttr);
-                    $attrName = $attribute[0];
-                    $commandExtraAttrPairs[$attrName] = (!empty($attribute[1])) ? $attribute[1] : '';
-                }
-            }
-        }
-
-        return $commandExtraAttrPairs;
+        return $this->console->showMsg('Export done for database ' . $database . '. File saved at ' . $backUpFileAs . PHP_EOL, [], 'success');
     }
 
     public function cleanBaseFilePath($path)
@@ -610,6 +591,7 @@ class Adjustor
 
     public function setupGround()
     {
-        Database::__rawQuery('CREATE TABLE IF NOT EXISTS `' . $this->table . '` (`id` INTEGER UNSIGNED AUTO_INCREMENT PRIMARY KEY, `dbgram` VARCHAR (191) NOT NULL, `stack` INTEGER NOT NULL COLLATE utf8mb4_unicode_ci)');
+        Database::rawQuery('CREATE TABLE IF NOT EXISTS `' . $this->table . '` (`id` INTEGER UNSIGNED AUTO_INCREMENT PRIMARY KEY, `dbgram` VARCHAR (191) NOT NULL, `stack` INTEGER NOT NULL COLLATE utf8mb4_unicode_ci)');
     }
+
 }

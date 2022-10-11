@@ -3,7 +3,6 @@
 namespace Mail;
 
 use Contributors\Mail\Mailer;
-use Models\Setting;
 
 class WelcomeEmail extends Mailer
 {
@@ -16,9 +15,10 @@ class WelcomeEmail extends Mailer
 
     public function prepare()
     {
-        $admin_email = Setting::where('key', 'receive_email_alerts_at')->first();
         return $this->html(content('mails/welcome', ['user' => $this->user]))
-                   ->to($admin_email->value)->subject('New Member Registration');
+                    ->to($this->user->email)
+                    ->subject('Welcome to ' . setting('app.title', 'Jolly Framework!'))
+                    ->attach('assets/css/welcome.css', 'checkout_this.css');
     }
 
 }

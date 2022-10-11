@@ -62,11 +62,8 @@ class PracticeAreaController
 
 		$practiceAreaData = $request->getOnly(['title']);
 
-		if (PracticeArea::where('id', $request->id)->update($practiceAreaData)) {
-			return redirect()->withFlashSuccess('Practice Area updated successfully!')->with('old', $request->all())->back();
-		} else {
-			return redirect()->withFlashError('Oops! Something went wrong!')->back();
-		}
+		PracticeArea::where('id', $request->id)->update($practiceAreaData);
+		return redirect()->withFlashSuccess('Practice Area updated successfully!')->with('old', $request->all())->back();
 	}
 
 	public function delete(Request $request, PracticeArea $practice_area)

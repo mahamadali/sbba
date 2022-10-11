@@ -10,12 +10,12 @@ return new class
 
 	public function fill()
 	{
-		Database::__insertMulti([
+		Database::table($this->table)->insertMulti([
 			[
 				'key' => 'receive_email_alerts_at',
 				'value' => 'hasanmoriya429@gmail.com',
 			],
-		], null, $this->table);
+		]);
 	}
 
 };

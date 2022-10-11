@@ -10,7 +10,7 @@ return new class
 
 	public function fill()
 	{
-		Database::__insertMulti([
+		Database::table($this->table)->insertMulti([
 			[
 				'name' => 'Atlanta',
 			],
@@ -29,7 +29,7 @@ return new class
 			[
 				'name' => 'New York',
 			],
-		], null, $this->table);
+		]);
 	}
 
 };

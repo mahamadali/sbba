@@ -31,7 +31,7 @@
             </tr>
           </thead>
           <tbody>
-            @if (count($cities) > 0):
+            @if ($cities->count() > 0):
               @foreach ($cities as $city):
               <tr>
                 <td>{{ $city->name }}</td>
@@ -40,6 +40,7 @@
                     <span><i class="ti-pencil"></i></span>
                   </a>
                   <form method="post" action="{{ url('admin/cities/delete/'.$city->id) }}" class="d-inline-block">
+                    {{ prevent_csrf_field() }}
                     <input type="hidden" name="_method" value="DELETE" />
                     <button type="submit" class="btn btn-sm btn-danger">
                       <span><i class="ti-trash"></i></span>

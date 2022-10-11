@@ -14,7 +14,7 @@ class UserController
 			return $query->where('name', 'user');
 		})->with('city')->get();
 		
-		$totalUsers = count($users);
+		$totalUsers = $users->count();
 		
 		return render('backend/admin/user/list', [
 			'users' => $users,

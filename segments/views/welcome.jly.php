@@ -23,7 +23,7 @@
      <div data-v-76520ee6="" class="section2__inner-img" style="margin-bottom:1.5rem;"><img data-v-76520ee6="" src="{{url('assets/frontend/img/cities1.png')}}" class="img-section3"></div>
      <div data-v-76520ee6="" class="section2__inner-txt">
         <h1 data-v-76520ee6="">Where Are We?</h1>
-        <h2 class="home-page-text-color" data-v-76520ee6="">We’ve started in {{ strtolower(convert_number(count($cities))) }}  cities. Choose a city and sign up. We’ll alert you when we have networking events near you!</h2>
+        <h2 class="home-page-text-color" data-v-76520ee6="">We’ve started in {{ strtolower(convert_number($cities->count())) }}  cities. Choose a city and sign up. We’ll alert you when we have networking events near you!</h2>
     </div>
     </div>
     <div class="city-dropdown">

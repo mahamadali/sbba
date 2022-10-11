@@ -3,7 +3,7 @@
 namespace Bones;
 
 use Bones\Skeletons\DataWing\Skeleton;
-use JollyException\BadMethodException;
+use Bones\BadMethodException;
 
 class DataWing
 {
@@ -49,6 +49,9 @@ class DataWing
                 return call_user_func_array([(new self($table, $name, null)), '__'.$name], $arguments);
             }
         }
+
+        if (method_exists(Skeleton::class, $name))
+            return Skeleton::$name(...$arguments);
 
         throw new BadMethodException($name.'() method not found');
     }

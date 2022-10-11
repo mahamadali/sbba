@@ -301,7 +301,7 @@ class Str
      * @param string $plural Pluralized form of word
      * @return string Singular word
      */
-    public static function singular($plural) : string
+    public static function singular($plural)
     {
         if (Str::endsWith($plural, 'ies')) {
             return substr($plural, 0, -3) . 'y';
@@ -321,19 +321,19 @@ class Str
      * 
      * @return bool
      */
-    public static function isEmail(string $email) : bool
+    public static function isEmail(string $email)
     {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 
     /**
-     * remove enclosed quotes from string
+     * Remove enclosed quotes from string
      * 
      * @param string $email
      * 
      * @return string
      */
-    public static function removeQuotes(string $string) : string
+    public static function removeQuotes(string $string)
     {
         if (Str::startsWith($string, '"') || Str::startsWith($string, "'")) {
             $string = str_replace(Str::charAt($string, 0), '', $string);
@@ -344,6 +344,135 @@ class Str
         }
 
         return $string;
+    }
+
+    /**
+     * Generate slug from string
+     * 
+     * @param string $string
+     * @param string $glue_with
+     * 
+     * @return string slug
+     */
+    public static function toSlug($string, $glue_with = '-')
+    {
+        $delimiter = $glue_with;
+
+        $string = mb_convert_encoding((string) $string, 'UTF-8', mb_list_encodings());
+        $string = preg_replace('/[^\p{L}\p{Nd}]+/u', $delimiter, $string);
+        $string = preg_replace('/(' . preg_quote($delimiter, '/') . '){2,}/', '$1', $string);
+        $string = trim($string, $delimiter);
+
+        return strtolower($string);
+    }
+
+    /**
+     * Convert string to title case
+     * 
+     * @param string $string
+     * 
+     * @return string $string with title case
+     */
+    public static function toTitleCase($string)
+    {
+        return mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
+    }
+
+    /**
+     * Split string by uppercase letter
+     * 
+     * @param string $string
+     * 
+     * @return array
+     */
+    public static function ucsplit($string)
+    {
+        return preg_split('/(?=[A-Z])/', $string);
+    }
+
+    /**
+     * Convert mixed string to readable
+     * 
+     * @param string $slug
+     * 
+     * @return string readable $string
+     */
+    public static function toReadable($string)
+    {
+        $readableChunks = explode(' ', $string);
+
+        if (count($readableChunks) > 1) {
+            $readableChunks = array_map([static::class, 'toTitleCase'], $readableChunks);
+        } else {
+            $readableChunks = array_map([static::class, 'toTitleCase'], $readableChunks);
+        }
+
+        $readable = Str::multiReplace(implode('_', $readableChunks), ['-', '_', ' '], ['_', '_', '_']);
+
+        return trim(implode(' ', array_filter(explode('_', $readable))));
+        
+    }
+
+    /**
+     * Convert array|object to json
+     * 
+     * @param array|object $set
+     * 
+     * @return string json
+     */
+    public static function toJson($set)
+    {
+        return json_encode($set);
+    }
+
+    /**
+     * Check string is valid json
+     * 
+     * @param string $string
+     * 
+     * @return bool
+     */
+    public static function isJson($string)
+    {
+        return is_object(json_decode($string));
+    }
+
+    /**
+     * Convert about any english textual datetime description into a Unix timestamp
+     * 
+     * @param string $date
+     * 
+     * @return string timestamp
+     */
+    public static function toTimestamp($date)
+    {
+        return strtotime($date);
+    }
+
+    /**
+     * Check string is a valid Unix timestamp
+     * 
+     * @param string $string
+     * 
+     * @return bool
+     */
+    public static function isTimestamp($string)
+    {
+        return ((string) (int) $string === $string)
+            && ($string <= PHP_INT_MAX)
+            && ($string >= ~PHP_INT_MAX);
+    }
+
+    /**
+     * Replace multiple white spaces to single whitespace in a string
+     * 
+     * @param string $string
+     * 
+     * @return string
+     */
+    public static function replaceMultiWhitespaceToSingle($string)
+    {
+        return preg_replace('/\s+/', ' ', $string);
     }
 
 }

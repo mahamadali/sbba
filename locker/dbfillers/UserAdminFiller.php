@@ -10,7 +10,7 @@ return new class
 
 	public function fill()
 	{
-		Database::__insertMulti([
+		Database::table($this->table)->insertMulti([
 			[
 				'first_name' => 'Super',
 				'last_name' => 'Admin',
@@ -18,7 +18,7 @@ return new class
 				'password' => md5('secret'),
 				'role_id' => 1,
 			],
-		], null, $this->table);
+		]);
 	}
 
 };

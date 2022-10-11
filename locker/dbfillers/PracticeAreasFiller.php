@@ -10,7 +10,7 @@ return new class
 
 	public function fill()
 	{
-		Database::__insertMulti([
+		Database::table($this->table)->insertMulti([
 			[
 				'title' => 'Banking & Finance'
 			],
@@ -47,7 +47,7 @@ return new class
 			[
 				'title' => 'Tax'
 			],
-		], null, $this->table);
+		]);
 	}
 
 };

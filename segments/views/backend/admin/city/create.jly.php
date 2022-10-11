@@ -13,6 +13,7 @@
     </div>
     <div class="card-body">
       <form method="post" action="{{ route('admin.cities.store') }}">
+        {{ prevent_csrf_field() }}
         <div class="row">
           <div class="col">
             <div class="form-group">

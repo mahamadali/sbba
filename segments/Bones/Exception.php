@@ -1,6 +1,6 @@
 <?php
 
-namespace JollyException;
+namespace Bones;
 
 use Exception;
 
@@ -165,6 +165,14 @@ class AlertException extends Exception
 }
 
  class MailerException extends Exception
+ {
+    public function errorMessage()
+    {
+        return $this;
+    }
+ }
+
+ class SMSException extends Exception
  {
     public function errorMessage()
     {

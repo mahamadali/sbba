@@ -4,16 +4,20 @@ namespace Bones\Skeletons\DBFiller;
 
 use Bones\Commander;
 use Bones\Str;
+use Bones\Traits\Commander\AttrPairGenerator;
 
 class Refill
 {
-
+    use AttrPairGenerator;
+    
     protected $console;
     protected $filesBasePath = 'locker/dbfillers/';
 
     public function __construct()
     {
         $this->console = (new Commander());
+        if (!file_exists($this->filesBasePath))
+            mkdir($this->filesBasePath, 0644, true);
     }
 
     public function proceedDBFillers($commandAttr)
@@ -28,7 +32,18 @@ class Refill
                 $dbFillerFile = $this->cleanBaseFilePath($dbFillerFile) . '.php';
             }
         } else {
-            $dbFillerFiles = $this->getAllDBFillerFiles($this->filesBasePath);
+            $dbFillerFiles = [];
+
+            if (file_exists($dbFillerConfig = $this->filesBasePath . '/config.php')) {
+                $dbFillerFiles = require_once($dbFillerConfig);
+                if (!empty($dbFillerFiles)) {
+                    $dbFillerFiles = array_map(function($dbFillerFile) {
+                        return $dbFillerFile . '.php';
+                    }, $dbFillerFiles);
+                }
+            }
+            
+            $dbFillerFiles = (!empty($dbFillerFiles)) ? $dbFillerFiles : $this->getAllDBFillerFiles($this->filesBasePath);
         }
 
         $this->runFiller($dbFillerFiles);
@@ -44,8 +59,12 @@ class Refill
         $processedFilesCount = 0;
 
         foreach ($dbFillerFiles as $dbFillerFile) {
+            if ($dbFillerFile == 'config.php') {
+                continue;
+            }
+            
             $DBFillerFilePath = path() . DIRECTORY_SEPARATOR . $this->filesBasePath . $dbFillerFile;
-
+            
             if (!file_exists($DBFillerFilePath)) {
                 $this->console->showMsgAndContinue('Trying to find [Database Filler] %s with auto search technique' . PHP_EOL, [basename($DBFillerFilePath)]);
                 $DBFillerFilePath = path() . DIRECTORY_SEPARATOR . $this->filesBasePath . Str::decamelize($dbFillerFile);
@@ -60,6 +79,8 @@ class Refill
                     $this->console->showMsgAndContinue('[Database Filler] completed for %s' . PHP_EOL, [$DBFillerFilePath]);
                     $processedFilesCount++;
                 }
+            } else {
+                $this->console->showMsgAndContinue('Skipping [Database Filler] %s does not exists' . PHP_EOL, [$DBFillerFilePath]);
             }
         }
 
@@ -126,44 +147,16 @@ class Refill
         $baseFillerCode .= "\tprotected \$table = '" . $table . "';" . PHP_EOL . PHP_EOL;
         $baseFillerCode .= "\tpublic function fill()" . PHP_EOL;
         $baseFillerCode .= "\t{" . PHP_EOL;
-        $baseFillerCode .= "\t\tDatabase::__insertMulti([" . PHP_EOL;
+        $baseFillerCode .= "\t\tDatabase::table(\$this->table)->insertMulti([" . PHP_EOL;
         $baseFillerCode .= "\t\t\t[" . PHP_EOL;
         $baseFillerCode .= "\t\t\t\t'column_1' => 'value_1'," . PHP_EOL;
         $baseFillerCode .= "\t\t\t\t'column_2' => 'value_2'," . PHP_EOL;
         $baseFillerCode .= "\t\t\t\t'column_3' => 'value_3'," . PHP_EOL;
         $baseFillerCode .= "\t\t\t]," . PHP_EOL;
-        $baseFillerCode .= "\t\t], null, \$this->table);" . PHP_EOL;
+        $baseFillerCode .= "\t\t]);" . PHP_EOL;
         $baseFillerCode .= "\t}" . PHP_EOL . PHP_EOL;
         $baseFillerCode .= "};";
         return $baseFillerCode;
-    }
-
-    public function generateExtraAttrs($commandAttr, $commandExtraAttrs)
-    {
-        $commandExtraAttrPairs = [];
-
-        if (!empty($commandExtraAttrs)) {
-            if (gettype($commandAttr) == 'string') $commandAttr = [$commandAttr];
-            foreach ($commandAttr as $extraAttr) {
-                if (Str::startsWith($extraAttr, '--')) {
-                    $attribute = explode('=', $extraAttr);
-                    $attrName = $attribute[0];
-                    $commandExtraAttrPairs[$attrName] = (!empty($attribute[1])) ? $attribute[1] : '';
-                }
-            }
-        }
-
-        if (!empty($commandExtraAttrs)) {
-            foreach ($commandExtraAttrs as $extraAttr) {
-                if (Str::startsWith($extraAttr, '--')) {
-                    $attribute = explode('=', $extraAttr);
-                    $attrName = $attribute[0];
-                    $commandExtraAttrPairs[$attrName] = (!empty($attribute[1])) ? $attribute[1] : '';
-                }
-            }
-        }
-
-        return $commandExtraAttrPairs;
     }
 
     public function getAllDBFillerFiles($dir, &$dbFillerFiles = array())

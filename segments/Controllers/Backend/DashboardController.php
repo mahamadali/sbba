@@ -12,13 +12,13 @@ class DashboardController
 {
 	public function index(Request $request)
 	{
-		$total_users = count(User::whereHas('role', function($query) {
+		$total_users = User::whereHas('role', function($query) {
 			return $query->where('name', 'user');
-		})->get());
+		})->count();
 
-		$total_cities = count(City::get());
+		$total_cities = City::count();
 
-		$total_practice_area = count(PracticeArea::get());
+		$total_practice_area = PracticeArea::count();
 
 		
 

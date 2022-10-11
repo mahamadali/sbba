@@ -17,7 +17,7 @@ return new class
 			$table->unsignedBigInteger('practice_area_id');
 			$table->string('other')->nullable();
 			$table->timestamps();
-			$table->softDelete();
+			$table->trashMask();
 			return $table;
 		});
 	}

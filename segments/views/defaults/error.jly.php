@@ -54,7 +54,6 @@
             background: #d72434;
             padding: .625rem;
             box-sizing: border-box;
-            position: absolute;
             width: 100%;
             top: 1.875rem;
             bottom: 0;
@@ -84,10 +83,16 @@
                 :Jolly
             </div>
         </header>
-        <section class="terminal">
-            <div class="history"></div>
-            <?php echo $error; ?>
-        </section>
+        
+            <section class="terminal">
+                <div class="history"></div>
+                <?php
+                    if (!empty($error))
+                        echo $error;
+                    else
+                        echo 'Oops! Something went wrong...';
+                ?>
+            </section>
     </div>
 </body>
 

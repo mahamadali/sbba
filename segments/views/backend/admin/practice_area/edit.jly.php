@@ -13,6 +13,7 @@
     </div>
     <div class="card-body">
       <form method="post" action="{{ route('admin.practice_area.update') }}">
+        {{ prevent_csrf_field() }}
         <input type="hidden" name="id" value="{{ $practice_area->id }}" />
         <div class="row">
           <div class="col">
