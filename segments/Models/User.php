@@ -34,7 +34,7 @@ class User extends Model
 	}
 
 	public function city() {
-		return $this->parallelTo(City::class, 'city_id')->first();
+		return $this->parallelTo(City::class, 'city_id');
 	}
 	
 
