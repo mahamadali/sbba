@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ url('assets/backend/vendors/ti-icons/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ url('assets/backend/vendors/css/vendor.bundle.base.css') }}">
     <link rel="stylesheet" href="{{ url('assets/backend/css/vertical-layout-light/style.css') }}">
-    <link rel="stylesheet" href="{{ url('assets/backend/vendors/dataTables.net-bs4/dataTables.bootstrap4.css') }}">
+    <link rel="stylesheet" href="{{ url('assets/backend/vendors/datatables.net-bs4/dataTables.bootstrap4.css') }}">
     
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap4.min.css">
