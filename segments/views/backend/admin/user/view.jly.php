@@ -19,7 +19,7 @@
                         <h3>{{ $user->full_name  }}</h3><hr>
                         <h4 class="text-muted">{{ $user->email  }}</h4>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                        {{ $user->city_id != '' ?  $user->city()->name .' | ' : '' }} {{ $user->law_firm ?? '' }}
+                        {{ $user->city_id != '' ?  $user->city->name .' | ' : '' }} {{ $user->law_firm ?? '' }}
                         </div>
                     </div>
                 </div>
