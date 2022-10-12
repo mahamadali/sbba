@@ -20,7 +20,7 @@ class WelcomeController
 
     public function page(Request $request, $page)
     {
-        if (empty($page) || !in_array($page, ['terms-conditions', 'about-us', 'privacy-polic', 'contact-us'])) error(404);
+        if (empty($page) || !in_array($page, ['terms-conditions', 'about-us', 'privacy-policy', 'contact-us'])) error(404);
 
         return render($page);
     }
