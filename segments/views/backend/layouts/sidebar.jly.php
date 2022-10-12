@@ -43,6 +43,19 @@
         </div>
       </li>
 
+       <li class="nav-item {{ (request()->matchesTO('/admin/homepage_sections/*')) ? 'active' : '' }}">
+        <a class="nav-link" data-toggle="collapse" href="#homepage_sections" aria-expanded="false" aria-controls="homepage_sections">
+          <i class="ti-list menu-icon"></i>
+          <span class="menu-title">Heading and text</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse {{ (request()->matchesTO('/admin/homepage_sections/*')) ? 'show' : '' }}" id="homepage_sections">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.homepage_sections.list') }}">Homepage sections</a></li>
+          </ul>
+        </div>
+      </li>
+
       <li class="nav-item {{ (request()->matchesTo('/admin/settings/*')) ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.settings.list') }}">
           <i class="ti-settings menu-icon"></i>

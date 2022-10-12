@@ -2,14 +2,18 @@
 
 namespace Controllers;
 use Models\City;
+use Models\HomeSectionArea;
+
 
 class WelcomeController
 {
     public function index()
     {
         $cities = City::get();
+        $HomeSectionArea = HomeSectionArea::get();
         return render('welcome', [
-            'cities' => $cities
+            'cities' => $cities,
+            'HomeSectionArea' => $HomeSectionArea
         ]);
      
     }

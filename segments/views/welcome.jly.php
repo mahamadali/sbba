@@ -11,8 +11,8 @@
 <section data-v-70ba3ad3="" data-v-88cae4b0="" class="section1">
   <div data-v-70ba3ad3="" class="section1__inner">
      <div data-v-70ba3ad3="" class="section1__inner-txt">
-        <h1 data-v-70ba3ad3="">Who Are We?</h1>
-        <h2 class="home-subtitle home-page-text-color">We are a free bar association for solo and boutique law firms. Enjoy social events and benefit from referrals from other members.</h2>
+        <h1 data-v-70ba3ad3="">{{ $HomeSectionArea->section1_heading }}</h1>
+        <h2 class="home-subtitle home-page-text-color">{{ $HomeSectionArea->section1_content }}</h2>
     </div>
     <div data-v-70ba3ad3="" class="section1__inner-img" style="margin-bottom:3.5rem;margin-right:3.5rem;text-align: right;"><img data-v-70ba3ad3="" src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" class="img-section1" style="height: 250px;
     width: 349px;"></div>
@@ -22,8 +22,12 @@
   <div data-v-76520ee6="" class="section2__inner">
      <div data-v-76520ee6="" class="section2__inner-img" style="margin-bottom:1.5rem;"><img data-v-76520ee6="" src="{{url('assets/frontend/img/cities1.png')}}" class="img-section3"></div>
      <div data-v-76520ee6="" class="section2__inner-txt">
-        <h1 data-v-76520ee6="">Where Are We?</h1>
-        <h2 class="home-page-text-color" data-v-76520ee6="">We’ve started in {{ strtolower(convert_number($cities->count())) }}  cities. Choose a city and sign up. We’ll alert you when we have networking events near you!</h2>
+        <h1 data-v-76520ee6="">{{ $HomeSectionArea->section2_heading }}</h1>
+        <?php
+             $city_count = strtolower(convert_number($cities->count()));
+            $new_val_section2 = str_replace("total_city", $city_count, $HomeSectionArea->section2_content);
+        ?>
+        <h2 class="home-page-text-color" data-v-76520ee6="">{{ $new_val_section2 }}</h2>
     </div>
     </div>
     <div class="city-dropdown">
@@ -53,8 +57,8 @@
 <section data-v-70ba3ad3="" data-v-88cae4b0="" class="section1">
   <div data-v-70ba3ad3="" class="section1__inner">
      <div data-v-70ba3ad3="" class="section1__inner-txt section3_inner-txt">
-        <h1 data-v-70ba3ad3="">How To Join</h1>
-        <h2 class="home-subtitle home-page-text-color">Sign-up today — we’ll get you out of the office (or off the laptop) in your hand in no time. Let's have fun! And make getting referrals easier for all of us.</h2>
+        <h1 data-v-70ba3ad3="">{{ $HomeSectionArea->section3_heading }}</h1>
+        <h2 class="home-subtitle home-page-text-color">{{ $HomeSectionArea->section3_content }}</h2>
         <a href="{{ route('auth.sign-up')}}" class="ui-btn home-signup-footer">Sign Up</a>
     </div>
      <div data-v-70ba3ad3="" class="section1__inner-img section3__inner-img " style="margin-bottom: 7.5rem;text-align: right;"><img data-v-70ba3ad3="" src="{{ url('assets/frontend/img/slide3-img.png') }}" class="img-section3" style="min-width: 560px;"></div>
