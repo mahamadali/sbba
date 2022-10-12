@@ -40,10 +40,6 @@ Router::bunch('/admin', ['as' => 'admin.', 'barrier' => [IsAuthenticated::class]
 	Router::bunch('/homepage_sections', ['as' => 'homepage_sections.'], function() {
 		Router::get('/list', [ HomePageAreaController::class, 'index' ])->name('list');
 		Router::post('/store_section', [ HomePageAreaController::class, 'store_section' ])->name('store_section');
-		/*Router::get('/create', [ PracticeAreaController::class, 'create' ])->name('create');
-		Router::get('/edit/{user}', [ PracticeAreaController::class, 'edit' ])->name('edit');
-		Router::post('/update', [ PracticeAreaController::class, 'update' ])->name('update');
-		Router::delete('/delete/{user}', [ PracticeAreaController::class, 'delete' ])->name('delete');*/
 	});
 
 	Router::bunch('/settings', ['as' => 'settings.'], function() {

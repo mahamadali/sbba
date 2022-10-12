@@ -46,7 +46,7 @@
        <li class="nav-item {{ (request()->matchesTO('/admin/homepage_sections/*')) ? 'active' : '' }}">
         <a class="nav-link" data-toggle="collapse" href="#homepage_sections" aria-expanded="false" aria-controls="homepage_sections">
           <i class="ti-list menu-icon"></i>
-          <span class="menu-title">Heading and text</span>
+          <span class="menu-title">Heading and Text</span>
           <i class="menu-arrow"></i>
         </a>
         <div class="collapse {{ (request()->matchesTO('/admin/homepage_sections/*')) ? 'show' : '' }}" id="homepage_sections">
