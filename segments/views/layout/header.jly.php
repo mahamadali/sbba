@@ -2,21 +2,6 @@
       <div id="app">
          <div>
             <div data-v-88cae4b0="" class="ui-landing">
-               <!-- <div data-v-4031e0bf="" data-v-88cae4b0="" class="ui-wrapper-navbar">
-                  <div data-v-4031e0bf="" class="ui-wrapper-navbar__inner">
-                     <span data-v-4031e0bf="" class="navbar-logo__span" style="color:#ec1f27;text-align: center;">
-                        <a href="{{ url('/') }}" class="logo_hover">
-                            <img src="{{ url('assets/frontend/img/Solo_Boutique_Bar_Association-01.png') }}" alt="logo" class="navbar-logo bg-white" style="border-radius:4px"> 
-                        </a>
-                     <h2 style="float:right;margin-top:2rem;">SOLO & BOUTIQUE BAR ASSOCIATION</h2>
-                     </span>
-                     <div data-v-4031e0bf="">
-                        <a href="{{ route('landing')}}" data-v-4031e0bf="" class="text-white" style="padding:5px;padding-left: 20px;padding-right: 20px;">Home</a>
-                        <a href="{{ route('about-us')}}" data-v-4031e0bf="" class="text-white" style="padding:5px;padding-left: 20px;padding-right: 20px;">About Us</a>
-                        <a href="{{ route('auth.sign-up')}}" data-v-4031e0bf="" class="ui-btn ui-btn__outline" style="padding:5px;padding-left: 20px;padding-right: 20px;">Sign Up</a>
-                     </div>
-                  </div>
-               </div> -->
 
                <nav class="navbar navbar-expand-lg navbar-dark header-bg">
                  <div class="container-fluid">
@@ -33,7 +18,7 @@
                          <a class="nav-link {{ (request()->matchesTo('/home') || request()->matchesTo('/')) ? 'active' : '' }}" aria-current="page" href="{{ route('landing')}}">Home</a>
                        </li>
                        <li class="nav-item">
-                         <a class="nav-link {{ (request()->matchesTo('/about-us')) ? 'active' : '' }}" href="{{ route('about-us')}}">About Us</a>
+                         <a class="nav-link {{ (request()->matchesTo('/about-us')) ? 'active' : '' }}" href="{{ route('page', ['about-us'])}}">About Us</a>
                        </li>
                        <li class="nav-item signup_desk">
                          <a class="btn btn-header {{ (request()->matchesTo('/sign-up')) ? 'active' : '' }}" href="{{ route('auth.sign-up')}}">Sign Up</a>

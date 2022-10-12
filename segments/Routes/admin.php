@@ -6,9 +6,9 @@ use Controllers\Backend\UserController;
 use Controllers\AuthController;
 use Barriers\Admin\IsAuthenticated;
 use Controllers\Backend\CityController;
+use Controllers\Backend\CMS\HomepageController;
 use Controllers\Backend\PracticeAreaController;
 use Controllers\Backend\SettingController;
-use Controllers\Backend\HomePageAreaController;
 
 
 
@@ -37,9 +37,16 @@ Router::bunch('/admin', ['as' => 'admin.', 'barrier' => [IsAuthenticated::class]
 		Router::delete('/delete/{user}', [ PracticeAreaController::class, 'delete' ])->name('delete');
 	});
 
-	Router::bunch('/homepage_sections', ['as' => 'homepage_sections.'], function() {
-		Router::get('/list', [ HomePageAreaController::class, 'index' ])->name('list');
-		Router::post('/store_section', [ HomePageAreaController::class, 'store_section' ])->name('store_section');
+	// Router::bunch('/homepage_sections', ['as' => 'homepage_sections.'], function() {
+	// 	Router::get('/list', [ HomePageAreaController::class, 'index' ])->name('list');
+	// 	Router::post('/store_section', [ HomePageAreaController::class, 'store_section' ])->name('store_section');
+	// });
+
+	Router::bunch('/cms', ['as' => 'cms.'], function() {
+		Router::bunch('/homepage', ['as' => 'homepage.'], function() {
+			Router::get('/', [ HomepageController::class, 'index' ])->name('index');
+			Router::post('/store', [ HomepageController::class, 'store' ])->name('store');
+		});
 	});
 
 	Router::bunch('/settings', ['as' => 'settings.'], function() {

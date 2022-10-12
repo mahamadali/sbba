@@ -1,42 +1,27 @@
 <?php
 
 namespace Controllers;
-use Models\City;
-use Models\HomeSectionArea;
 
+use Bones\Request;
+use Models\City;
+use Models\CMS\Homepage;
 
 class WelcomeController
 {
     public function index()
     {
         $cities = City::get();
-        $HomeSectionArea = HomeSectionArea::get();
+        $HomeSectionArea = Homepage::get();
         return render('welcome', [
             'cities' => $cities,
             'HomeSectionArea' => $HomeSectionArea
         ]);
-     
     }
 
-
-    public function terms_conditions()
+    public function page(Request $request, $page)
     {
-        return render('terms_conditions');
-    }
+        if (empty($page) || !in_array($page, ['terms-conditions', 'about-us', 'privacy-polic', 'contact-us'])) error(404);
 
-    
-    public function about_us()
-    {
-        return render('about_us');
-    }
-
-     public function privacy_policy()
-    {
-        return render('privacy_policy');
-    }
-
-    public function contact_us()
-    {
-        return render('contact_us');
+        return render($page);
     }
 }

@@ -8,7 +8,7 @@
 @block("content")
 
   <div class="card card-inverse-light-with-black-text flatten-border">
-      <form method="post" action="{{ route('admin.homepage_sections.store_section') }}">
+      <form method="post" action="{{ route('admin.cms.homepage.store') }}">
         {{ prevent_csrf_field() }}
     <div class="card-header">
       Home Page Section1

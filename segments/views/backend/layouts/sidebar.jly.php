@@ -15,13 +15,13 @@
         </a>
       </li>
 
-      <li class="nav-item {{ (request()->matchesTO('/admin/cities/*')) ? 'active' : '' }}">
+      <li class="nav-item {{ (request()->matchesTo('/admin/cities/*')) ? 'active' : '' }}">
         <a class="nav-link" data-toggle="collapse" href="#cities" aria-expanded="false" aria-controls="cities">
           <i class="ti-list menu-icon"></i>
           <span class="menu-title">Cities</span>
           <i class="menu-arrow"></i>
         </a>
-        <div class="collapse {{ (request()->matchesTO('/admin/cities/*')) ? 'show' : '' }}" id="cities">
+        <div class="collapse {{ (request()->matchesTo('/admin/cities/*')) ? 'show' : '' }}" id="cities">
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="{{ route('admin.cities.create') }}"> Add </a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('admin.cities.list') }}"> Cities </a></li>
@@ -29,13 +29,13 @@
         </div>
       </li>
 
-      <li class="nav-item {{ (request()->matchesTO('/admin/practice_area/*')) ? 'active' : '' }}">
+      <li class="nav-item {{ (request()->matchesTo('/admin/practice_area/*')) ? 'active' : '' }}">
         <a class="nav-link" data-toggle="collapse" href="#practice_area" aria-expanded="false" aria-controls="practice_area">
           <i class="ti-list menu-icon"></i>
           <span class="menu-title">Practice Area</span>
           <i class="menu-arrow"></i>
         </a>
-        <div class="collapse {{ (request()->matchesTO('/admin/practice_area/*')) ? 'show' : '' }}" id="practice_area">
+        <div class="collapse {{ (request()->matchesTo('/admin/practice_area/*')) ? 'show' : '' }}" id="practice_area">
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="{{ route('admin.practice_area.create') }}"> Add </a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('admin.practice_area.list') }}"> Practice Area </a></li>
@@ -43,15 +43,15 @@
         </div>
       </li>
 
-       <li class="nav-item {{ (request()->matchesTO('/admin/homepage_sections/*')) ? 'active' : '' }}">
-        <a class="nav-link" data-toggle="collapse" href="#homepage_sections" aria-expanded="false" aria-controls="homepage_sections">
+       <li class="nav-item {{ (request()->matchesTo('/admin/cms/homepage/*')) ? 'active' : '' }}">
+        <a class="nav-link" data-toggle="collapse" href="#cms-homepage" aria-expanded="false" aria-controls="cms/homepage">
           <i class="ti-list menu-icon"></i>
           <span class="menu-title">Heading and Text</span>
           <i class="menu-arrow"></i>
         </a>
-        <div class="collapse {{ (request()->matchesTO('/admin/homepage_sections/*')) ? 'show' : '' }}" id="homepage_sections">
+        <div class="collapse {{ (request()->matchesTo('/admin/cms/homepage/*')) ? 'show' : '' }}" id="cms-homepage">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.homepage_sections.list') }}">Homepage sections</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.cms.homepage.index') }}">Homepage sections</a></li>
           </ul>
         </div>
       </li>

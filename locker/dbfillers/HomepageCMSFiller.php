@@ -6,7 +6,7 @@ use Bones\Database;
 
 return new class
 {
-	protected $table = 'home_page_headings';
+	protected $table = 'cms_homepage';
 
 	public function fill()
 	{
