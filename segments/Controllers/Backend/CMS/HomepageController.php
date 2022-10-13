@@ -4,6 +4,7 @@ namespace Controllers\Backend\CMS;
 
 use Bones\Request;
 use Models\CMS\Homepage;
+use Models\CMS\AboutUs;
 
 class HomepageController
 {
@@ -42,5 +43,36 @@ class HomepageController
 		$homepage_cms->save();
 
 		return redirect(route('admin.cms.homepage.index'))->withFlashSuccess('Homepage content saved successfully!')->go();
+	}
+
+	public function aboutUs(Request $request)
+	{
+		$aboutUsData = AboutUs::orderBy('id')->firstOrNull();
+		return render('backend/admin/cms/aboutus/content', [
+			'aboutUsData' => $aboutUsData
+		]);
+	}
+
+	public function aboutUsPost(Request $request)
+	{
+		
+		$validator = $request->validate([
+			'content' => 'required|min:2',
+		]);
+
+		if ($validator->hasError()) {
+			return redirect()->withFlashError(implode('<br>', $validator->errors()))->with('old', $request->all())->back();
+		}
+
+		$aboutus_cms = AboutUs::orderBy('id')->firstOrNull();
+
+		if (empty($aboutus_cms)) {
+			$aboutus_cms = new AboutUs();
+		}
+
+		$aboutus_cms->content = $request->content;
+		$aboutus_cms->save();
+
+		return redirect(route('admin.cms.about-us.index'))->withFlashSuccess('AboutUs content saved successfully!')->go();
 	}
 }

@@ -4,9 +4,8 @@
 	<tr>
 		<td class="pad">
 			<div style="color:#000000;direction:ltr;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size:15px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:18px;">
-				<h5>Hey Admin</h5>
-				<p style="margin: 0;">{{ $user->full_name }} is registered from {{ $user->city->name }} with {{ $user->law_firm }}.</p>
-				<p>Please click below link to access admin portal.</p>
+				<!-- <h5>Hey User</h5> -->
+				<p>Thank you for joining the Solo & Boutique Bar Association. Keep an eye out for emails about events in your area – we work hard to make sure they are meaningful and fun, so register fast when you get an invite! We look forward to meeting you!</p>
 			</div>
 		</td>
 	</tr>

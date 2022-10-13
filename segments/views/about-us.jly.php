@@ -31,8 +31,9 @@
         <h2>ABOUT US</h2>
       </div>
       <div class="row justify-content-center about-us-info">
-        <div class="about-us-container mb-4">
-          <p class="mt-3">
+        <div class="about-us-container mb-4 mt-3">
+           {{ $AboutUsData->content }}
+         <!--  <p class="mt-3">
            <h2>What is The SBBA?</h2>
          </p>
          <p>
@@ -58,7 +59,8 @@
       All we need is your openness to having a good time and trying a new way to meet some
       helpful and interesting colleagues. SBBA was started by attorneys, for attorneys, and it is all of us having fun and working together that is making it amazing. Sign up, and we’ll see you at the
       next event!
-    </p>
+    </p> -->
+   
   </div>
 </div>
 </div>
