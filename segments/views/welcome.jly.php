@@ -61,7 +61,7 @@
         <h2 class="home-subtitle home-page-text-color">{{ $HomeSectionArea->section3_content }}</h2>
         <a href="{{ route('auth.sign-up')}}" class="ui-btn home-signup-footer">Sign Up</a>
     </div>
-     <div data-v-70ba3ad3="" class="section1__inner-img section3__inner-img " style="margin-bottom: 7.5rem;text-align: right;"><img data-v-70ba3ad3="" src="{{ url('assets/frontend/img/slide3-img.png') }}" class="img-section3" style="min-width: 560px;"></div>
+     <div data-v-70ba3ad3="" class="section1__inner-img section3__inner-img " style="margin-bottom: 7.5rem;text-align: right;margin-left: 6rem;"><img data-v-70ba3ad3="" src="{{ url('assets/frontend/img/slide3-img.png') }}" class="img-section3" style="min-width: 560px;"></div>
 </div>
 </section>
 
