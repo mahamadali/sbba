@@ -1084,7 +1084,8 @@ p[data-v-70ba3ad3]{
     }
 }
 .section1__inner-img[data-v-70ba3ad3]{
-    width:55%;
+   /* width:55%;*/
+    width:46%;
     /*max-width:360px*/
 }
 @media(max-width:991px){
