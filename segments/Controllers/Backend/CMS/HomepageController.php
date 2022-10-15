@@ -5,6 +5,7 @@ namespace Controllers\Backend\CMS;
 use Bones\Request;
 use Models\CMS\Homepage;
 use Models\CMS\AboutUs;
+use Models\CMS\Footer;
 
 class HomepageController
 {
@@ -74,5 +75,43 @@ class HomepageController
 		$aboutus_cms->save();
 
 		return redirect(route('admin.cms.about-us.index'))->withFlashSuccess('AboutUs content saved successfully!')->go();
+	}
+
+	public function footer(Request $request)
+	{
+		$footerData = Footer::orderBy('id')->firstOrNull();
+		return render('backend/admin/cms/footer/content', [
+			'footerData' => $footerData
+		]);
+	}
+
+	public function footerPost(Request $request)
+	{
+		
+		$validator = $request->validate([
+			'follow_on_social_media_line_text' => 'required|min:2',
+			'terms_and_conditions_link' => 'required|min:2',
+			'privacy_policy_link' => 'required|min:2',
+			'contact_us_link' => 'required|min:2',
+		]);
+
+		if ($validator->hasError()) {
+			return redirect()->withFlashError(implode('<br>', $validator->errors()))->with('old', $request->all())->back();
+		}
+
+		$footer_cms = Footer::orderBy('id')->firstOrNull();
+
+		if (empty($footer_cms)) {
+			$footer_cms = new Footer();
+		}
+		$footer_cms->follow_on_social_media_line_text = $request->follow_on_social_media_line_text;
+		$footer_cms->terms_and_conditions_link = $request->terms_and_conditions_link;
+		$footer_cms->privacy_policy_link = $request->privacy_policy_link;
+		$footer_cms->contact_us_link = $request->contact_us_link;
+		$footer_cms->facebook_link = $request->facebook_link;
+		$footer_cms->instagram_link = $request->instagram_link;
+		$footer_cms->save();
+
+		return redirect(route('admin.cms.footer.index'))->withFlashSuccess('Footer data saved successfully!')->go();
 	}
 }

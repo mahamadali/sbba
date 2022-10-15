@@ -51,6 +51,10 @@ Router::bunch('/admin', ['as' => 'admin.', 'barrier' => [IsAuthenticated::class]
 			Router::get('/', [ HomepageController::class, 'aboutUs' ])->name('index');
 			Router::post('/store', [ HomepageController::class, 'aboutUsPost' ])->name('store');
 		});
+		Router::bunch('/footer', ['as' => 'footer.'], function() {
+			Router::get('/', [ HomepageController::class, 'footer' ])->name('index');
+			Router::post('/store', [ HomepageController::class, 'footerPost' ])->name('store');
+		});
 	});
 
 	Router::bunch('/settings', ['as' => 'settings.'], function() {

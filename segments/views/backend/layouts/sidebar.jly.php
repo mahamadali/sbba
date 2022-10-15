@@ -51,10 +51,13 @@
         </a>
         <div class="collapse {{ (request()->matchesTo('/admin/cms/homepage/*')) ? 'show' : '' }}" id="cms-homepage">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.cms.homepage.index') }}">Homepage sections</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.cms.homepage.index') }}">Homepage</a></li>
           </ul>
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.cms.about-us.index') }}">AboutUs sections</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.cms.about-us.index') }}">About Us</a></li>
+          </ul>
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.cms.footer.index') }}">Footer</a></li>
           </ul>
         </div>
       </li>
